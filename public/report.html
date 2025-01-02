@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .company-logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .company-info {
+            padding: 15px;
+            padding-left: 20px; /* Adjust the gap here */
+        }
+        .table-custom {
+            font-size: 16px; /* Adjust font size as needed */
+            width: 100%; /* Set the width to 100% */
+        }
+        .table-custom th,
+        .table-custom td {
+            padding: 12px; /* Adjust padding as needed */
+            height: auto; /* Let cell height adjust dynamically */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding-top: 60px;padding-bottom:100px;padding-left:30px;padding-right:30px">
+        <div class="row">
+            <div class="col-1">
+                <!-- Logo -->
+            </div>
+            <div class="col-5">
+                <!-- Company Info -->
+                <div class="company-info">
+                    <h2>Keloth Huller</h2>
+                    <p>Industrial Area, KushalNagar</p>
+                </div>
+            </div>
+            <div class="col-6 text-right">
+                <h6>Email: kelothhuller@gmail.com</h6>
+                <h6>Phone: +91 9744061516</h6>
+                    <h2>020125-215318</h2>
+
+            </div>
+        </div>
+
+ 
+
+        <!-- Bill Type -->
+<div class="row">
+    <div class="col-12 text-center ">
+        <h4  class="border border-success rounded" style="padding: 5px;">Purchase Delivery Report</h4>
+    </div>
+</div>
+        <!-- Party Info -->
+        <div class="row mb-1">
+            <div class="col-6">
+                <h4>PARTY : JAMAL</h4>
+                <h5>ITEM :  RC-A</h5>
+                <h5>Refference :  CROP 23-24</h5>
+
+                <!-- Include more address lines as needed -->
+            </div>
+            <div class="col-6 text-right">
+                    <h6>2025-01-02</h6>
+                <h6>Delivery : </h6>
+                <h6>Vehicle No. : </h6>
+                <!-- Include more address lines as needed -->
+            </div>
+        </div>
+
+        <!-- Item List -->
+        <div class="row">
+            <div class="col-12" style="height: 350px;">
+                <table class="table table-bordered table-custom" >
+                    <thead>
+                        <tr style="height: 60px;">
+                            <th>G. Weight : 10000</th>
+                            <th>Bags : </th>
+                            <th>Bag Weight : 0</th>
+                            <th>NET Weight : 10000</th>
+
+                            <!-- Add more headers as needed -->
+                        </tr>
+                           <tr style="height: 60px;">                            
+                            <th>FM (  %) : </th>
+                            <th>WGHT. DED. : 165</th>
+                            <th>FINAL Weight : 10000</th>
+                            <th>OUTERN : 53 </th>
+
+                            <!-- Add more headers as needed -->
+                        </tr>
+                    </thead>
+                    <tr style="height: 60px;">
+                            <td>MC : </td>
+                            <td>BB  : </td>
+                            <td>IDB : </td>
+                            <td>OTHER</td>
+
+                            <!-- Add more columns for each item -->
+                        </tr>
+                        <tr style="height: 60px;">
+                            <td>MC DED : 0</td>
+                            <td>BB DED. :0</td>
+                            <td>IDB DED. : 0 </td>
+                            <td>OTHER DED . : </td>
+                            <!-- Add more columns for each item -->
+                        </tr>
+                         <tr style="height: 60px;"> 
+                            <th>HUSK / O (  %): 0</th>
+                            <th>TOTAL EP DED. : 0 </th>
+                            <th>EP PERCENTAGE : 53.00</th>
+                            <th>NET EP WEIGHT: 5300</th>
+
+                            <!-- Add more headers as needed -->
+                        </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Deduction -->
+        <div class="row">
+            <div class="col-10">
+                <p>The report has been finalized according to company standards and verified by our expert team.</p>
+                <!-- You can style this area as needed -->
+            </div>
+             <div class="col-2">
+                <p>Signature.</p>
+                <!-- You can style this area as needed -->
+            </div>
+        </div>
+
+<div class="row">
+    <div class="col-12">
+        <h2>Billing Confirmation</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Commitment</th>
+                     <th>Net Weight</th>
+                    <th>E.P. Weight</th>
+                    <th>Rate</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr> 
+                    <tr> 
+        <td>2025-01-02</td>
+    <td>CROP 23-24</td>
+    <td>10000.0</td>
+    <td>5300</td>
+    <td>452</td>
+    <td>2395600.00</td>
+</tr>            
+
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="5" class="text-right">Sub Total</th>
+                    <th>2395600</th>
+                    <!-- Assuming grand total is passed from backend -->
+                </tr>
+                <tr>
+                    <th colspan="5" class="text-right">OTHER : tax-exempt</th>
+                    <th>0</th>
+                    <!-- Assuming grand total is passed from backend -->
+                </tr>
+                <tr>
+                    <th colspan="5" class="text-right">Grand Total</th>
+                    <th>2395600</th>
+                    <!-- Assuming grand total is passed from backend -->
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+     <div class="row p-3 mt-1">
+            <div class="col-10">
+                <p>This document serves solely as a billing confirmation for reference purposes and does not constitute the actual bill. .</p>
+                <!-- You can style this area as needed -->
+            </div>
+             <div class="col-2">
+                <p>Party Signature.</p>
+                <!-- You can style this area as needed -->
+            </div>
+           
+        </div>
+</div>
+    </div>
+
+
+</body>
+</html>
