@@ -1,0 +1,149 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+               
+                <div class="table-responsive text-nowrap p-4">
+                    <table class="table" id="despatchtable">
+                        <thead>
+                            <tr>
+                              <th>Date</th> 
+                              <th>Party</th>
+        <th>Lorry</th>
+        <th>Reference</th>     
+        <th>Bags</th>
+        <th>Weight</th>
+        <th>Ep %</th>
+        <th>EP</th>
+        <th>EP Storage</th>
+        <th>Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0" id="table-body">
+                          <!-- Data will be populated here -->
+                      </tbody>
+  </table>
+
+</div>
+</div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+
+<script>
+  $(document).ready(function () {
+    //var routeName = '<%= route %>';
+    //var geturl =  routeName=='featured' ?'featuredpropertieslist':'propertieslist'  // Assuming you're passing this variable from EJS
+    //var buttonname =  routeName=='featured' ?'Remove From Featured':'Add To Featured'  // Assuming you're passing this variable from EJS
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+    var betatable = $('#despatchtable').DataTable({
+      responsive: responsive,
+      processing: true,
+      serverSide: true,
+      dom: '<"top d-flex justify-content-between"l p>rt<"bottom"ip><"clear">', 
+      ajax: {
+        url: '/despatch',// Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+          // Add any additional parameters you want to send to the server here
+        },
+      },
+      columns: [
+      {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      },
+      { data: 'billTo' },
+
+      { data: 'lorry' },
+        { data: 'item' },
+        { data: 'bags' },
+        { data: 'netWeight' },
+        { data: 'eppercentage' },
+        { data: 'netepweight' },
+        { data: 'storage' },
+
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                <i class="bx bx-dots-vertical-rounded"></i>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/editsalesentry/${row.billTo}/${row._id}"><i class="bx bx-edit me-1"></i> Edit /View </a>
+                <a class="dropdown-item delete-btn" href="javascript:void(0);" data-id="${row.lotnumber}"  data-party="${row.billTo}"><i class="bx bx-trash me-1"></i> Delete</a>
+              </div>
+            </div>`;
+          },
+        },
+      ],
+    });
+    $('#despatchtable').off('click', '.delete-btn');
+
+    $('#despatchtable').on('click', '.delete-btn', function() {
+      if(!confirm('Do you want to delete the data')){
+        return 
+      }
+    var id = $(this).data('id');
+    var party = $(this).data('party');
+
+    // Send delete request to the server
+    fetch(`/deletesales/${id}/${party}`, {
+        method: 'DELETE'
+    }).then(response => {
+        // Check if the request was successful
+        if (response.ok) {
+            // Reload or update the DataTable
+            betatable.ajax.reload(null, false);
+        } else {
+            // Handle errors
+            alert('Something went wrong .Please check if the data already has a bill')
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+  })
+});
+</script>
+
+
+                                    
+                                        <%- include('./include/end.ejs') -%>

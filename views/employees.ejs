@@ -1,0 +1,794 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <style>/* Popup container */
+            .popup {
+                position: fixed;
+                top: 0;
+                right: -100%; /* Initially hidden */
+                width: 20%;
+                height: 100%;
+                background-color: #fff;
+                box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+                transition: right 0.3s ease;
+                z-index: 1000;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+            @media (max-width: 1500px) {
+                .popup {
+                    width: 25%;
+                }
+            }
+            @media (max-width: 1000px) {
+                .popup {
+                    width: 30%;
+                }
+            }
+            /* For mobile devices */
+            @media (max-width: 768px) {
+                .popup {
+                    width: 100%;
+                }
+            }
+            
+            /* Open popup animation */
+            .popup.open {
+                right: 0;
+            }
+            
+            /* Close button */
+            .close-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-color: #ff5c5c;
+                border: none;
+                color: white;
+                font-size: 16px;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+            
+            /* Open button */
+            .open-btn {
+                position: fixed;
+                top: 50%;
+                right: 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+                z-index: 999;
+            }
+            .submit-container {
+
+    width: 100%;
+
+}
+
+
+            </style>
+
+<div id="popup" class="popup" style="display: flex; flex-direction: column; height: 100vh; max-width: 500px;">
+  <!-- Content of the popup -->
+  <h4>Mark Attendance</h4>
+  <h6>Current Date <span id="currentDate"></span></h6>
+  <h6>By standards one day has 8 hours work <span id="currentDate"></span></h6>
+  <button id="closePopup" class="close-btn">X</button>
+  <div class="row p-2">
+      <div class="col-12">
+        <label for=""> Attendance Date</label>
+          <input type="date" id="choosedate" class="form-control">
+      </div>
+  </div>
+
+  <div class="row p-2">
+      <div class="col-6">
+          <label for="">Employee Name</label>
+      </div>
+      <div class="col-4">
+          <label for="">Work Hour</label>
+      </div>
+      <div class="col-2">
+        <label for="">Mark</label>
+    </div>
+  </div>
+
+  <!-- Scrollable employee container with dynamic height -->
+  <div id="employee-container" style="flex-grow: 1; overflow-y: auto; overflow-x: hidden;  padding-bottom: 60px;">
+      <!-- Employee input fields will be inserted here -->
+  </div>
+
+  <!-- Submit button at the bottom -->
+  <div class="row p-2 mt-3 mb-2" style="position: relative; bottom: 0; width: 100%; background-color: white;">
+      <div class="col-12 text-right">
+          <button class="btn btn-primary w-100" id="submitAttendance">Submit</button>
+      </div>
+  </div>
+</div>
+
+<script> $(document).ready(function(){
+  // Open the popup
+  $('#openPopup').click(function(){
+    $('#employee-container').html('')
+    getlist();
+      $('#popup').addClass('open');
+     
+  });
+
+  // Close the popup
+  $('#closePopup').click(function(){
+      $('#popup').removeClass('open');
+  });
+
+  // Close the popup by clicking outside (optional)
+  $(window).click(function(event) {
+      if (!$(event.target).closest('#popup, #openPopup').length) {
+          $('#popup').removeClass('open');
+      }
+  });
+
+  $('#choosedate').on('change', function() {
+            var selectedDate = $(this).val();
+            getattendance(selectedDate)
+        });
+
+        $('#submitAttendance').on('click', function() {
+            var selectedDate = $('#choosedate').val();
+            if(!selectedDate || !confirm('Do you want to submit this attendance')){
+              alert('Please choose a date and confirm the attendance')
+            }else{
+              var workHoursData = [];
+        
+        $('#employee-container input[type="number"]').each(function() {
+            var workHour = {
+                id: $(this).attr('id'),
+                wrokhour: parseInt($(this).val())||0,
+                src: $(this).data('src')
+            };
+            workHoursData.push(workHour);
+        });
+
+        $.ajax({
+            url: '/submitAttendance',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                date: selectedDate,
+                attendance: workHoursData
+            }),
+            success: function(response) {
+                alert(response.message);
+            },
+            error: function(err) {
+                console.error(err);
+                alert('An error occurred while submitting attendance.');
+            }
+        });
+    
+            }
+            
+        });
+
+});
+</script>
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-primary text-white" href="#" data-bs-toggle="modal"
+                  data-bs-target="#newagentmodal">Add Agent</a>
+                  <a class="btn btn-primary text-white" href="#" id="openPopup" class="open-btn">Mark Attendance</a>
+                  <a class="btn btn-primary text-white" href="#" data-bs-toggle="modal"
+                  data-bs-target="#attendancereport">Attendance Report</a>
+                  <a class="btn btn-primary text-white" href="#" data-bs-toggle="modal"
+                  data-bs-target="#openreport">Download Report</a>
+                <div class="table-responsive text-nowrap p-4">
+                  <h5>Current Month Report</h5>
+                  <table class="table" id="sellers">
+                    <thead>
+                      <tr>
+                        <th>Account</th> 
+                        <th>Address</th>
+  <th>Phone</th>     
+  <th>Payable</th>
+  <th>Paid</th>
+  <th>Balance</th>
+  <th>Action</th>     
+          
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="table-body">
+                      <!-- Data will be populated here -->
+                    </tbody>
+                  </table>
+          
+                </div>
+              </div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade "></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+<div class="modal fade hidden" id="attendancereport">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Attendance Report</h5>
+      
+      </div>
+      <div class="modal-body">
+        <form  id="transportagentform">
+      <div class="row">
+        <div class="col mb-3">
+          <label for="name" class="form-label">From</label>
+          <input required type="date" name="fromdate" id="fromdate" class="form-control" placeholder="Enter Name">
+        </div>
+        <div class="col mb-3">
+          <label for="description" class="form-label">To</label>
+          <input  type="date" id="todate" name="todate" class="form-control" placeholder="Enter Phone">
+        </div>
+        <div class="col-2 mb-3">
+          <label for="description" class="form-label"></label>
+          <button type="button" id="checkattendance" class="btn btn-primary btn-sm add-btnvd mt-2">
+            <i class="bx bx-check"></i> Check
+        </button>      
+        </div>
+        </div>
+        <div class="row">
+          <table>
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Work Hours</th>
+                  <th>Base Pay</th>
+                  <th>Total</th>
+                  <th>Action</th>
+
+                </tr>
+              </thead>
+              <tbody id="attendancedetails">
+
+              </tbody>
+
+          </table>
+
+
+
+
+        </div>
+
+        
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeeditpartybtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button"  id="downloadpdf" class="btn btn-primary">Download Attendance</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ 
+<div class="modal fade hidden" id="newagentmodal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Add New account</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form  id="transportagentform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input required type="text" name="Tagentname" id="Tagentname" class="form-control" placeholder="Enter Name">
+          </div>
+          <!-- <div class="col mb-3">
+            <label for="address" class="form-label">Account Type</label>
+            <select name="accounttype" id="accounttype" class="form-control">
+
+              <option value="Labour">Labour</option>
+              <option value="Expence-income">Expence / Income</option>
+              <option value="Delivery-Agent">Delivery Agent</option>
+              <option value="Loader">Loader</option>
+
+            </select>     
+
+</div> -->
+<input type="hidden" name="accounttype" id="accounttype" value="Expence-income">
+          </div>
+ 
+          <div class="row">
+          <div class="col mb-3">
+            <label for="description" class="form-label">Phone</label>
+            <input  type="text" id="Tagentphone" name="Tagentphone" class="form-control" placeholder="Enter Phone">
+          </div>
+          <div class="col mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" id="Tagentaddress" name="Tagentaddress" class="form-control" placeholder="Enter Address">
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeTransportModalBtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" form="sellerform" id="submitbutton" onclick="addtransportagent()" class="btn btn-primary">Add Party</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ <div class="modal fade hidden" id="openreport">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Report</h5>
+      
+      </div>
+      <div class="modal-body">
+        <form  id="downloadform" method="post" action="/downloademployeereport">
+      <div class="row">
+        <div class="col mb-3">
+          <label for="name" class="form-label">From</label>
+          <input required type="date" name="from" id="datafrom" class="form-control">
+        </div>
+        <div class="col mb-3">
+          <label for="description" class="form-label">To</label>
+          <input  type="date" id="datato" required  name="to" class="form-control" >
+        </div>
+        </div>
+
+       
+      
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeeditpartybtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" id="buttonreport" form="downloadform"   class="btn btn-primary">Download loaders</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<style>
+  .custom-checkbox {
+    width: 25px;
+    height: 25px;
+    transform: scale(1.5); /* Adjust the scale as needed */
+    cursor: pointer;
+}
+</style>
+<script>
+  var thetatable
+      $(document).ready(function () {
+        const today = new Date();
+
+// Format today's date as yyyy-mm-dd
+const formattedDate = today.toISOString().split('T')[0];
+
+// Set the value of the input field to today's date
+document.getElementById('currentDate').innerText = formattedDate;
+const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+         thetatable = $('#sellers').DataTable({
+          responsive: responsive,
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: '/expenseincometotal',
+            dataSrc: 'docs', // Key that holds the array of data in the API response
+            data: function (d) {
+              d.name = 'Labour'; // Add the 'name' parameter to the data object
+              return d;
+  
+              // Add any additional parameters you want to send to the server here
+            },
+          },
+          columns: [
+            {
+              data: null,
+              render: function (data, type, row) {
+                return `<a class="" href="/ieaccount/${row.agent}" >${row.agent}</a>`;
+              },
+            },
+            { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.address || '') 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.phone || '') 
+              }
+          },
+           
+          { 
+              data: null,
+              render: function (data, type, row) {
+                return row.totalIncome ? parseInt(row.totalIncome) : 0;
+              }
+          }, 
+  
+          { 
+              data: null,
+              render: function (data, type, row) {
+                return row.totalExpense ? parseInt(row.totalExpense) : 0;
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                return parseInt(((row.totalIncome||0)-(row.totalExpense || 0))) 
+              }
+          },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item edit-action" data-id="${row._id}"  data-name="${row.agent}" data-address="${row.address}" data-address="${row.phone}"><i class="bx bx-edit me-1"></i> Edit /View </button>
+                  <button class="dropdown-item delete-btn" data-id="${row._id}"><i class="bx bx-trash me-1"></i> Delete</button>
+                </div>
+              </div>`;
+            },
+          }, // Assuming coffee is an array property
+          ],
+        });
+        $('#sellers').on('click', '.edit-action', function () {
+          var name = $(this).data('name');
+      var address = $(this).data('address');   
+      var phone = $(this).data('phone');   
+      var id = $(this).data('id');   
+
+      $('#editname').val(name);
+      $('#editaddress').val(address);
+      $('#editphone').val(phone);
+      $('#id').val(id);
+
+      // Show the edit party modal
+      $('#transportagentModal').modal('show');
+      // const rowData = JSON.parse($(this).closest('.edit-btn').attr('data-row'));
+    });
+    $('#sellers').off('click', '.delete-btn');
+
+    $('#sellers').on('click', '.delete-btn', function () {
+  
+      var id = $(this).data('id');
+      const password = window.prompt("Please enter your password to confirm deletion:");
+      if (password !== null) { // User clicked "OK"
+          // Send a request to deleteuser API endpoint with the entered password
+          fetch('/deleteagent', {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify( {password:password,id:id} )
+          })
+          .then(response => {
+              if (response.ok) {
+                  alert('User deleted successfully');
+                  window.location.reload();
+              } else {
+                  alert('Failed to delete user. Please check your password.');
+              }
+          })
+          .catch(error => {
+              console.error('Error deleting user:', error);
+              alert('Failed to delete user. Please try again later.');
+          });
+      }
+  
+  
+    });
+      });
+
+      function updateexpence() {
+    // Get form data
+    const name = document.getElementById('editname').value;
+    const address = document.getElementById('editaddress').value;
+    const phone = document.getElementById('editphone').value;
+    const id = document.getElementById('id').value;
+
+    var closeButton = document.getElementById('closeeditpartybtn');
+
+    // Prepare data to be sent
+    const data = {
+        name: name,
+        address: address,
+        phone: phone,
+        id:id
+    };
+
+ 
+      axios.post('/editagent', data)
+  .then(response => {
+    // Handle the server response here
+    thetatable.ajax.reload();
+    closeButton.click();
+    
+    // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+}
+function addtransportagent(){
+  var agent = document.getElementById("Tagentname").value;
+  var address = document.getElementById("Tagentaddress").value;
+  var phone = document.getElementById("Tagentphone").value;
+  var strength = 0;
+  var accounttype = document.getElementById("accounttype").value;
+
+  var data = {
+    agent: agent,
+    address:address,
+    phone:phone,
+    strength:strength,
+    accounttype:'Labour'
+  
+  };
+  
+  
+  // Send a POST request to the server using Axios
+  axios.post('/addtransportagent', data)
+    .then(response => {
+      // Handle the server response here
+  
+      // Close the modal on successful response
+      if (response.data.success) {
+      var closeButton = document.getElementById('closeTransportModalBtn');
+      thetatable.ajax.reload()
+  // Trigger the click event on the button
+  closeButton.click();
+      }
+    })
+    .catch(error => {
+      // Handle errors here
+      console.log('Error:', error);
+    });
+  
+  
+  }
+    </script>  
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+       
+    <script>
+      // $(document).ready(function() {
+      //     // Fetch employee data using jQuery
+      //     getlist();
+      //       // Fetch employee data using Axios
+       
+      // });
+    
+    function getattendance(selectedDate){
+      $.ajax({
+        url: '/attendance/' + selectedDate,
+        method: 'GET',
+        success: function(response) {
+            // Clear existing input fields
+
+            // If attendance data is found, populate the fields
+            if (response.attendance && response.attendance.length > 0) {
+                response.attendance.forEach(function(entry) {
+                  var inputField = $('#' + entry.id);
+
+                    if (inputField.length > 0) {
+                        // If it exists, update the value
+                        inputField.val(entry.wrokhour);
+                    }
+                });
+            } else {
+              $('#employee-container input[type="number"]').each(function() {
+                    $(this).val(0);
+                });
+                alert('No attendance data found for this date.');
+            }
+        },
+        error: function(err) {
+          $('#employee-container input[type="number"]').each(function() {
+                    $(this).val(0);
+                });
+          alert('No attendance data found for this date.');        }
+    });
+      }
+      function getlist(){
+        axios.get('/getallemployees')
+                .then(function(response) {
+                    const employees = response.data.data;
+              employees.forEach(function(employee) {
+                  // Create a new row for each employee
+                  var row = $('<div class="row p-2"></div>');
+
+                  // Create the name column
+                  var nameCol = $('<div class="col-6"><h4>' + employee.agent + '</h4></div>');
+
+                  // Create the input field column
+                  var inputCol = $('<div class="col-4"><input type="number" class="form-control" value="0" name="employee_' + employee._id + '" id="' + employee._id + '" data-src="'+employee.agent+'"></div>');
+                  var checkboxCol = $(
+                    '<div class="col-2"><input type="checkbox" class="custom-checkbox" id="checkbox_' + employee._id + '"></div>'
+                );
+
+                // Add event listener to the checkbox
+                checkboxCol.find('input').on('change', function() {
+                    const inputField = $('#' + employee._id); // Get the associated input field
+                    if ($(this).is(':checked')) {
+                        inputField.val(8); // Set the value to 8 if checked
+                    } else {
+                        inputField.val(0); // Set the value to 0 if unchecked
+                    }
+                });
+                  // Append the columns to the row
+                  row.append(nameCol);
+                  row.append(inputCol);
+                  row.append(checkboxCol);
+
+                  // Append the row to the container
+                  $('#employee-container').append(row);
+              });
+            })
+         
+      }
+  </script>
+  <script>
+
+$(document).ready(function() {
+    $('#checkattendance').on('click', function() {
+        // Get the date values from the input fields
+        const fromDate = $('#fromdate').val();
+        const toDate = $('#todate').val();
+
+        // Send an API request to fetch attendance data
+        $.ajax({
+            url: '/getallattendance',  // Modify this to your API endpoint
+            method: 'GET',
+            data: {
+                from: fromDate,
+                to: toDate
+            },
+            success: function(response) {
+                // Clear existing table rows
+                $('#attendancedetails').empty();
+
+                // Loop through each employee's data and create table rows
+                response.attendanceData.forEach((employee, index) => {
+    const row = `
+        <tr>
+            <td>${employee.src}</td>
+            <td>${employee.totalWorkHours}</td>
+            <td><input class="form-control basepay-input" data-index="${index}" id="basepay-${index}" type="number" placeholder="Enter Base Pay"></td>
+            <td><input class="form-control" id="totalamount-${index}" type="number" readonly></td>
+            <td>
+                <button type="button" id="addsalary-${index}" class="btn btn-primary btn-sm add-btnvdd mt-2" data-id="${employee.id}" data-index="${index}">
+                    <i class="bx bx-check"></i> Add Salary
+                </button>
+            </td>
+        </tr>
+    `;
+    $('#attendancedetails').append(row);
+});
+$('#downloadpdf').off('click').on('click', function() {
+                    if(response.attendanceData<=0){
+                      alert('check data first');
+                      return;
+                    }
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+
+                    // Add a title with the date range
+                    doc.text(`Attendance Details (${fromDate} to ${toDate})`, 14, 10);
+
+                    // Generate the PDF table using response.agentData
+                    doc.autoTable({
+                        head: [['Agent', 'Work Hours']],
+                        body: response.attendanceData.map((agent) => [
+                            agent.src,
+                            agent.totalWorkHours,
+                    
+                        ])
+                    });
+
+                    // Download the PDF
+                    doc.save(`KooliDetails_${fromDate}_to_${toDate}.pdf`);
+                });
+           
+// When basepay is changed, update the total amount field
+$(document).on('input', '.basepay-input', function() {
+    const index = $(this).data('index');
+    const basePay = parseFloat($(this).val()) || 0;
+    const workHours = response.attendanceData[index].totalWorkHours;
+    const totalAmount = basePay * workHours;
+
+    // Set the corresponding total amount field
+    $(`#totalamount-${index}`).val(totalAmount);
+});
+
+$(document).on('click', '.add-btnvdd', function() {
+    const index = $(this).data('index');
+    const employeeId = $(this).data('id');
+    const workHours = response.attendanceData[index].totalWorkHours;
+    const name = response.attendanceData[index].src;
+    const basePay = parseFloat($(`#basepay-${index}`).val()) || 0;
+    const totalAmount = parseFloat($(`#totalamount-${index}`).val()) || 0;
+    const from = $('#fromdate').val(); // Assuming 'from' is the ID of the 'from' date input
+    const to = $('#todate').val(); // Assuming 'to' is the ID of the 'to' date input
+
+    if (!basePay || !totalAmount) {
+        alert("Please enter a valid base pay and ensure the total amount is calculated.");
+        return;
+    }
+    const src = {
+      name:name,
+        type: 'W + '+(workHours||0)+ 'H',
+        medium: 'Salary',
+        from: from||'',
+        to: to||'Un bounded',
+        date:new Date(),
+        payable:totalAmount,
+
+    };
+
+    // Send POST request to the server to add salary
+    axios.post('/addsalary', src)
+  .then(response => {
+    // Handle the server response here
+ 
+    // closeButton.click();
+    $(`#addsalary-${index}`).hide();
+    // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+});
+            },
+            error: function(error) {
+                console.error('Error fetching attendance data:', error);
+            }
+        });
+    });
+});
+
+  </script>
+                                        <%- include('./include/end.ejs') -%>

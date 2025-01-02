@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .company-logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .company-info {
+            padding: 15px;
+            padding-left: 20px; /* Adjust the gap here */
+        }
+        .table-custom {
+            font-size: 16px; /* Adjust font size as needed */
+            width: 100%; /* Set the width to 100% */
+        }
+        .table-custom th,
+        .table-custom td {
+            padding: 12px; /* Adjust padding as needed */
+            height: auto; /* Let cell height adjust dynamically */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <!-- Logo -->
+                <img src="http://77.37.47.185/logob.png" style="width: 100px;height:100px"  class="company-logo"></img>
+            </div>
+            <div class="col-md-5">
+                <!-- Company Info -->
+                <div class="company-info">
+                    <h2>{{data.companyname}}</h2>
+                    <p>Industrial Area, KushalNagara</p>
+                </div>
+            </div>
+            <div class="col-md-6 text-right">
+                <h6>Email: hitechcoffy@gmail.com</h6>
+                <h6>Phone: +91 9744061516</h6>
+                    <h2>{{data.lotnumber}}</h2>
+
+            </div>
+        </div>
+
+ 
+
+        <!-- Bill Type -->
+<div class="row">
+    <div class="col-md-12 text-center ">
+        <h4  class="border border-success rounded" style="padding: 5px;">{{data.type}} Delivery Report</h4>
+    </div>
+</div>
+        <!-- Party Info -->
+        <div class="row mb-1">
+            <div class="col-md-6">
+                <h4>PARTY : {{data.party}}</h4>
+                <h5>ITEM :  {{data.item}}</h5>
+                <h5>Refference :  {{data.refference}}</h5>
+
+                <!-- Include more address lines as needed -->
+            </div>
+            <div class="col-md-6 text-right">
+                    <h6>{{data.date}}</h6>
+                <h6>Delivery : {{data.delivery}}</h6>
+                <h6>Vehicle No. : {{data.vehicleno}}</h6>
+                <!-- Include more address lines as needed -->
+            </div>
+        </div>
+
+        <!-- Item List -->
+        <div class="row">
+            <div class="col-md-12" style="height: 350px;">
+                <table class="table table-bordered table-custom" >
+                    <thead>
+                        <tr style="height: 60px;">
+                            <th>G. Weight : {{data.quantity}}</th>
+                            <th>Bags : {{data.bags}}</th>
+                            <th>Bag Weight : {{data.bagweight}}</th>
+                            <th>NET Weight : {{data.netweights}}</th>
+
+                            <!-- Add more headers as needed -->
+                        </tr>
+                           <tr style="height: 60px;">                            
+                            <th>FM ( {{data.forignobject}} %) : {{data.forignobject}}</th>
+                            <th>WGHT. DED. : {{data.weightallowance}}</th>
+                            <th>FINAL Weight : {{data.netWeight}}</th>
+                            <th>OUTERN : {{data.outern}} </th>
+
+                            <!-- Add more headers as needed -->
+                        </tr>
+                    </thead>
+                    <tr style="height: 60px;">
+                            {{!-- <td>OUTERN : {{data.outern}} </td> --}}
+                            <td>MC : {{data.moisturepercentage}}</td>
+                            <td>BB  : {{data.bbpercentage}}</td>
+                            <td>IDB : {{data.berryborepercentage}}</td>
+                            {{!-- <td>MC DED : {{data.moisturecutting}}</td> --}}
+                            <td>OTHER</td>
+
+                            <!-- Add more columns for each item -->
+                        </tr>
+                         {{!-- <tr style="height: 60px;">
+                            <td>BB  : {{data.bbpercentage}}</td>
+                            <td>IDB : {{data.berryborepercentage}}</td>
+                            <td colspan="2">OTHER</td>
+                            <!-- Add more columns for each item -->
+                        </tr> --}}
+                        <tr style="height: 60px;">
+                            <td>MC DED : {{data.moisturecutting}}</td>
+                            <td>BB DED. :{{data.bbcutting}}</td>
+                            <td>IDB DED. : {{data.berryborecutting}} </td>
+                            <td>OTHER DED . : {{data.other}}</td>
+                            <!-- Add more columns for each item -->
+                        </tr>
+                         <tr style="height: 60px;"> 
+                            <th>HUSK / O ( {{data.huskpercentage}} %): {{data.huskcutting}}</th>
+                            <th>TOTAL EP DED. : {{data.cuttings}} </th>
+                            <th>EP PERCENTAGE : {{data.eppercentage}}</th>
+                            <th>NET EP WEIGHT: {{data.netepweight}}</th>
+
+                            <!-- Add more headers as needed -->
+                        </tr>
+                    {{!-- <tbody>
+                        <tr>
+                            <td>Item 1</td>
+                            <td>10 kg</td>
+                            <td>Bag Type</td>
+                            <!-- Add more columns for each item -->
+                        </tr>
+                        <!-- Add more rows for more items -->
+                        <tr>
+                            <td colspan="3"> <!-- colspan to span all columns -->
+                                <!-- This row is for additional notes or remarks -->
+                                Remarks: Any additional notes or remarks can be mentioned here.
+                            </td>
+                        </tr>
+                    </tbody> --}}
+                </table>
+            </div>
+        </div>
+
+        <!-- Deduction -->
+        <div class="row">
+            <div class="col-md-10">
+                <p>The report has been finalized according to company standards and verified by our expert team.</p>
+                <!-- You can style this area as needed -->
+            </div>
+             <div class="col-md-2">
+                <p>Signature.</p>
+                <!-- You can style this area as needed -->
+            </div>
+        </div>
+
+        {{!-- if data.bill.length greater than 0  --}}
+{{#if data.bill.length}}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Billing Confirmation</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Commitment</th>
+                     <th>Net Weight</th>
+                    <th>E.P. Weight</th>
+                    <th>Rate</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.bill}}
+                <tr> 
+                    <tr> 
+        <td>{{#if this.formatted_date}}{{this.formatted_date}}{{else}}{{this.date}}{{/if}}</td>
+    <td>{{#if this.id}}{{this.id}}{{else}}{{this.commitment}}{{/if}}</td>
+    <td>{{this.weight}}</td>
+    <td>{{#if this.quantity}}{{this.quantity}}{{else}}{{this.qty}}{{/if}}</td>
+    <td>{{#if this.rate}}{{this.rate}}{{else}}{{this.amount}}{{/if}}</td>
+    <td>{{#if this.total}}{{this.total}}{{else}}{{this.subtotal}}{{/if}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="5" class="text-right">Sub Total</th>
+                    <th>{{data.total}}</th>
+                    {{!-- <th>{{grandTotal}}</th>  --}}
+                    <!-- Assuming grand total is passed from backend -->
+                </tr>
+                <tr>
+                    <th colspan="5" class="text-right">OTHER : {{data.taxtype}}</th>
+                    <th>{{data.taxtotal}}</th>
+                    {{!-- <th>{{grandTotal}}</th>  --}}
+                    <!-- Assuming grand total is passed from backend -->
+                </tr>
+                <tr>
+                    <th colspan="5" class="text-right">Grand Total</th>
+                    <th>{{data.grandtotal}}</th>
+                    {{!-- <th>{{grandTotal}}</th>  --}}
+                    <!-- Assuming grand total is passed from backend -->
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+     <div class="row p-3 mt-1">
+            <div class="col-md-10">
+                <p>This document serves solely as a billing confirmation for reference purposes and does not constitute the actual bill. .</p>
+                <!-- You can style this area as needed -->
+            </div>
+             <div class="col-md-2">
+                <p>Party Signature.</p>
+                <!-- You can style this area as needed -->
+            </div>
+           
+        </div>
+</div>
+{{/if}}
+    </div>
+
+
+</body>
+</html>

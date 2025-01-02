@@ -1,0 +1,545 @@
+<%- include('../include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+<h3>Account of <%=employee%> <a ><i class="bx bxs-edit me-1"></i></a></h3>
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+               
+                <a class="btn btn-primary text-white" href="#"  data-bs-toggle="modal"
+                  data-bs-target="#newagentmodal">Claim Salary</a>
+                  <a class="btn btn-primary text-white" href="#"  data-bs-toggle="modal"
+                  data-bs-target="#workdays">Work Days</a>
+                  <div class="row mt-3 text-center"> 
+                    <div class="col-4"> <h4>Total Payable</h4>
+                        <h4 id="payabletotal">0</h4></div>
+                    <div class="col-4"><h4>Total Paid</h4> <h4 id="paidtotal">0</h4></div>
+                    <div class="col-4"><h4>Balance</h4> <h4 id="balancetotal">0</h4></div>
+
+                </div>
+                <div class="table-responsive text-nowrap p-4">
+                  <table class="table" id="sellers">
+                    <thead>
+                      <tr>
+                        <th>Date</th> 
+                          <th>Hint</th>
+                          <th>For/Against</th>
+                          <th>Medium</th>
+                          <th>Payable</th>
+                          <th>Recieved</th>
+                          <th>Paid</th>  
+
+  <th>Action</th>     
+          
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="table-body">
+                      <!-- Data will be populated here -->
+                    </tbody>
+                  </table>
+          
+                </div>
+              </div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade "></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+
+ 
+<div class="modal fade hidden" id="newagentmodal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Claim Salary Or Bonus</h5>
+      
+      </div>
+      <div class="modal-body">
+        <form id="addsalaryform">
+          <div class="row">
+              <div class="col-10 row">
+                  <div class="col-6 mb-3">
+                      <label for="attendanceFrom" class="form-label">Attendance From</label>
+                      <input type="date" id="attendanceFrom" name="attendanceFrom" class="form-control">
+                  </div>
+                  <div class="col-6 mb-3">
+                      <label for="attendanceTo" class="form-label">Attendance To</label>
+                      <input type="date" id="attendanceTo" name="attendanceTo" class="form-control">
+                      <input type="hidden" name="employeeName" id="employeeName" value="<%=employee%>">
+                  </div>
+              </div>
+              <div class="col-2">
+                  <label for=""></label>
+                  <button type="button" id="checkattendance" class="btn btn-primary btn-sm add-btnvd">
+                      <i class="bx bx-check"></i> Check
+                  </button>
+              </div>
+          </div>
+      
+          <div class="row">
+              <div class="col mb-3">
+                  <label for="claimDate" class="form-label">Claim Date</label>
+                  <input required type="date" id="claimDate" name="claimDate" class="form-control">
+              </div>
+              <div class="col mb-3">
+                  <label for="medium" class="form-label">Medium</label>
+                  <select id="medium" name="medium" class="form-control">
+                      <option value="Salary">Salary</option>
+                      <option value="Wage">Wage</option>
+                      <option value="Bonus">Bonus</option>
+                      <option value="Other">Other</option>
+                  </select>
+              </div>
+          </div>
+      
+          <div class="row">
+              <div class="col mb-3">
+                  <label for="workHours" class="form-label">Work Hours</label>
+                  <input type="number" value="0" id="workHours" name="workHours" class="form-control">
+              </div>
+              <div class="col mb-3">
+                  <label for="basePayment" class="form-label">Base Hour Payment</label>
+                  <input type="number" value="0" id="basePayment" name="basePayment" class="form-control">
+              </div>
+          </div>
+      
+          <div class="row">
+              <div class="col mb-3">
+                  <label for="extra" class="form-label">Extra</label>
+                  <input type="number" value="0" id="extra" name="extra" class="form-control">
+              </div>
+              <div class="col mb-3">
+                  <label for="totalPayable" class="form-label">Total Payable</label>
+                  <input type="number" value="0" id="totalPayable" name="totalPayable" class="form-control">
+              </div>
+          </div>
+      </form>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeTransportModalBtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" form="sellerform" id="submitbutton" onclick="addsalary()" class="btn btn-primary">Add Payment</button>
+      </div>
+
+    </div>
+  </div>
+ </div>
+ <div class="modal fade hidden" id="workdays">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Work Days</h5>
+      
+      </div>
+      <div class="modal-body">
+        <form  id="transportagentform">
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label for="name" class="form-label">From</label>
+          <input required type="date" name="fromdate" id="fromdate" class="form-control" placeholder="Enter Name">
+        </div>
+        <div class="col-6 mb-3">
+          <label for="description" class="form-label">To</label>
+          <input  type="date" id="todate" name="todate" class="form-control" placeholder="Enter Phone">
+        </div>
+        <div class="col-5 mb-3">
+          <label for="name" class="form-label">Hour Senario</label>
+          <select name="senario" class="form-control" id="senario">
+            <option value="gt">Greater Than</option>
+            <option value="lt">Less Than</option>
+
+          </select>
+        </div>
+        <div class="col-5 mb-3">
+          <label for="description" class="form-label">Value</label>
+          <input  type="number" value="0" id="numvalue" name="numvalue" class="form-control" placeholder="Enter numvalue">
+        </div>
+        <div class="col-2 mb-3">
+          <label for="description" class="form-label"></label>
+          <button type="button" id="checkworkhours" class="btn btn-primary btn-sm add-btnvd mt-2">
+            <i class="bx bx-check"></i> Check
+        </button>      
+        </div>
+        </div>
+        <div class="row">
+          <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Workhour</th>
+                </tr>
+              </thead>
+              <tbody id="workhoursdetails">
+
+              </tbody>
+
+          </table>
+
+
+
+
+        </div>
+
+        
+      
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeeditpartybtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" id="downloadpdf" class="btn btn-primary">Download Report</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  var thetatable
+  var employee = '<%=employee%>'
+      $(document).ready(function () {
+        calculatesum()
+        updateTotalPayment();
+        const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+         thetatable = $('#sellers').DataTable({
+          responsive: responsive,
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: '/ieaccount',
+            dataSrc: 'data', // Key that holds the array of data in the API response
+            data: function (d) {
+              d.name = '<%=employee%>'; // Add the 'name' parameter to the data object
+              return d;
+  
+              // Add any additional parameters you want to send to the server here
+            },
+          },
+          columns: [
+          {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      }, 
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.refference || '') 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.name || '') 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.medium || '') 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return parseInt(row.payable || 0) 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return parseInt(row.recieved || 0) 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                return parseInt(row.paid || 0) 
+              }
+          },
+          
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item delete-btn" data-id="${row._id}"><i class="bx bx-trash me-1"></i> Delete</button>
+                </div>
+              </div>`;
+            },
+          }, // Assuming coffee is an array property
+          ],
+        });
+        $('#sellers').on('click', '.edit-action', function () {
+          var name = $(this).data('name');
+      var address = $(this).data('address');   
+      var phone = $(this).data('phone');   
+      var id = $(this).data('id');   
+
+      $('#editname').val(name);
+      $('#editaddress').val(address);
+      $('#editphone').val(phone);
+      $('#id').val(id);
+
+      // Show the edit party modal
+      $('#transportagentModal').modal('show');
+      // const rowData = JSON.parse($(this).closest('.edit-btn').attr('data-row'));
+    });
+    $('#sellers').off('click', '.delete-btn');
+
+    $('#sellers').on('click', '.delete-btn', function () {
+  
+  var id = $(this).data('id');
+  if (confirm("do you want to delete ?")) { // User clicked "OK"
+      // Send a request to deleteuser API endpoint with the entered password
+      fetch('/deleteagentdata', {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify( {agent:employee,id:id} )
+      })
+      .then(response => {
+          if (response.ok) {
+              alert('Data deleted successfully');
+              thetatable.ajax.reload();
+              calculatesum()
+            } else {
+              alert('Failed to delete Data.');
+          }
+      })
+      .catch(error => {
+          alert('Failed to delete Data. Please try again later.');
+      });
+  }
+
+
+});
+  });
+     
+
+  
+  function addsalary(){
+    var attendanceFrom = $('#attendanceFrom').val();
+    var attendanceTo = $('#attendanceTo').val();
+    var claimDate = $('#claimDate').val();
+    var medium = $('#medium').val();
+    var workHours = $('#workHours').val();
+    var basePayment = $('#basePayment').val();
+    var extra = $('#extra').val();
+    var totalPayable = $('#totalPayable').val();
+    const src = {
+      name:employee,
+        type: 'W + '+(workHours||0)+ 'H',
+        medium: medium,
+        from: attendanceFrom||'',
+        to: attendanceTo||'Un bounded',
+        date:claimDate,
+        payable:totalPayable,
+
+    };
+
+    axios.post('/addsalary', src)
+  .then(response => {
+    // Handle the server response here
+    thetatable.ajax.reload();
+    $('#newagentmodal').modal('hide');
+    calculatesum()
+    // closeButton.click();
+    
+    // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+}
+function calculatesum(){
+    axios.get('/agentsum/'+employee)
+            .then(function(response) {
+                var data = response.data.data;
+                document.getElementById('payabletotal').innerText = (data.totalPayable+data.totalrecieved)
+                document.getElementById('paidtotal').innerText = data.totalPaid
+                document.getElementById('balancetotal').innerText = (data.totalPayable+data.totalrecieved-data.totalPaid)
+            })
+   }
+
+   function updateTotalPayment() {
+    // Get the values from the input fields
+    var workHours = parseFloat($('#workHours').val()) || 0;
+    var basePayment = parseFloat($('#basePayment').val()) || 0;
+    var extra = parseFloat($('#extra').val()) || 0;
+
+    // Calculate the total payable
+    var totalPayable = (workHours * basePayment) + extra;
+
+    // Update the totalPayable input field
+    $('#totalPayable').val(totalPayable.toFixed(2));
+}
+
+// Event listeners for input fields to recalculate the total payment
+$('#workHours, #basePayment, #extra').on('input', function() {
+    updateTotalPayment();
+});
+    </script>                
+                <script>
+
+
+$(document).ready(function() {
+
+  const today = new Date();
+
+// Format today's date as yyyy-mm-dd
+const formattedDate = today.toISOString().split('T')[0];
+
+// Set the value of the input field to today's date
+document.getElementById('claimDate').value = formattedDate;
+    $('#checkattendance').on('click', function() {
+        // Get values from the form
+        var attendanceFrom = $('#attendanceFrom').val();
+        var attendanceTo = $('#attendanceTo').val();
+        var employee = $('#employeeName').val();
+        console.log(attendanceFrom,attendanceTo,employee)
+
+        // Validate inputs
+        if (!attendanceFrom || !attendanceTo || !employee) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Make the AJAX request to the backend
+        $.ajax({
+            url: '/getTotalWorkHours',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                attendanceFrom: attendanceFrom,
+                attendanceTo: attendanceTo,
+                employee: employee
+            }),
+            success: function(response) {
+                // Handle the response (for example, show it in an alert or update the UI)
+                $('#workHours').val(parseFloat(response.totalWorkHours||0))
+                updateTotalPayment();
+
+
+            },
+            error: function(err) {
+                console.log(err);
+                alert('An error occurred while fetching total work hours.');
+            }
+        });
+    });
+});
+                </script>       
+                
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+                  
+                  <script>
+
+$(document).ready(function() {
+   $('#checkworkhours').on('click', function() {
+       // Get the date values from the input fields
+       const fromDate = $('#fromdate').val();
+       const toDate = $('#todate').val();
+       const senario = $('#senario').val();
+       const numvalue = $('#numvalue').val();
+       // Send an API request to fetch attendance data
+       $.ajax({
+           url: '/getworkhourdetails',  // Modify this to your API endpoint
+           method: 'GET',
+           data: {
+               from: fromDate,
+               to: toDate,
+               senario:senario,
+               numvalue:numvalue,
+               src:employee
+           },
+           success: function(response) {
+               // Clear existing table rows
+               $('#workhoursdetails').empty();
+
+               // Loop through each agent's data and create table rows
+               response.agentData.forEach((agent) => {
+                   const row = `
+                       <tr>
+                           <td>${agent.date}</td>
+                           <td>${agent.attendance.wrokhour}</td>
+                         =
+                       </tr>
+                   `;
+                   $('#workhoursdetails').append(row);
+               });
+
+               // Add functionality to download as PDF
+               $('#downloadpdf').off('click').on('click', function() {
+                   if(response.agentData<=0){
+                     alert('check data first');
+                     return;
+                   }
+                   const { jsPDF } = window.jspdf;
+                   const doc = new jsPDF();
+
+                   // Add a title with the date range
+                   doc.text(`WorkHour Details of ${employee} (${fromDate} to ${toDate})`, 14, 10);
+
+                   // Generate the PDF table using response.agentData
+                   doc.autoTable({
+                       head: [['Date', 'Work Hour']],
+                       body: response.agentData.map((agent) => [
+                           agent.date,
+                           agent.attendance.wrokhour,
+                           
+                       ])
+                   });
+
+                   // Download the PDF
+                   doc.save(`KooliDetails_${fromDate}_to_${toDate}.pdf`);
+               });
+           },
+           error: function(error) {
+               console.error('Error fetching Kooli data:', error);
+           }
+       });
+   });
+});
+
+                  </script>
+                <%- include('../include/end.ejs') -%>

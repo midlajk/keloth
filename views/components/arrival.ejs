@@ -1,0 +1,136 @@
+<div class="table-responsive text-nowrap p-4">
+  <h3>Arrivals</h3>
+  <a class="btn btn-success text-white" href="/generatereport"  >Add New</a>
+  <table class="table" id="arrivaltable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Lorry</th>
+        <th>Reference</th>     
+        <th>Bags</th>
+        <th>Weight</th>
+        <th>Ep %</th>
+        <th>EP</th>
+        <th>EP Storage</th>
+        <th>Action</th>
+
+      </tr>
+    </thead>
+    <tbody class="table-border-bottom-0" id="table-body">
+      <!-- Data will be populated here -->
+    </tbody>
+  </table>
+  <a class="btn btn-secondary text-white" id="downlodarrivalsbutton"   >Download</a>
+
+</div>
+
+
+<script>
+ 
+
+</script>
+<!-- Include Axios library (if not already included) -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- Your existing HTML code -->
+
+<script>
+  window.individualarrivals = function () {
+     console.log(filterdata)
+    // var geturl = routeName == 'featured' ? 'featuredpropertieslist' : 'propertieslist'  // Assuming you're passing this variable from EJS
+    // var buttonname = routeName == 'featured' ? 'Remove From Featured' : 'Add To Featured'  // Assuming you're passing this variable from EJS
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+    alTable = $('#arrivaltable').DataTable({
+      responsive: responsive,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/arrivals', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+             d.name = name;
+             d.filter = filterdata  // Add the 'name' parameter to the data object
+            return d;
+          // Add any additional parameters you want to send to the server here
+        },
+      },
+      columns: [
+      {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      },
+      { data: 'lorry' },
+        { data: 'item' },
+        { data: 'bags' },
+        { data: 'netWeight' },
+        { data: 'eppercentage' },
+        { data: 'netepweight' },
+        { data: 'storage' },
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  
+                  <a class="dropdown-item" href="/editentry/${name}/${row._id}"><i class="bx bx-edit me-1"></i> Edit /View </a>
+                  <a class="dropdown-item delete-btn" data-id="${row.lotnumber}"  data-party="${name}"><i class="bx bx-trash me-1"></i> Delete</a>
+                </div>
+              </div>`;
+          },
+        },
+      ],
+    });
+
+    // Delete Button Click Event
+  
+    $('#arrivaltable').off('click', '.delete-btn');
+
+    $('#arrivaltable').on('click', '.delete-btn', function() {
+      if(!confirm('Do you want to delete the data')){
+        return 
+      }
+    var id = $(this).data('id');
+    var party = $(this).data('party');
+
+    // Send delete request to the server
+    fetch(`/deletepurchase/${id}/${party}`, {
+        method: 'DELETE'
+    }).then(response => {
+        // Check if the request was successful
+        if (response.ok) {
+            // Reload or update the DataTable
+            getdetailedreport()
+            alTable.ajax.reload(null, false);
+        } else {
+            // Handle errors
+            alert('Something went wrong .Please check if the data already has a bill')
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+  })
+    // $('#example').on('click', '.featured-button', function () {
+    //   var data = dataTable.row($(this).closest('tr')).data();
+    //   var id = data._id;
+
+    //   if (routeName === 'featured') {
+    //     toggleFeatured(id, true); // Remove from Featured
+    //   } else if (routeName === 'properties') {
+    //     toggleFeatured(id, false); // Add to Featured
+    //   }
+    // });
+
+  }
+
+  document.getElementById('downlodarrivalsbutton').addEventListener('click', () => {
+      window.location.href = '/downloadarrivals/'+name;
+    });
+
+</script>

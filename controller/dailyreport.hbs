@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .company-logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .company-info {
+            padding: 15px;
+            padding-left: 20px; /* Adjust the gap here */
+        }
+        .table-custom {
+            font-size: 16px; /* Adjust font size as needed */
+            width: 100%; /* Set the width to 100% */
+        }
+        .table-custom th,
+        .table-custom td {
+            padding: 12px; /* Adjust padding as needed */
+            height: auto; /* Let cell height adjust dynamically */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding-top: 60px;padding-bottom:100px;padding-left:30px;padding-right:30px">
+        <div class="row">
+            <div class="col-1">
+                <!-- Logo -->
+                {{!-- <img src="/" style="width: 100px;height:100px"  class="company-logo"></img> --}}
+            </div>
+            <div class="col-5">
+                <!-- Company Info -->
+                <div class="company-info">
+                    <h2>KELOTH HULLER</h2>
+                    <p>Industrial Area, KushalNagar</p>
+                </div>
+            </div>
+            <div class="col-6 text-right">
+                <h6>Email: kelothhuller@gmail.com</h6>
+                <h6>Phone: +91 9744061516</h6>
+
+            </div>
+        </div>
+
+ 
+
+        <!-- Bill Type -->
+<div class="row">
+    <div class="col-12 text-center ">
+        <h4  class="border border-success rounded" style="padding: 5px;">Report of {{data.reportdate}}</h4>
+    </div>
+</div>
+        <!-- Party Info -->
+
+
+        <!-- Item List -->
+      
+
+        <!-- Deduction -->
+      
+
+        {{!-- if data.bill.length greater than 0  --}}
+{{#if data.arrivals.length}}
+<div class="row">
+    <div class="col-12">
+        <h2>Arival Report</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Item</th>
+                    <th>Lorry</th>
+                    <th>Bags</th>
+                    <th>Net Weight</th>
+                    <th>Outturn</th>
+                    <th>E.P.</th>
+                    <th>Storage E.P.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.arrivals}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.coffee.item}}</td>
+   <td>{{this.coffee.lorry}}</td>
+<td>{{this.coffee.bags}}</td>
+<td>{{this.coffee.netWeight}}</td>
+<td>{{this.coffee.eppercentage}}</td>
+<td>{{this.coffee.netepweight}}</td>
+<td>{{this.coffee.storage}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    
+</div>
+{{/if}}
+{{#if data.purchaseBills.length}}
+<div class="row">
+    <div class="col-12">
+        <h2>Purchase Bills</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Item</th>
+                    <th>Net Weight</th>
+                    <th>E.P.</th>
+                    <th>Rate</th>
+                    <th>Total before Tax</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.purchaseBills}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.purchasebillSchema.item}}</td>
+<td>{{this.purchasebillSchema.weight}}</td>
+<td>{{this.purchasebillSchema.qty}}</td>
+<td>{{this.purchasebillSchema.amount}}</td>
+<td>{{this.purchasebillSchema.total}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    
+</div>
+{{/if}}
+{{#if data.despatch.length}}
+<div class="row">
+    <div class="col-12">
+        <h2>Despatch Report</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Item</th>
+                    <th>Lorry</th>
+                    <th>Bags</th>
+                    <th>Net Weight</th>
+                    <th>Delivered E.P.</th>
+                    <th>Delivery</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.despatch}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.despatch.item}}</td>
+   <td>{{this.despatch.lorry}}</td>
+<td>{{this.despatch.bags}}</td>
+<td>{{this.despatch.netWeight}}</td>
+<td>{{this.despatch.netepweight}}</td>
+<td>{{this.despatch.delivery}}</td>
+
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    
+</div>
+{{/if}}
+{{#if data.salesBills.length}}
+<div class="row">
+    <div class="col-12">
+        <h2>Sales Bills</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Item</th>
+                    <th>Net Weight</th>
+                    <th>E.P.</th>
+                    <th>Rate</th>
+                    <th>Total before Tax</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.salesBills}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.salesbillSchema.item}}</td>
+<td>{{this.salesbillSchema.weight}}</td>
+<td>{{this.salesbillSchema.qty}}</td>
+<td>{{this.salesbillSchema.amount}}</td>
+<td>{{this.salesbillSchema.total}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    
+</div>
+{{/if}}
+{{#if data.salesCommitments.length}}
+<div class="row">
+    <div class="col-12">
+        <h2>Sale Commitments</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Item</th>
+                    <th>Net Weight</th>
+                    <th>Rate</th>
+                    <th>Additional</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.salesCommitments}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.salescommitmentsschema.item}}</td>
+<td>{{this.salescommitmentsschema.weight}}</td>
+<td>{{this.salescommitmentsschema.rate}}</td>
+<td>{{this.salescommitmentsschema.info}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    
+</div>
+{{/if}}
+{{#if data.purchaseCommitments.length}}
+<div class="row">
+    <div class="col-12">
+        <h2>Purchase Commitments</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Item</th>
+                    <th>Net Weight</th>
+                    <th>Rate</th>
+                    <th>Delivery</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.purchaseCommitments}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.purchasecommitments.item}}</td>
+<td>{{this.purchasecommitments.weight}}</td>
+<td>{{this.purchasecommitments.rate}}</td>
+<td>{{this.purchasecommitments.info}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    
+</div>
+{{/if}}
+      <div class="row border border-danger rounded m-1" style="padding: 5px;">
+    <div class="col-3 text-center ">
+        <label for="Openin Account Balance">Openin Account Balance</label>
+        <h4  class="">{{data.openingaccount}}</h4>
+    </div>
+    <div class="col-3 text-center ">
+        <label for="Openin Cash Balance">Openin Cash Balance</label>
+        <h4  class="">{{data.openingcash}}</h4>
+    </div>
+    <div class="col-3 text-center ">
+        <label for="Openin Other Balance">Openin Other Balance</label>
+        <h4  class="">{{data.openingother}}</h4>
+    </div>
+        <div class="col-3 text-center ">
+        <label for="Total Opening Balance">Total Opening Balance</label>
+        <h4  class="">{{data.openingtotal}}</h4>
+    </div>
+</div>
+{{#if data.transactions.length}}
+<div class="row">
+    <div class="col-12">
+        <h2>Transactions</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Refference</th>
+                    <th>Medium</th>
+                    <th>Recieved</th>
+                    <th>Paid</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.transactions}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.transaction.refference}}</td>
+<td>{{this.transaction.medium}}</td>
+<td>{{this.transaction.recieved}}</td>
+<td>{{this.transaction.paid}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    
+</div>
+{{/if}}
+{{#if data.balances.length }}
+<div class="row">
+    <div class="col-12">
+        <h2>Expenses / Credit</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Refference</th>
+                    <th>Medium</th>
+                    <th>Credit</th>
+                    <th>Expense</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.balances}}
+                <tr> 
+                    <tr> 
+        <td>{{this.agent}}</td>
+    <td>{{this.transaction.refference}}</td>
+<td>{{this.transaction.medium}}</td>
+<td>{{this.transaction.recieved}}</td>
+<td>{{this.transaction.paid}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    
+</div>
+{{/if}}
+{{#if data.closingbalance}}
+    <div class="row border border-danger rounded m-1" style="padding: 5px;">
+    <div class="col-3 text-center ">
+        <label for="Openin Account Balance">Total Recieved</label>
+        <h4  class="">{{data.recieved}}</h4>
+    </div>
+    <div class="col-3 text-center ">
+        <label for="Openin Cash Balance">Total Paid</label>
+        <h4  class="">{{data.paid}}</h4>
+    </div>
+    <div class="col-2 text-center ">
+        <label for="Openin Other Balance">Tds Recievable</label>
+        <h4  class="">{{data.tdsrecievable}}</h4>
+    </div>
+        <div class="col-2 text-center ">
+        <label for="Total Opening Balance">Tds Payable</label>
+        <h4  class="">{{data.tdspayable}}</h4>
+    </div>
+    <div class="col-2 text-center ">
+        <label for="Total Opening Balance">Closing</label>
+        <h4  class="">{{data.closebalance}} </h4>
+    </div>
+</div>
+{{/if}}
+
+{{!-- {{#if data.data.balances}}
+<div class="row">
+    <div class="col-12">
+        <h2>Pending Transactions</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Recievable</th>
+                    <th>Payable</th>
+                    <th>Defference</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.balances}}
+                <tr> 
+                    <tr> 
+        <td>{{this.agent}}</td>
+    <td>{{this.transaction.refference}}</td>
+<td>{{this.transaction.medium}}</td>
+<td>{{this.transaction.recieved}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    
+</div>
+{{/if}} --}}
+{{#if data.partybalance.length}}
+<div class="row">
+    <div class="col-12">
+        <h2>Pending Transactions</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Recievable</th>
+                    <th>Payable</th>
+                    <th>Balance Recievable</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.partybalance}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.arecievable}}</td>
+<td>{{this.apayable}}</td>
+<td>{{this.customSortKey}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          <tfoot>
+            <th>Total</th>
+            <th>{{data.totalAdjustedRecievable}}</th>
+            <th>{{data.totalAdjustedPayable}}</th>
+            <th>{{data.totalCustomSortKey}}</th>
+          </tfoot>
+        </table>
+    </div>
+    
+</div>
+{{/if}}
+<div class="row">
+    {{#if data.salecommitmentbalance.length}}
+
+    <div class="col-12">
+        <h2>Pending Sales</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>ID</th>     
+                    <th>Penging weight</th>
+                    <th>Expected EP</th>
+                    <th>EP Price</th>                 
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.salecommitmentbalance}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.salescommitmentsschema.id}}</td>
+<td>{{this.salescommitmentsschema.balanceweight}}</td>
+<td>{{this.salescommitmentsschema.balance}}</td>
+<td>{{this.salescommitmentsschema.rate}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    {{/if}}
+    {{#if data.purchasecommitmentbalance.length}}
+
+     <div class="col-12">
+        <h2>Pending Purchase</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>ID</th>     
+                    <th>Penging weight</th>
+                    <th>Expected EP</th>
+                    <th>EP Price</th>                 
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.purchasecommitmentbalance}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.purchasecommitments.id}}</td>
+<td>{{this.purchasecommitments.balanceweight}}</td>
+<td>{{this.purchasecommitments.balance}}</td>
+<td>{{this.purchasecommitments.rate}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    {{/if}}
+
+</div>
+
+<div class="row">
+    {{#if data.PurchaseStorage}}
+
+    <div class="col-12">
+        <h2>Arrival Storage</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Party</th>
+                    <th>Item</th>     
+                    <th>Storage EP weight</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.PurchaseStorage}}
+                <tr> 
+                    <tr> 
+        <td>{{this.name}}</td>
+    <td>{{this.item}}</td>
+<td>{{this.totalPurchaseStorage}}</td>
+
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    {{/if}}
+
+    {{#if data.SalesStorage}}
+
+     <div class="col-12">
+        <h2>Despatch Storage</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                       <th>Party</th>
+                    <th>Item</th>     
+                    <th>Storage EP weight</th>                
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.SalesStorage}}
+                <tr> 
+                    <tr> 
+      <td>{{this.name}}</td>
+    <td>{{this.item}}</td>
+<td>{{this.totalSalesStorage}}</td>
+</tr>            
+
+                </tr>
+                {{/each}}
+            </tbody>
+          
+        </table>
+    </div>
+    {{/if}}
+
+</div>
+{{#if data.stock.length}}
+<div class="row">
+    <div class="col-12">
+        <h2>Stock</h2>
+        <table class="table table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Stock Weight</th>
+                    <th>Stock EP</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data.stock}}
+                <tr>
+                    <td>{{product}}</td>
+                    <td>{{stockweight}}</td>
+                    <td>{{stockep}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{/if}}
+{{#if data.purchaseorsale}}
+ <div class="row border border-danger rounded m-1" style="padding: 5px;">
+    <div class="col-2 text-center ">
+        <label for="Openin Account Balance">Godown EP Stock</label>
+        <h4  class="">{{data.totalStockEp}}</h4>
+    </div>
+    <div class="col-2 text-center ">
+        <label for="Openin Cash Balance">EP Stock out</label>
+        <h4  class="">{{data.totalDespatchStorage}}</h4>
+    </div>
+    <div class="col-2 text-center ">
+        <label for="Openin Other Balance">EP Stock In</label>
+        <h4  class="">{{data.totalCoffeeStorage}}</h4>
+    </div>
+    <div class="col-2 text-center ">
+        <label for="Openin Other Balance">P Commitment</label>
+        <h4  class="">{{data.totalPurchaseCommitmentBalance}}</h4>
+    </div>
+    <div class="col-2 text-center ">
+        <label for="Openin Other Balance">S Commitment</label>
+        <h4  class="">{{data.totalSalesCommitmentBalance}}</h4>
+    </div>
+        <div class="col-2 text-center ">
+        <label for="Total Opening Balance">To Sell</label>
+        <h4  class="">{{data.topurchaseorsale}}</h4>
+    </div>
+</div>
+{{/if}}
+
+    </div>
+
+
+</body>
+</html>

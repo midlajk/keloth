@@ -1,0 +1,208 @@
+<div class="table-responsive text-nowrap p-4">
+  
+  
+  
+  <table class="table" style="width: 100%;">
+    <tr>
+      <th>Date</th>
+      <th>Refference</th>
+      <th>Medium</th>
+      <th style="min-width: 120px;">Paid</th>
+      <th style="min-width: 120px;">Recieved</th>
+      <th>Action</th>
+
+    </tr>
+    <tr>
+
+      <td>
+        <input type="date" id="transactiondate" class="form-control" autofocus>
+      </td>
+      <td>
+        <input type="text" id="transactionrefference" class="form-control" >
+      </td>
+      <td>
+        <select name="transactionmedium" id="transactionmedium"  class="form-control">
+          <option value="bank">BANK</option>
+          <option value="cash">CASH</option>
+          <option value="tds">TDS</option>
+
+        </select>
+
+      </td>
+      <td>
+        <input type="number" style="min-width: 120px;" value="0" id="transactionpaid" class="form-control">
+      </td>
+      <td>
+        <input type="number" style="min-width: 120px;" value="0" id="transactionrecieved" class="form-control">
+      </td>
+      <td>
+        <a class="btn btn-success text-white" href="#" id="submitTransaction">Submit</a>
+
+      </td>
+    </tr>
+
+  </table>
+  <table class="table" id="transactionTable" style="width: 100%;">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Refference</th>
+        <th>Recievable</th>
+        <th>Payable</th>
+        <th>Medium</th>
+        <th>Recieved</th>
+        <th>Paid</th>
+        <th>Action</th>
+
+      </tr>
+    </thead>
+    <tbody class="table-border-bottom-0" id="table-body">
+      <!-- Data will be populated here -->
+    </tbody>
+  </table>
+
+</div>
+
+
+
+<!-- Include Axios library (if not already included) -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- Your existing HTML code -->
+
+<script>
+  window.individualtransactions = function () {
+    var today = new Date();
+// Format the date to YYYY-MM-DD (required format for input type="date")
+var formattedDate = today.toISOString().split('T')[0];
+
+// Set the value of the input field to today's date
+document.getElementById('transactiondate').value = formattedDate;
+
+     document.getElementById('transactiondate').focus()
+    // var geturl = routeName == 'featured' ? 'featuredpropertieslist' : 'propertieslist'  // Assuming you're passing this variable from EJS
+    // var buttonname = routeName == 'featured' ? 'Remove From Featured' : 'Add To Featured'  // Assuming you're passing this variable from EJS
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+    transactionTable = $('#transactionTable').DataTable({
+      responsive: responsive,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/alltransactions', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+             d.name = name;
+             d.filter = filterdata // Add the 'name' parameter to the data object
+            return d;
+          // Add any additional parameters you want to send to the server here
+        },
+      },
+      columns: [
+      {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      }, 
+        { data: 'refference' },
+        { data: 'revievable' },
+        { data: 'payable' },
+        { data: 'medium' },
+        { data: 'recieved' },
+        { data: 'paid' },
+       
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item featured-button" href="javascript:void(0);"><i class="bx bx-star me-1"></i>delete</a>
+                  <a class="dropdown-item delete-btn" href="javascript:void(0);" data-id="${row._id}" data-party="${name}"><i class="bx bx-trash me-1"></i> Delete</a>                </div>
+                </div>
+              </div>`;
+          },
+        },
+      ],
+    });
+
+    // Delete Button Click Event
+  
+    $('#transactionTable').off('click', '.delete-btn');
+
+    $('#transactionTable').on('click', '.delete-btn', function () {
+      var id = $(this).data('id');
+    var party = $(this).data('party');
+    if(!confirm('Do you wan to delete this ?')){
+      return
+    }
+    fetch(`/transaction/${id}/${party}`, {
+        method: 'DELETE'
+    }).then(response => {
+        // Check if the request was successful
+        if (response.ok) {
+            // Reload or update the DataTable
+            transactionTable.ajax.reload(null, false);
+            getdetailedreport()
+        } else {
+            // Handle errors
+            console.error('Failed to delete item.');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+    });
+
+    // $('#example').on('click', '.featured-button', function () {
+    //   var data = dataTable.row($(this).closest('tr')).data();
+    //   var id = data._id;
+
+    //   if (routeName === 'featured') {
+    //     toggleFeatured(id, true); // Remove from Featured
+    //   } else if (routeName === 'properties') {
+    //     toggleFeatured(id, false); // Add to Featured
+    //   }
+    // });
+
+  }
+
+
+  $('#submitTransaction').click(function() {
+  var data = {
+    name:name,
+    date: $('#transactiondate').val(),
+    medium: $('#transactionmedium').val(),
+    paid: $('#transactionpaid').val(),
+    recieved: $('#transactionrecieved').val(),
+    refference: $('#transactionrefference').val()
+
+    // Add other fields as needed
+  };
+
+  // Send data to the server
+  $.ajax({
+    url: '/saveTransaction',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(data),
+    success: function(response) {
+      // Update DataTable on success
+      transactionTable.ajax.reload();
+      getdetailedreport()
+      // Optionally, clear the form fields
+      $('#transactionpaid').val(0);
+      $('#transactionrecieved').val(0);
+      $('#transactionrefference').val('');
+
+    },
+    error: function(xhr, status, error) {
+      console.error('Error:', error);
+      // Handle error
+    }
+  });
+});
+</script>

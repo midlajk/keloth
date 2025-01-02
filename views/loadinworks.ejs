@@ -1,0 +1,530 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+  <style>/* Popup container */
+            .popup {
+                position: fixed;
+                top: 0;
+                right: -100%; /* Initially hidden */
+                width: 100%;
+                height: 100%;
+                background-color: #fff;
+                box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+                transition: right 0.3s ease;
+                z-index: 1000;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+         
+            /* Open popup animation */
+            .popup.open {
+                right: 0;
+            }
+            
+            /* Close button */
+            .close-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-color: #ff5c5c;
+                border: none;
+                color: white;
+                font-size: 16px;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+            
+            /* Open button */
+            .open-btn {
+                position: fixed;
+                top: 50%;
+                right: 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+                z-index: 999;
+            }
+            .submit-container {
+
+    width: 100%;
+
+}
+
+
+            </style>
+
+<div id="popup" class="popup" style="display: flex; flex-direction: column; height: 100vh; max-width: 600px;">
+  <!-- Content of the popup -->
+    <div class="card-body">
+      <!-- action="/submit-bill" method="post" -->
+        <div class="row">
+            <div class="col">
+                <div class="card p-4 p-xl-5 my-3 my-xl-4">
+                 
+                  <div class="row">
+                    <div class="d-flex flex-column col-12">
+                          
+                      <div class="d-flex flex-row align-items-center">
+                          <span class="fw-bold d-block me-2">Work Date:</span>
+                          <input type="date" class="form-control" name="dateOfIssue" id="dateOfIssue" style="max-width: 150px;" required>
+                          <button id="closePopup" class="close-btn">X</button>
+
+                      </div>
+                  </div>
+                  </div>
+                    <hr class="my-4">
+                    <div class="row mb-5">
+                        <div class="col">
+                            <label class="fw-bold">Work:</label>
+                            
+                            <input placeholder="Work" type="text" name="work" id="work" class="form-control my-2">
+
+                      <label class="fw-bold">Unit:</label>
+                          <select name="unit" class="form-control my-2" id="unit">
+                              <option value="Bags">Bags</option>
+                              <option value="MT">MT</option>
+                              <option value="MT">Hour</option>
+
+                            </select>
+                     
+                            <!-- <input placeholder="Who is this invoice to?" type="text" name="billTo" id="billto" class="form-control my-2" required> -->
+                         
+                          
+                            </div>
+                        <div class="col">
+                          
+                           <label class="fw-bold">Bags/Ton</label>
+
+                                 <input placeholder="bags" type="number" name="bags" id="bags" class="form-control my-2">
+
+                            <label class="fw-bold">Base Kooli:</label>
+                            <input placeholder="Base kooli" type="number" name="basekooli" id="basekooli" class="form-control my-2">
+                       
+
+                      
+                        </div>
+                    </div>
+                    <div class="row">
+                      <table style="border-spacing: 10px; ">
+                        <thead>
+                            <tr>
+                                <th>Agent</th>
+                                <th>No.Of Workers</th>
+                                <th>Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td style="width: 45%;padding: 5px">
+                                <div class="input-group">
+                                  <div class="my-1 flex-nowrap input-group">
+                                    <select class="items-js" name="agent" id="agent" required></select>
+                                  </div>    
+                                    
+                                </div>
+                            </td>
+                            <td style="min-width: 70px;padding: 5px">
+                              <div class="input-group my-1 flex-nowrap">
+                                  <input
+                                      type="number"
+                                      name="manpower"
+                                      min="1"
+                                      step="1"
+                                      id="manpower"
+                                      class="form-control"
+                                      required
+                                  />
+                              </div>
+                          </td>
+                            <td style="min-width: 70px;padding: 5px">
+                                <div class="input-group my-1 flex-nowrap">
+                                  <div class="col-12 text-right">
+                                    <button class="btn btn-primary w-100" id="sumitworkerswork">Submit</button>
+                                </div>
+                                </div>
+                            </td>
+                
+                           
+                        </tr>
+                            <!-- ItemRows will be added here -->
+                        </tbody>
+                    </table>
+                  </div>
+                  <div class="row mt-4">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Agent Name</th>
+                          <th>Man Power</th>
+                          <th>Bags/Ton</th>
+                          <th>Kooli</th>
+                          <th>Divident</th>
+                        </tr>
+                      </thead>
+                      <tbody id="resultTableBody">
+                        <!-- Rows will be dynamically added here -->
+                      </tbody>
+                  
+                    </table>
+                    
+                  </div>
+
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+              
+        
+
+  <!-- Submit button at the bottom -->
+  <div class="row p-2 mt-3 mb-2" style="position: relative; bottom: 0; width: 100%; background-color: white;">
+      <div class="col-12 text-right">
+          <button class="btn btn-primary w-100" onclick="submitwork()" id="submitAttendance">Submit</button>
+      </div>
+  </div>
+</div>
+         
+<script> $(document).ready(function(){
+  // Open the popup
+  $('#openPopup').click(function(){
+    $('#employee-container').html('')
+      $('#popup').addClass('open');
+     
+  });
+
+  // Close the popup
+  $('#closePopup').click(function(){
+      $('#popup').removeClass('open');
+  });
+
+  // Close the popup by clicking outside (optional)
+  $(window).click(function(event) {
+      if (!$(event.target).closest('#popup, #openPopup').length) {
+          $('#popup').removeClass('open');
+      }
+  });
+  })
+</script>
+        
+
+<!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-primary text-white" href="#" id="openPopup" class="open-btn">Add Work</a>
+          
+                <div class="table-responsive text-nowrap p-4">
+                  <table class="table" id="sellers">
+                    <thead>
+                      <tr>
+                        <th>Date</th> 
+                        <th>Work</th>
+  <th>Variables</th>     
+  <th>Kooli/V</th>
+  <th>Total</th>
+  <th>Workers</th>
+  <th>Action</th>     
+          
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="table-body">
+                      <!-- Data will be populated here -->
+                    </tbody>
+                  </table>
+          
+                </div>
+              </div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade "></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  var thetatable
+      $(document).ready(function () {
+        const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+         thetatable = $('#sellers').DataTable({
+          responsive: responsive,
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: '/getloadingworks',
+            dataSrc: 'docs', // Key that holds the array of data in the API response
+            data: function (d) {
+              return d;
+  
+              // Add any additional parameters you want to send to the server here
+            },
+          },
+          columns: [
+    {
+      data: null,
+      render: function (data, type, row) {
+        return row.date ? new Date(row.date).toLocaleDateString() : ''; // Format and display date
+      },
+    },
+    {
+      data: null,
+      render: function (data, type, row) {
+        return row.work || ''; // Display work from `loadinwork` schema
+      },
+    },
+    {
+      data: null,
+      render: function (data, type, row) {
+        return (row.variables +' ' + row.unit) || ''; // Display variables from `loadinwork` schema
+      },
+    },
+    {
+      data: null,
+      render: function (data, type, row) {
+        return row.kooli || ''; // Display Kooli/V from `loadinwork` schema
+      },
+    },
+    {
+      data: null,
+      render: function (data, type, row) {
+       
+          return row.total || ''; // Display Kooli/V from `loadinwork` schema
+      },
+    },
+   
+    {
+      data: null,
+      render: function (data, type, row) {
+    return row.agents.map(agent => `${agent.agent} (${agent.manpower})`).join(', '); // Display workers (agent names and manpower)
+  }
+},
+    {
+      data: null,
+      render: function (data, type, row) {
+        return `<div class="dropdown">
+          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+            <i class="bx bx-dots-vertical-rounded"></i>
+          </button>
+          <div class="dropdown-menu">
+        
+            <button class="dropdown-item delete-btn" data-id="${row._id}">
+              <i class="bx bx-trash me-1"></i> Delete
+            </button>
+          </div>
+        </div>`;
+      },
+    },
+  ],
+        });
+        $('#sellers').off('click', '.delete-btn');
+
+    $('#sellers').on('click', '.delete-btn', function () {
+  
+      var id = $(this).data('id');
+      if (confirm("Please enter your password to confirm deletion:")) { // User clicked "OK"
+          // Send a request to deleteuser API endpoint with the entered password
+          fetch('/deleteloadingwork', {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify( {id:id} )
+          })
+          .then(response => {
+              if (response.ok) {
+                  alert('User deleted successfully');
+                  thetatable.ajax.reload()
+                } else {
+                  alert('Failed to delete user. Please check your password.');
+              }
+          })
+          .catch(error => {
+              console.error('Error deleting user:', error);
+              alert('Failed to delete user. Please try again later.');
+          });
+      }
+  
+  
+    });
+      });
+
+let dataArray = []; // Array to store submitted data
+let numberofworkers = 0;
+function submitwork(){
+  const dateOfIssue = $('#dateOfIssue').val();
+  const work = $('#work').val();
+  const unit = $('#unit').val();
+  const bags = $('#bags').val();
+  const basekooli = $('#basekooli').val();
+   if (!dateOfIssue||!dateOfIssue||!bags || dataArray <= 0){
+    return alert('please fill data')
+   }
+  var data = {
+    date: dateOfIssue,
+    work:work,
+    unit:unit,
+    bags:bags,
+    basekooli:basekooli,
+    total:parseInt(bags*basekooli),
+    agents:dataArray
+  
+  };
+  
+  
+  // Send a POST request to the server using Axios
+  axios.post('/addloadingwork', data)
+    .then(response => {
+      console.log(response)
+      // Handle the server response here
+  
+      // Close the modal on successful response
+      if (response.data) {
+      var closeButton = document.getElementById('closePopup');
+      thetatable.ajax.reload()
+  // Trigger the click event on the button
+        $('#work').val('');
+        $('#bags').val('');
+        $('#basekooli').val('');
+        $('#manpower').val('');
+
+        // Reset dataArray
+        dataArray = [];
+        const resultTableBody = $('#resultTableBody');
+  resultTableBody.empty(); // Clear the table before updating
+  numberofworkers = 0;
+  closeButton.click();
+      }
+    })
+    .catch(error => {
+      // Handle errors here
+      console.log('Error:', error);
+    });
+  
+  
+  }
+    </script>    
+    
+    <script>
+
+$(document).ready(function () {
+//     const today = new Date();
+
+// // Format today's date as yyyy-mm-dd
+// const formattedDate = today.toISOString().split('T')[0];
+
+// // Set the value of the input field to today's date
+// document.getElementById('dateOfIssue').value = formattedDate;
+    $('.items-js').select2({
+              ajax: {
+                  url: '/getworkagents',
+                  dataType: 'json',
+                  delay: 250, // Delay in milliseconds before making the request
+                  processResults: function (data) {
+                      return {
+                          results: data.results.map(name => ({ id: name, text: name }))
+                      };
+                  },
+                  cache: true // Enable caching to reduce server requests
+              }
+          });
+        })
+    </script>
+
+    <script>
+
+
+// Function to update the result table
+function updateTable() {
+  const resultTableBody = $('#resultTableBody');
+  resultTableBody.empty(); // Clear the table before updating
+
+  dataArray.forEach(data => {
+    const row = `
+      <tr>
+        <td>${data.agent}</td>
+        <td>${data.manpower}</td>
+        <td>${data.bags}</td>
+        <td>${data.kooli}</td>
+        <td>${data.total}</td>
+      </tr>
+    `;
+
+    resultTableBody.append(row);
+  });
+}
+
+// Handle submit button click
+$('#sumitworkerswork').on('click', function() {
+
+  const bags = $('#bags').val();
+  const basekooli = $('#basekooli').val();
+  const agent = $('#agent').val();
+  const manpower = parseInt($('#manpower').val()||1); // Convert manpower to integer
+console.log(manpower)
+  if ( bags && basekooli && agent && manpower) {
+    numberofworkers += manpower; // Update total number of workers
+
+    // If data already exists, update the bags for each agent
+    if (dataArray.length > 0) {
+      dataArray = dataArray.map(element => {
+        const updatedBags = ((bags / numberofworkers) * element.manpower).toFixed(1);
+        return {
+          agent: element.agent,
+          manpower: element.manpower,
+          bags: updatedBags,
+          kooli: element.kooli,
+          total: parseInt(updatedBags * basekooli),
+        };
+      });
+    }
+
+    // Add new agent data
+    const newBags = ((bags / numberofworkers) * manpower).toFixed(1);
+    dataArray.push({
+      agent: agent,
+      manpower: manpower,
+      bags: newBags,
+      kooli: basekooli,
+      total: parseInt(newBags * basekooli),
+    });
+
+    updateTable(); // Update the result table
+  } else {
+    dataArray = [];
+        const resultTableBody = $('#resultTableBody');
+  resultTableBody.empty(); // Clear the table before updating
+  numberofworkers= 0;
+    alert('Please fill all fields before submitting.');
+  }
+});
+
+
+    </script>
+                                        <%- include('./include/end.ejs') -%>

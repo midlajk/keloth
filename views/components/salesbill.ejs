@@ -1,0 +1,133 @@
+<div class="table-responsive text-nowrap p-4">
+  <h3>Sales Bill</h3>
+  <table class="table" id="sbillTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Bill no.</th>
+        <th>Item</th>
+        <th>LotNumber</th>
+        <th>Commitment</th>
+        <th>Net Weight</th>
+        <th>Net EP</th>
+        <th>Rate</th>
+        <th>Sub Total</th>
+        <th>Total</th>
+        <th>Action</th>
+
+      </tr>
+    </thead>
+    <tbody class="table-border-bottom-0" id="table-body">
+      <!-- Data will be populated here -->
+    </tbody>
+  </table>
+
+</div>
+
+
+
+<!-- Include Axios library (if not already included) -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- Your existing HTML code -->
+
+<script>
+  window.individualsalesbill = function () {
+     
+    // var geturl = routeName == 'featured' ? 'featuredpropertieslist' : 'propertieslist'  // Assuming you're passing this variable from EJS
+    // var buttonname = routeName == 'featured' ? 'Remove From Featured' : 'Add To Featured'  // Assuming you're passing this variable from EJS
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+    sbillTable = $('#sbillTable').DataTable({
+      responsive: responsive,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/salesbills', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+             d.name = name; // Add the 'name' parameter to the data object
+             d.filter = filterdata;
+            return d;
+          // Add any additional parameters you want to send to the server here
+        },
+      },
+      columns: [
+      {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      },  { data: 'uniqueid' },
+        { data: 'item' },
+        { data: 'lotnumber' },
+        { data: 'commitment' },
+        { data: 'weight' },
+        { data: 'qty' },
+        { data: 'amount' },
+        { data: 'subtotal' },
+        { data: 'total' },
+       
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item delete-btn" href="javascript:void(0);" data-id="${row._id}" data-uniqueid="${row.uniqueid}" data-party="${name}"><i class="bx bx-trash me-1"></i> Delete</a>                </div>
+                </div>
+              </div>`;
+          },
+        },
+      ],
+    });
+    $('#sbillTable').off('click', '.delete-btn');
+
+    $('#sbillTable').on('click', '.delete-btn', function() {
+    var id = $(this).data('id');
+    var uniqueid = $(this).data('uniqueid');
+    var party = $(this).data('party');
+    if(!confirm('Do you wan to delete this ?')){
+      return
+    }
+
+    // Send delete request to the server
+    fetch(`/sbills/${uniqueid}/${party}`, {
+        method: 'DELETE'
+    }).then(response => {
+        // Check if the request was successful
+        if (response.ok) {
+            // Reload or update the DataTable
+            getdetailedreport()
+            sbillTable.ajax.reload(null, false);
+        } else {
+            // Handle errors
+            console.error('Failed to delete item.');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+    // Delete Button Click Event
+    
+
+    // $('#example').on('click', '.featured-button', function () {
+    //   var data = dataTable.row($(this).closest('tr')).data();
+    //   var id = data._id;
+
+    //   if (routeName === 'featured') {
+    //     toggleFeatured(id, true); // Remove from Featured
+    //   } else if (routeName === 'properties') {
+    //     toggleFeatured(id, false); // Add to Featured
+    //   }
+    // });
+
+  }
+
+
+
+</script>

@@ -1,0 +1,586 @@
+<%- include('../include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+<h3>Account of <%=employee%> <a ><i class="bx bxs-edit me-1"></i></a></h3>
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+               
+                <a class="btn btn-primary text-white" href="#" o data-bs-toggle="modal"
+                  data-bs-target="#newagentmodal">Mark Work Done</a>
+                  <a class="btn btn-primary text-white" href="#" o data-bs-toggle="modal"
+                  data-bs-target="#newmodal">Pending Calculations</a>
+                  <a class="btn btn-primary text-white" href="/indivdualoadingworks/<%= employee %>">View Loading Works</a>
+                  <div class="row mt-3 text-center"> 
+                    <div class="col-4"> <h4>Total Payable</h4>
+                      <h4 id="payabletotal">0</h4></div>
+                  <div class="col-4"><h4>Total Paid</h4> <h4 id="paidtotal">0</h4></div>
+                  <div class="col-4"><h4>Balance</h4> <h4 id="balancetotal">0</h4></div>
+                </div>
+                <div class="table-responsive text-nowrap p-4">
+                  <table class="table" id="sellers">
+                    <thead>
+                      <tr>
+                        <th>Date</th> 
+                          <th>Hint</th>
+                          <th>Medium</th>
+
+<th>Payable</th>
+<th>Recieved</th>
+<th>Paid</th>     
+
+  <th>Action</th>     
+          
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="table-body">
+                      <!-- Data will be populated here -->
+                    </tbody>
+                  </table>
+          
+                </div>
+              </div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade "></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+
+ 
+<div class="modal fade hidden" id="newagentmodal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Mark new Work</h5>
+      
+      </div>
+      <div class="modal-body">
+        <form  id="transportagentform">
+          <div class=row>
+      
+        <div class="col mb-3">
+          <label for="name" class="form-label">Date</label>
+          <input required type="date" autofocus name="workdate" id="workdate" class="form-control" >
+        </div>
+        <div class="col mb-3">
+          <label for="name" class="form-label">Work</label>
+          <input required type="text" name="work" id="work" class="form-control" placeholder="work">
+        </div>
+      
+
+          </div>
+          <div class=row>
+      
+            <div class="col mb-3">
+              <label for="name" class="form-label">Variables</label>
+              <input required type="text" name="variables" id="variables" class="form-control" placeholder="Bags/Mt">
+            </div>
+            <div class="col mb-3">
+              <label for="name" class="form-label">Unit</label>
+              <select name="unit" id="unit" class="form-control">
+                <option value="Bags">Bags</option>
+                <option value="MT">MT</option>
+                <option value="Hours">Hours</option>
+                <option value="Other">Other</option>
+
+              </select>
+            </div>
+          
+    
+              </div>
+          <div class="row">
+          <div class="col mb-3">
+            <label for="description" class="form-label">Kooli</label>
+            <input  type="number" id="kooli"  name="kooli" class="form-control" placeholder="Kooli">
+          </div>
+          <div class="col mb-3">
+            <label for="address" class="form-label">Total</label>
+            <input type="number" id="total" value="0" name="total" class="form-control" placeholder="Total">
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeTransportModalBtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" form="sellerform" id="submitbutton" onclick="markload()" class="btn btn-primary">Mark Load</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+
+ <div class="modal fade hidden" id="newmodal" >
+  <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 50%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Pending Calculations</h5>
+
+      </div>
+      <div class="modal-body">
+        <form  >
+      <div class="row">
+        <table lass="table"  class="table" id="loads-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Work</th>
+              <th>Variable</th>
+              <th>Man power</th>
+              <th>Kooli</th>
+              <th>Total</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0" id="loads-table-body">
+            <!-- Data will be populated here -->
+          </tbody>
+          </table>
+        </div>
+
+        
+      
+    </div>
+      
+  </form>
+    </div>
+  </div>
+ </div>
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  var thetatable
+  var employee = '<%=employee%>'
+      $(document).ready(function () {
+        calculatesum()
+        const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+         thetatable = $('#sellers').DataTable({
+          responsive: responsive,
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: '/ieaccount',
+            dataSrc: 'data', // Key that holds the array of data in the API response
+            data: function (d) {
+              d.name = '<%=employee%>'; // Add the 'name' parameter to the data object
+              return d;
+  
+              // Add any additional parameters you want to send to the server here
+            },
+          },
+          columns: [
+          {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      }, 
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.refference || '') 
+              }
+          },
+           
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.medium || '') 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return parseInt(row.payable || 0) 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return parseInt(row.recieved || 0) 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                return parseInt(row.paid || 0) 
+              }
+          },
+          
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item delete-btn" data-id="${row._id}"><i class="bx bx-trash me-1"></i> Delete</button>
+                </div>
+              </div>`;
+            },
+          }, // Assuming coffee is an array property
+          ],
+        });
+        $('#sellers').off('click', '.delete-btn');
+
+    $('#sellers').on('click', '.delete-btn', function () {
+  
+      var id = $(this).data('id');
+  if (confirm("do you want to delete ?")) { // User clicked "OK"
+      // Send a request to deleteuser API endpoint with the entered password
+      fetch('/deleteagentdata', {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify( {agent:employee,id:id} )
+      })
+      .then(response => {
+          if (response.ok) {
+              alert('Data deleted successfully');
+              thetatable.ajax.reload();
+            } else {
+              alert('Failed to delete Data.');
+          }
+      })
+      .catch(error => {
+          alert('Failed to delete Data. Please try again later.');
+      });
+  }
+
+
+  
+    });
+      });
+
+      function updateexpence() {
+    // Get form data
+    const name = document.getElementById('editname').value;
+    const address = document.getElementById('editaddress').value;
+    const phone = document.getElementById('editphone').value;
+    const id = document.getElementById('id').value;
+
+    var closeButton = document.getElementById('closeeditpartybtn');
+
+    // Prepare data to be sent
+    const data = {
+        name: name,
+        address: address,
+        phone: phone,
+        id:id
+    };
+
+ 
+      axios.post('/editagent', data)
+  .then(response => {
+    // Handle the server response here
+    thetatable.ajax.reload();
+    closeButton.click();
+    
+    // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+}
+function addtransportagent(){
+  var agent = document.getElementById("Tagentname").value;
+  var address = document.getElementById("Tagentaddress").value;
+  var phone = document.getElementById("Tagentphone").value;
+  var strength = 0;
+  var accounttype = document.getElementById("accounttype").value;
+
+  var data = {
+    agent: agent,
+    address:address,
+    phone:phone,
+    strength:strength,
+    accounttype:'Labour'
+  
+  };
+  
+  
+  // Send a POST request to the server using Axios
+  axios.post('/addtransportagent', data)
+    .then(response => {
+      // Handle the server response here
+  
+      // Close the modal on successful response
+      if (response.data.success) {
+      var closeButton = document.getElementById('closeTransportModalBtn');
+      thetatable.ajax.reload()
+  // Trigger the click event on the button
+  closeButton.click();
+      }
+    })
+    .catch(error => {
+      // Handle errors here
+      console.log('Error:', error);
+    });
+  
+  
+  }
+    </script>      
+    <script>
+
+
+function markload() {
+    // Retrieve the form element
+    const form = document.getElementById('transportagentform');
+    
+    // Get form data using FormData API
+    const formData = new FormData(form);
+    
+    // Convert FormData to an object
+    const data = Object.fromEntries(formData.entries());
+
+    // Construct the `src` object
+    const src = {
+        name: employee, // Assuming employee is a global variable or defined elsewhere
+        work: data.work, // Or another relevant field if distance isn't correct
+        variables: data.variables,
+        unit: data.unit,
+        kooli: data.kooli, // Assuming weight is the quantity
+        total: data.total,
+        date: data.workdate // Assuming rent is the rate
+    };
+ if(src.work && src.date && src.total){
+  addtrip(src)
+ }else{
+  alert('Please fill the fields')
+ }
+   
+}
+  function addtrip(data){
+    const src = {
+      work: data.work,
+        unit: data.unit,
+        date:data.date,
+        agent:{
+          agent: employee,
+          total : data.total||0,
+          bags : data.variables||0,
+          kooli : data.kooli||0,
+        }
+
+    };
+
+    axios.post('/aditionalloadinwork', src)
+  .then(response => {
+    // Handle the server response here
+    thetatable.ajax.reload();
+    $('#newagentmodal').modal('hide');
+    calculatesum()
+    // closeButton.click();
+    
+    // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+
+   
+  }
+  document.getElementById('variables').addEventListener('input', calculateTotal);
+  document.getElementById('kooli').addEventListener('input', calculateTotal);
+
+  function calculateTotal() {
+    const variables = parseFloat(document.getElementById('variables').value) || 0;
+    const kooli = parseFloat(document.getElementById('kooli').value) || 0;
+    const total = variables * kooli;
+
+    // Set the total value in the input field
+    document.getElementById('total').value = parseInt(total) // Optional: limit to 2 decimal places
+  }
+    </script> 
+    <script>
+
+
+$(document).ready(function() {
+
+  var dataTable
+
+  $('#newmodal').on('shown.bs.modal', function() {
+      viewtable()
+  });
+  $('#newmodal').on('hidden.bs.modal', function() {
+    // Your function to execute when the modal is hidden
+    dataTable.destroy();
+  });
+  function viewtable(){
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+  dataTable = $('#loads-table').DataTable({
+    responsive: responsive,
+        "pageLength": 10,
+        "dom": 'rtip',
+
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/notcalculatedloads', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+          d.name = employee;
+          return d;
+          // Add any additional parameters you want to send to the server here
+        },
+        
+      },
+        columns: [
+  
+        {
+          data: 'date',
+          render: function (data, type, row) {
+            // Format the date using moment.js
+            return moment(data).format('DD/MM/YYYY');
+          }
+        },
+        {
+      data: 'work',
+      render: function (data, type, row) {
+        // If delivery is null, show billTo instead
+        return data ? data : row.work;
+      }
+    },       {
+      data: null,
+      render: function (data, type, row) {
+        // If delivery is null, show billTo instead
+        return row.agents.bags;
+      }
+    },
+    {
+      data: null,
+      render: function (data, type, row) {
+        // If delivery is null, show billTo instead
+        return  row.agents.manpower;
+      }
+    },
+    {
+      data: null,
+      render: function (data, type, row) {
+        // Render an input field with the value of 'trip'
+        return `<input type="text" class="form-control kooli-input" value="${row.agents.kooli}" data-row-id="${row.agents._id}" data-bags="${row.agents.bags}" name="pendingkooliinput">`;
+      }
+    },
+        {
+      data: null,
+      render: function (data, type, row) {
+        // Render an input field with the value of 'trip'
+        return `<input type="text" class="form-control total-input" value="${row.agents.total}" data-row-id="${row.agents._id}" name="pendingtotalinput">`;
+      }
+    },
+     
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="dropdown">
+                  <button type="button" class="btn btn-primary btn-sm add-btnvd" data-src='${JSON.stringify(row)}'>
+        <i class="bx bx-plus"></i> Add
+      </button>
+                  
+                </div>`;
+            },
+          },
+        ],
+      });
+      $('#loads-table').on('input', '.kooli-input', function() {
+  // Get the current row data
+  var kooliValue = parseFloat($(this).val()) || 0;
+  var bagsValue = parseFloat($(this).data('bags')) || 0;
+
+  // Calculate the new total
+  var totalValue = parseInt(bagsValue * kooliValue);
+
+  // Find the corresponding total input and update it
+  $(this).closest('tr').find('input.total-input').val(totalValue); // optional: round to 2 decimal places
+});
+
+      $('#loads-table').off('click', '.add-btnvd');
+      $('#loads-table').on('click', '.add-btnvd', function() {
+        var rowData = $(this).data('src'); // Get the row data
+    var totalinput = $(this).closest('tr').find('input.total-input').val();
+    var kooliinput = $(this).closest('tr').find('input.kooli-input').val();
+
+    dat = {
+      kooli:kooliinput||0,
+      totalinput:totalinput||0,
+      id:rowData._id,
+      agentid:rowData.agents._id
+    }
+    axios.post('/updateloadinworkDetails', dat)
+  .then(response => {
+    const src = {
+        name: employee, // Assuming employee is a global variable or defined elsewhere
+        work: rowData.work, // Or another relevant field if distance isn't correct
+        variables: rowData.agents.bags,
+        unit: rowData.unit,
+        kooli: kooliinput||0, // Assuming weight is the quantity
+        total: totalinput||0,
+        date: rowData.date // Assuming rent is the rate
+    };
+   
+    addtrip(src)
+    $('#newmodal').modal('hide');
+    // closeButton.click();
+ // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+    // Call the assignCommitment function with the retrieved arguments (row data and trip value)
+    
+
+    // Call the assignCommitment function with the retrieved arguments
+});
+    }
+
+
+})
+function calculatesum(){
+    axios.get('/agentsum/'+employee)
+            .then(function(response) {
+                var data = response.data.data;
+                document.getElementById('payabletotal').innerText = (data.totalPayable+data.totalrecieved)
+                document.getElementById('paidtotal').innerText = data.totalPaid
+                document.getElementById('balancetotal').innerText = (data.totalPayable+data.totalrecieved-data.totalPaid)
+            })
+   }
+    </script>         
+                                        <%- include('../include/end.ejs') -%>

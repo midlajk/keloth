@@ -1,0 +1,550 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-primary text-white" href="#" onclick="abcd()">Add Purchase Commitment</a>
+                <a class="btn btn-primary text-white" href="#" onclick="openpcModal()">Add Sale Commitment</a>
+                <a class="btn btn-primary text-white" href="/allpuchasecommitments" >Purchase Commitments</a>
+                <a class="btn btn-primary text-white" href="/allsalescommitments" >Sale Commitments</a>
+
+                <div class="table-responsive text-nowrap p-4">
+                    <table class="table" id="despatchtable">
+                        <thead>
+                            <tr>
+                              <th>ITEM</th> 
+                              <th>Ballance Arrival</th>
+        <th>Balance E.P</th>     
+        <th>Avg Ep. Rate</th>
+        <th></th>
+        <th>Balance Despatch</th>
+        <th>Balance E.P</th>     
+        <th>Avg. Ep. Rate</th>
+        <th></th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0" id="table-body">
+                          <!-- Data will be populated here -->
+                      </tbody>
+  </table>
+
+</div>
+</div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade "></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+<div id="purchasecommitmentadd" class="modal"
+  style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+  <div class="modal-content"
+    style="background-color: white; padding: 20px; border-radius: 5px; width: 50%;  max-width: 500px;min-width: 330px; position: relative;">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalCenterTitle">Add Purchase Commitments</h5>
+
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col mb-3">
+          <label for="party" class="form-label">Party</label>
+          <select type="text" id="pcparty" name="pcparty" class="form-control"></select>
+
+        </div>
+      
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" id="pccomdate" name="pccomdate" class="form-control" placeholder="DATE">
+
+        </div>
+        <div class="col mb-3">
+          <label for="name" class="form-label">Item</label>
+          <select type="text" id="pccomitem" name="pccomitem" class="form-control items-js-pccom" ></select>
+
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col mb-3">
+          <label for="image" class="form-label">Reference</label>
+          <select type="text" id="pccomreference" name="pccomreference" class="form-control items-js-reffernece-pccom"></select>
+        </div>
+        <div class="col mb-3">
+          <label for="description" class="form-label">Weight</label>
+          <input type="number" id="pccomweight" name="pccomweight" class="form-control" placeholder="Weight">
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Expected EP %</label>
+          <input type="number" id="pccomep" name="pccomep" class="form-control" placeholder="EP %" max="100" value="100">
+
+        </div>
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Rate</label>
+          <input type="number" id="pccomrate" name="pccomrate" class="form-control" placeholder="Rate">
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Additional</label>
+          <input type="text" id="pccomAdditional" name="pccomAdditional" class="form-control" placeholder="Additional">
+
+        </div>
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Delivery</label>
+          <input type="text" id="pccomInfo" name="pccomInfo" class="form-control" placeholder="Delivery">
+
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" onclick="closepurchasecommitment()"
+        data-bs-dismiss="modal">
+        Close
+      </button>
+      <button onclick="postpurchasecommitment()" id="submitbutton" class="btn btn-primary">Add Commitment</button>
+    </div>
+  </div>
+</div>
+<div id="addsalescommitment" class="modal"
+  style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+  <div class="modal-content"
+    style="background-color: white; padding: 20px; border-radius: 5px; width: 50%;  max-width: 500px;min-width: 330px; position: relative;">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalCenterTitle">Add Sale Commitment</h5>
+
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col mb-3">
+          <label for="party" class="form-label">Party</label>
+          <select type="text" id="scparty" name="scparty" class="form-control"></select>
+
+        </div>
+      
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" id="scdate" name="scdate" class="form-control">
+
+        </div>
+        <div class="col mb-3">
+          <label for="name" class="form-label">Item</label>
+          <select type="text" id="scitem" name="scitem" class="form-control items-js" ></select>
+
+
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col mb-3">
+          <label for="image" class="form-label">Reference</label>
+          <select type="text" id="screference" name="screference" class="form-control items-js-reffernece"></select>
+
+        </div>
+        <div class="col mb-3">
+          <label for="description" class="form-label">Weight</label>
+          <input type="number" id="scweight" name="scweight" class="form-control" placeholder="Enter weight">
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Expected EP %</label>
+          <input type="number" id="scep" name="scep" class="form-control" placeholder="Ep %" max="100" value="100">
+
+        </div>
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Rate</label>
+          <input type="number" id="scrate" name="scrate" class="form-control" placeholder="Rate">
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Additional</label>
+          <input type="text" id="scAdditional" name="scAdditional" class="form-control" placeholder="Additional">
+
+        </div>
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Info</label>
+          <input type="text" id="scInfo" name="scInfo" class="form-control" placeholder="Info">
+
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" onclick="closepcModal()" data-bs-dismiss="modal">
+        Close
+      </button>
+      <button onclick="submitsalescommitment()" id="submitbutton" class="btn btn-primary">Add Sale Commitment</button>
+    </div>
+  </div>
+</div>
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  function openpcModal() {
+    const modal = document.getElementById('addsalescommitment');
+    modal.style.display = 'flex';
+    const inputElement = document.getElementById('scdate');
+    inputElement.focus();
+  }
+
+  // Function to close the modal
+  function closepcModal() {
+    const modal = document.getElementById('addsalescommitment');
+    modal.style.display = 'none';
+  }
+  function abcd() {
+    const modal = document.getElementById('purchasecommitmentadd');
+    modal.style.display = 'flex';
+
+    // Focus on the input element
+    const inputElement = document.getElementById('pccomdate');
+    inputElement.focus();
+}
+ 
+
+  // Function to close the modal
+  function closepurchasecommitment() {
+    const modal = document.getElementById('purchasecommitmentadd');
+    modal.style.display = 'none';
+  }
+</script>
+<script>
+var betatable
+  $(document).ready(function () {
+    //var routeName = '<%= route %>';
+   // var geturl =  routeName=='featured' ?'featuredpropertieslist':'propertieslist'  // Assuming you're passing this variable from EJS
+   // var buttonname =  routeName=='featured' ?'Remove From Featured':'Add To Featured'  // Assuming you're passing this variable from EJS
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+     betatable = $('#despatchtable').DataTable({
+      responsive: responsive,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/commitmenttotal',// Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+          // Add any additional parameters you want to send to the server here
+        },
+      },
+      lengthMenu: [[-1], ["All"]],
+      columns: [
+     
+      
+      { data: 'product' },
+      { data: 'totalBalanceWeight' },
+
+      { data: 'totalBalance' },
+      
+        { data: 'ratio' },
+       
+
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<a class="btn text-info" href="/getpurchasecommitmentreport/${row.product}">
+                <i class="fa fa-eye"></i>
+              </a>`;
+          },
+        },
+
+        { data: 'stotalBalanceWeight' },
+        { data: 'stotalBalance' },
+        { data: 'sratio' },
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<a class="btn text-primary"  href="/getsalescommitmentreport/${row.product}">
+                <i class="fa fa-eye"></i>
+              </a>`;
+          },
+        },
+      
+      ],
+    });
+
+    // Delete Button Click Event
+//     function deleteData(id) {
+//     $.ajax({
+//       url: `https://www.safehomes.ae/backend/deleteproperty/${id}`,
+//       type: 'DELETE',
+//       success: function (response) {
+//         dataTable.ajax.reload();
+//       },
+//       error: function (error) {
+//         console.error('Error deleting data:', error);
+//       },
+//     });
+//   }
+
+//   function toggleFeatured(id, isFeatured) {
+//     var formDataObj = { id: id, status: isFeatured ? 'notfeatured' : 'featured' };
+
+//     $.ajax({
+//       url: `https://www.safehomes.ae/backend/addfeatured`,
+//       type: 'POST',
+//       data: JSON.stringify(formDataObj),
+//       contentType: 'application/json',
+//       success: function (response) {
+//         dataTable.ajax.reload();
+//       },
+//       error: function (error) {
+//         console.error('Error updating data:', error);
+//       },
+//     });
+//   }
+
+//   $('#example').on('click', '.delete-btn', function () {
+//     var data = dataTable.row($(this).closest('tr')).data();
+//     var id = data._id;
+//     deleteData(id);
+//   });
+
+//   $('#example').on('click', '.featured-button', function () {
+//     var data = dataTable.row($(this).closest('tr')).data();
+//     var id = data._id;
+    
+//     if (routeName === 'featured') {
+//       toggleFeatured(id, true); // Remove from Featured
+//     } else if (routeName === 'properties') {
+//       toggleFeatured(id, false); // Add to Featured
+//     }
+//   });
+//  });
+});
+</script>
+<script>
+   async function postpurchasecommitment() {
+    const name = document.getElementById('pcparty').value;
+    const pccomdate = document.getElementById('pccomdate').value;
+    const pccomitem = document.getElementById('pccomitem').value;
+    const pccomreference = document.getElementById('pccomreference').value;
+    const pccomweight = document.getElementById('pccomweight').value;
+    const pccomep = document.getElementById('pccomep').value;
+    const pccomrate = document.getElementById('pccomrate').value;
+    const pccomAdditional = document.getElementById('pccomAdditional').value;
+    const pccomInfo = document.getElementById('pccomInfo').value;
+    const payload = {
+      name:name,
+      pccomdate: pccomdate,
+      pccomitem: pccomitem,
+      pccomreference: pccomreference,
+      pccomweight: pccomweight,
+      pccomep: pccomep,
+      pccomrate: pccomrate,
+      pccomAdditional: pccomAdditional,
+      pccomInfo: pccomInfo
+    };
+console.log(payload)
+    if(!pccomdate||!pccomitem||!pccomreference||!pccomweight||!pccomep||!pccomrate){
+      return alert('Please fill Date,Item,Refference,Weight,Ep,Rate fields')
+    }
+
+  
+    try {
+      // Use Axios to make the POST request
+      const response = await axios.post('/addpurchasecommitment', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Handle the response (you can add your own logic here)
+      window.location.reload()
+
+      // Close the modal after server response
+      closepurchasecommitment();
+
+    } catch (error) {
+      // Handle errors, such as network issues or server errors
+      console.log('Error:', error);
+    }
+  }
+  $('.items-js-pccom').select2({
+    dropdownParent: $("#purchasecommitmentadd"),
+
+              ajax: {
+                  url: '/getproducts',
+                  dataType: 'json',
+                  delay: 250, // Delay in milliseconds before making the request
+                  processResults: function (data) {
+                      return {
+                          results: data.results.map(name => ({ id: name, text: name }))
+                      };
+                  },
+                  cache: true // Enable caching to reduce server requests
+              }
+          });
+
+          $('.items-js-reffernece-pccom').select2({
+                  dropdownParent: $("#purchasecommitmentadd"),
+
+              ajax: {
+                  url: '/getrefferance',
+                  dataType: 'json',
+                  delay: 250, // Delay in milliseconds before making the request
+                  processResults: function (data) {
+                      return {
+                          results: data.results.map(name => ({ id: name, text: name }))
+                      };
+                  },
+                  cache: true // Enable caching to reduce server requests
+              }
+          });
+</script>
+
+                    <script>
+                      
+  async function submitsalescommitment() {
+    const name = document.getElementById('scparty').value;
+
+    const scdate = document.getElementById('scdate').value;
+    const scitem = document.getElementById('scitem').value;
+    const screference = document.getElementById('screference').value;
+    const scweight = document.getElementById('scweight').value;
+    const scep = document.getElementById('scep').value;
+    const scrate = document.getElementById('scrate').value;
+    scAdditional=document.getElementById('scAdditional').value;
+    scInfo=document.getElementById('scInfo').value;
+    if(!scdate||!scitem||!screference||!scweight||!scep||!scrate){
+      return alert('Please fill Date,Item,Refference,Weight,Ep,Rate fields')
+    }
+    const payload = {
+      name : name,
+      scdate: scdate,
+      scitem: scitem,
+      screference: screference,
+      scweight: scweight,
+      scep: scep,
+      scrate: scrate,
+      scInfo:scInfo,
+      scAdditional:scAdditional
+
+    };
+
+    try {
+      // Use Axios to make the POST request
+      const response = await axios.post('/addsalecommitment', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Handle the response (you can add your own logic here)
+
+      // Close the modal after server response
+      closepcModal();
+      window.location.reload()
+
+    } catch (error) {
+      // Handle errors, such as network issues or server errors
+      console.log('Error:', error);
+    }
+  }
+  $('.items-js').select2({
+    dropdownParent: $("#addsalescommitment"),
+
+              ajax: {
+                  url: '/getproducts',
+                  dataType: 'json',
+                  delay: 250, // Delay in milliseconds before making the request
+                  processResults: function (data) {
+                      return {
+                          results: data.results.map(name => ({ id: name, text: name }))
+                      };
+                  },
+                  cache: true // Enable caching to reduce server requests
+              }
+          });
+
+          $('.items-js-reffernece').select2({
+                  dropdownParent: $("#addsalescommitment"),
+
+              ajax: {
+                  url: '/getrefferance',
+                  dataType: 'json',
+                  delay: 250, // Delay in milliseconds before making the request
+                  processResults: function (data) {
+                      return {
+                          results: data.results.map(name => ({ id: name, text: name }))
+                      };
+                  },
+                  cache: true // Enable caching to reduce server requests
+              }
+          });
+
+
+          $('#scparty').select2({
+            dropdownParent: $("#addsalescommitment"),
+
+ajax: {
+url: '/getnames',
+dataType: 'json',
+delay: 250, // Delay in milliseconds before making the request
+processResults: function (data) {
+  return {
+    results: data.results.map(name => ({ id: name, text: name }))
+  };
+},
+cache: true // Enable caching to reduce server requests
+}
+
+});
+$('#pcparty').select2({
+  dropdownParent: $("#purchasecommitmentadd"),
+ajax: {
+url: '/getnames',
+dataType: 'json',
+delay: 250, // Delay in milliseconds before making the request
+processResults: function (data) {
+  return {
+    results: data.results.map(name => ({ id: name, text: name }))
+  };
+},
+cache: true // Enable caching to reduce server requests
+}
+
+});
+                    </script>                
+                                        <%- include('./include/end.ejs') -%>

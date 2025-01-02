@@ -1,0 +1,193 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+               
+                <div class="table-responsive text-nowrap p-4">
+                    <table class="table" id="arrivalstable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Party</th>
+                                <th>Commitment</th>
+                                <th>Item</th>
+                                <th>Weight</th>
+                                <th>Ep Weight</th>
+                                <th>Price</th>
+                                <th>Sub Total</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0" id="table-body">
+                          <!-- Data will be populated here -->
+                      </tbody>
+  </table>
+
+</div>
+</div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+
+<script>
+  $(document).ready(function () {
+    console.log('hehe')
+    // var routeName = '<%= route %>';
+    // var geturl =  routeName=='featured' ?'featuredpropertieslist':'propertieslist'  // Assuming you're passing this variable from EJS
+    // var buttonname =  routeName=='featured' ?'Remove From Featured':'Add To Featured'  // Assuming you're passing this variable from EJS
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+    var dataTable = $('#arrivalstable').DataTable({
+      responsive:responsive,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/allpurchasebill', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+          // Add any additional parameters you want to send to the server here
+        },
+        
+      },
+      columns: [
+      {
+        data: 'purchasebillSchema.date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      },
+      { data: 'name' },
+      { data: 'purchasebillSchema.commitment' },
+        { data: 'purchasebillSchema.item' },
+        { data: 'purchasebillSchema.weight' },
+        { data: 'purchasebillSchema.qty' },
+        { data: 'purchasebillSchema.amount' },
+        { data: 'purchasebillSchema.subtotal' },
+        { data: 'purchasebillSchema.total' },
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                <i class="bx bx-dots-vertical-rounded"></i>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item delete-btn" href="javascript:void(0);" data-id="${row.purchasebillSchema._id}" data-uniqueid="${row.purchasebillSchema.uniqueid}" data-party="${name}"><i class="bx bx-trash me-1"></i> Delete</a>                </div>
+              </div>
+            </div>`;
+          },
+        },
+      ],
+    });
+    $('#arrivalstable').off('click', '.delete-btn');
+
+    $('#arrivalstable').on('click', '.delete-btn', function() {
+    var id = $(this).data('id');
+    var uniqueid = $(this).data('uniqueid');
+    var party = $(this).data('party');
+
+    // Send delete request to the server
+    fetch(`/bills/${uniqueid}/${party}`, {
+        method: 'DELETE'
+    }).then(response => {
+        // Check if the request was successful
+        if (response.ok) {
+            // Reload or update the DataTable
+            dataTable.ajax.reload(null, false);
+        } else {
+            // Handle errors
+            console.error('Failed to delete item.');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+})
+
+//     // Delete Button Click Event
+//     function deleteData(id) {
+//     $.ajax({
+//       url: `https://www.safehomes.ae/backend/deleteproperty/${id}`,
+//       type: 'DELETE',
+//       success: function (response) {
+//         dataTable.ajax.reload();
+//       },
+//       error: function (error) {
+//         console.log('Error deleting data:', error);
+//       },
+//     });
+//   }
+
+//   function toggleFeatured(id, isFeatured) {
+//     var formDataObj = { id: id, status: isFeatured ? 'notfeatured' : 'featured' };
+
+//     $.ajax({
+//       url: `https://www.safehomes.ae/backend/addfeatured`,
+//       type: 'POST',
+//       data: JSON.stringify(formDataObj),
+//       contentType: 'application/json',
+//       success: function (response) {
+//         dataTable.ajax.reload();
+//       },
+//       error: function (error) {
+//         console.error('Error updating data:', error);
+//       },
+//     });
+//   }
+
+//   $('#example').on('click', '.delete-btn', function () {
+//     var data = dataTable.row($(this).closest('tr')).data();
+//     var id = data._id;
+//     deleteData(id);
+//   });
+
+//   $('#example').on('click', '.featured-button', function () {
+//     var data = dataTable.row($(this).closest('tr')).data();
+//     var id = data._id;
+    
+//     if (routeName === 'featured') {
+//       toggleFeatured(id, true); // Remove from Featured
+//     } else if (routeName === 'properties') {
+//       toggleFeatured(id, false); // Add to Featured
+//     }
+//   });
+//  });
+});
+</script>
+
+
+                                    
+                                        <%- include('./include/end.ejs') -%>

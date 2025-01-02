@@ -1,0 +1,5 @@
+node_modules
+public/report.html
+model/db.js
+app.js
+.env

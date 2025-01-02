@@ -1,0 +1,323 @@
+<div class="table-responsive text-nowrap p-4">
+  <h3>Purchase commitments</h3>
+  <a class="btn btn-success text-white" href="#" onclick="abcd()">Add New</a>
+  <table class="table" id="example">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Commitment id</th>
+        <th>Item</th>
+        <th>Weight</th>
+        <th>Ep Percentage</th>
+        <th>Price</th>
+        <th>Remaining</th>
+        <th>Expected Ep</th>
+        <th>Action</th>
+
+      </tr>
+    </thead>
+    <tbody class="table-border-bottom-0" id="table-body">
+      <!-- Data will be populated here -->
+    </tbody>
+  </table>
+
+</div>
+
+<div id="purchasecommitmentadd" class="modal"
+  style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+  <div class="modal-content"
+    style="background-color: white; padding: 20px; border-radius: 5px; width: 50%;  max-width: 500px; position: relative;">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalCenterTitle">Add New Commitments</h5>
+
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col mb-3">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" id="pccomdate" name="pccomdate" class="form-control" placeholder="DATE">
+
+        </div>
+        <div class="col mb-3">
+          <label for="name" class="form-label">Item</label>
+          <select type="text" id="pccomitem" name="pccomitem" class="form-control items-js-pccom" ></select>
+
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col mb-3">
+          <label for="image" class="form-label">Reference</label>
+          <select type="text" id="pccomreference" name="pccomreference" class="form-control items-js-reffernece-pccom"></select>
+        </div>
+        <div class="col mb-3">
+          <label for="description" class="form-label">Weight</label>
+          <input type="number" id="pccomweight" name="pccomweight" class="form-control" placeholder="Weight">
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Expected EP %</label>
+          <input type="number" id="pccomep" name="pccomep" class="form-control" placeholder="EP %" max="100" value="100">
+
+        </div>
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Rate</label>
+          <input type="number" id="pccomrate" name="pccomrate" class="form-control" placeholder="Rate">
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Additional</label>
+          <input type="text" id="pccomAdditional" name="pccomAdditional" class="form-control" placeholder="Additional">
+
+        </div>
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Delivery</label>
+          <input type="text" id="pccomInfo" name="pccomInfo" class="form-control" placeholder="Delivery">
+
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" onclick="closepurchasecommitment()"
+        data-bs-dismiss="modal">
+        Close
+      </button>
+      <button onclick="postpurchasecommitment()" id="submitbutton" class="btn btn-primary">Add Commitment</button>
+    </div>
+  </div>
+</div>
+<script>
+ function abcd() {
+    const modal = document.getElementById('purchasecommitmentadd');
+    modal.style.display = 'flex';
+
+    // Focus on the input element
+    const inputElement = document.getElementById('pccomdate');
+    inputElement.focus();
+}
+ 
+
+  // Function to close the modal
+  function closepurchasecommitment() {
+    const modal = document.getElementById('purchasecommitmentadd');
+    modal.style.display = 'none';
+  }
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Include Axios library (if not already included) -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- Your existing HTML code -->
+
+<script>
+  //  $(document).ready(function () {
+  //       $('#addpurchasecommitment').on('shown.bs.modal', function () {
+  //           const today = new Date();
+  //           const formattedDate = today.toISOString().split('T')[0];
+  //           $('#pccomdate').val(formattedDate);
+  //       });
+  //   });
+  window.purchasecommitments = function () {
+    console.log(filterdata)
+     
+    // var geturl = routeName == 'featured' ? 'featuredpropertieslist' : 'propertieslist'  // Assuming you're passing this variable from EJS
+    // var buttonname = routeName == 'featured' ? 'Remove From Featured' : 'Add To Featured'  // Assuming you're passing this variable from EJS
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+     dataTable = $('#example').DataTable({
+      responsive: responsive,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/purchasecommitments', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+             d.name = name;
+             d.filter = filterdata  // Add the 'name' parameter to the data object
+            return d;
+          // Add any additional parameters you want to send to the server here
+        },
+      },
+      columns: [
+      {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      },
+        { data: 'id' },
+        { data: 'item' },
+        { data: 'weight' },
+        { data: 'eppercentage' },
+        { data: 'rate' },
+        { data: 'balanceweight' },
+        { data: 'balance' },
+   
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item"><i class="bx bx-edit me-1"></i>View </a>
+                  <a class="dropdown-item delete-btn" data-id="${row._id}"  data-party="${name}"><i class="bx bx-trash me-1"></i> Delete</a>
+                </div>
+              </div>`;
+          },
+        },
+      ],
+    });
+    $('#example').off('click', '.delete-btn');
+
+    $('#example').on('click', '.delete-btn', function() {
+    var id = $(this).data('id');
+    var party = $(this).data('party');
+    if (!confirm('Do you want to delete this item?')) {
+            return; // Exit if the user cancels
+        }
+
+
+    // Send delete request to the server
+    fetch(`/deletepurchasecommitments/${id}/${party}`, {
+        method: 'DELETE'
+    }).then(response => {
+        // Check if the request was successful
+        if (response.ok) {
+            // Reload or update the DataTable
+            getdetailedreport()
+            dataTable.ajax.reload(null, false);
+        } else {
+            // Handle errors
+            console.error('Failed to delete item.');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+    // Delete Button Click Event
+    // function deleteData(id) {
+    //   $.ajax({
+    //     url: `/deletepurchasecommitments/${id}/${name}`,
+    //     type: 'DELETE',
+    //     success: function (response) {
+    //       dataTable.ajax.reload();
+    //     },
+    //     error: function (error) {
+    //       console.error('Error deleting data:', error);
+    //     },
+    //   });
+    // }
+
+   
+    // $('#example').on('click', '.delete-btn', function () {
+    //   var data = dataTable.row($(this).closest('tr')).data();
+    //   var id = data._id;
+    //   deleteData(id);
+    // });
+
+    // $('#example').on('click', '.featured-button', function () {
+    //   var data = dataTable.row($(this).closest('tr')).data();
+    //   var id = data._id;
+
+    //   if (routeName === 'featured') {
+    //     toggleFeatured(id, true); // Remove from Featured
+    //   } else if (routeName === 'properties') {
+    //     toggleFeatured(id, false); // Add to Featured
+    //   }
+    // });
+
+  }
+
+
+
+  async function postpurchasecommitment() {
+    const pccomdate = document.getElementById('pccomdate').value;
+    const pccomitem = document.getElementById('pccomitem').value;
+    const pccomreference = document.getElementById('pccomreference').value;
+    const pccomweight = document.getElementById('pccomweight').value;
+    const pccomep = document.getElementById('pccomep').value;
+    const pccomrate = document.getElementById('pccomrate').value;
+    const pccomAdditional = document.getElementById('pccomAdditional').value;
+    const pccomInfo = document.getElementById('pccomInfo').value;
+    const payload = {
+      name:name,
+      pccomdate: pccomdate,
+      pccomitem: pccomitem,
+      pccomreference: pccomreference,
+      pccomweight: pccomweight,
+      pccomep: pccomep,
+      pccomrate: pccomrate,
+      pccomAdditional: pccomAdditional,
+      pccomInfo: pccomInfo
+    };
+console.log(payload)
+    if(!pccomdate||!pccomitem||!pccomreference||!pccomweight||!pccomep||!pccomrate){
+      return alert('Please fill Date,Item,Refference,Weight,Ep,Rate fields')
+    }
+
+  
+    try {
+      // Use Axios to make the POST request
+      const response = await axios.post('/addpurchasecommitment', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Handle the response (you can add your own logic here)
+      dataTable.ajax.reload();
+
+      // Close the modal after server response
+      closepurchasecommitment();
+      getdetailedreport()
+    } catch (error) {
+      // Handle errors, such as network issues or server errors
+      console.log('Error:', error);
+    }
+  }
+  $('.items-js-pccom').select2({
+    dropdownParent: $("#purchasecommitmentadd"),
+
+              ajax: {
+                  url: '/getproducts',
+                  dataType: 'json',
+                  delay: 250, // Delay in milliseconds before making the request
+                  processResults: function (data) {
+                      return {
+                          results: data.results.map(name => ({ id: name, text: name }))
+                      };
+                  },
+                  cache: true // Enable caching to reduce server requests
+              }
+          });
+
+          $('.items-js-reffernece-pccom').select2({
+                  dropdownParent: $("#purchasecommitmentadd"),
+
+              ajax: {
+                  url: '/getrefferance',
+                  dataType: 'json',
+                  delay: 250, // Delay in milliseconds before making the request
+                  processResults: function (data) {
+                      return {
+                          results: data.results.map(name => ({ id: name, text: name }))
+                      };
+                  },
+                  cache: true // Enable caching to reduce server requests
+              }
+          });
+
+</script>

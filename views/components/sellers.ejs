@@ -1,0 +1,378 @@
+<div>
+  <div class="card">
+    <div class="modal fade hidden" id="modalCenter">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCenterTitle">Add New Party</h5>
+            
+          </div>
+          <div class="modal-body">
+            <form >
+              <div class="row">
+                <div class="col mb-3">
+                  <label for="name" class="form-label">Party Name</label>
+                  <input required type="text" name="name" id="name" class="form-control" placeholder="Enter Name">
+                </div>
+                <div class="col mb-3">
+                  <label for="image" class="form-label">Address</label>
+                  <input type="text" id="address" name="address" class="form-control " placeholder="Enter Address">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col mb-3">
+                  <label for="description" class="form-label">Phone</label>
+                  <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter Phone">
+                </div>
+                <div class="col mb-3">
+                  <label for="highlighted" class="form-label">TDS</label>
+                  <select type="text" id="tds" name="tds" class="form-control" placeholder="Enter GSTIN">
+
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+      
+                  </select>
+                </div>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" id="closeaddpartybtn" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button  id="submitbutton" class="btn btn-primary" onclick="addParty()">Add Seller</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade hidden" id="editpartmodal">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCenterTitle">Edit Party</h5>
+
+          </div>
+          <div class="modal-body">
+            <form >
+              <div class="row">
+                <div class="col mb-3">
+                  <label for="name" class="form-label">Party Name</label>
+                  <input required type="text" disabled name="editname" id="editname" class="form-control" placeholder="Enter Name">
+                </div>
+                <div class="col mb-3">
+                  <label for="image" class="form-label">Address</label>
+                  <input type="text" id="editaddress" name="editaddress" class="form-control " placeholder="Enter Address">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col mb-3">
+                  <label for="description" class="form-label">Phone</label>
+                  <input type="text" id="editphone" name="editphone" class="form-control" placeholder="Enter Phone">
+                </div>
+                <input type="hidden" name="id" id="id">
+                <div class="col mb-3">
+                  <label for="highlighted" class="form-label">TDS</label>
+                  <select type="text" id="edittds" name="edittds" class="form-control" placeholder="Enter GSTIN">
+
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+      
+                  </select>
+                </div>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" id="closeeditpartybtn" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button  id="submitbutton" class="btn btn-primary" onclick="editparty()">Add Seller</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <a class="btn btn-primary text-white" href="#" onclick="openAddModal()" data-bs-toggle="modal"
+        data-bs-target="#modalCenter">Add Party</a>
+        <a class="btn btn-primary text-white" href="#" data-bs-toggle="modal"
+        data-bs-target="#openreport">Download Report</a>
+      <div class="table-responsive text-nowrap p-4">
+        <table class="table" id="sellers">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Recievable</th>
+              <th>Payable</th>
+              <th>Diffrence</th>
+              <th>Store-In</th>
+              <th>Store-Out</th>
+              <th>Actions</th>
+
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0" id="table-body">
+            <!-- Data will be populated here -->
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal fade hidden" id="openreport">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCenterTitle">Report</h5>
+        
+        </div>
+        <div class="modal-body">
+          <form  id="downloadform" method="post" action="/downloadallaccounts">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">From</label>
+            <input  type="date" name="from" id="datafrom" class="form-control">
+          </div>
+          <div class="col mb-3">
+            <label for="description" class="form-label">To</label>
+            <input  type="date" id="datato" required  name="to" class="form-control" >
+          </div>
+          </div>
+  
+          <div class="row">
+            <div class="col mb-3">
+              <label for="name" class="form-label">Recievable ></label>
+              <input required type="number" name="recievable" value="0" id="datafrom" class="form-control">
+            </div>
+            <div class="col mb-3">
+              <label for="description" class="form-label">Payable ></label>
+              <input required type="number" id="datato" name="payable" value="0" class="form-control" >
+            </div>
+            </div>
+    
+        
+      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="closeeditpartybtn" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="submit" id="buttonreport" form="downloadform"   class="btn btn-primary">Download loaders</button>
+        </div>
+    </form>
+      </div>
+    </div>
+   </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <script>
+var dataTable
+    $(document).ready(function () {
+      const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+       dataTable = $('#sellers').DataTable({
+        responsive: responsive,
+        processing: true,
+        serverSide: true,
+        ajax: {
+          url: '/getclients',
+          dataSrc: 'data', // Key that holds the array of data in the API response
+          data: function (d) {
+
+            // Add any additional parameters you want to send to the server here
+          },
+        },
+        columns: [
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<a class="" href="/purchaseaccount/${row.name}">${row.name}</a>`;
+            },
+          },
+      
+        { 
+            data: null,
+            render: function (data, type, row) {
+                return parseInt(row.recievable || 0)-parseInt(row.recieved || 0);
+                 
+            }
+        }, 
+        { 
+            data: null,
+            render: function (data, type, row) {
+                return parseInt(row.payable || 0) - parseInt(row.paid || 0);
+            }
+        },
+
+        { 
+            data: null,
+            render: function (data, type, row) {
+                return parseInt(row.recievable || 0) + parseInt(row.paid || 0)-parseInt(row.payable || 0) - parseInt(row.recieved || 0)
+            }
+        },
+        { 
+            data: null,
+            render: function (data, type, row) {
+              return row.storein ? parseInt(row.storein) : 0;
+            }
+        },
+        { 
+            data: null,
+            render: function (data, type, row) {
+              return row.storeout ? parseInt(row.storeout) : 0;
+            }
+        },
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                <i class="bx bx-dots-vertical-rounded"></i>
+              </button>
+              <div class="dropdown-menu">
+                <button class="dropdown-item edit-action"  data-name="${row.name}"
+                        data-tds="${row.tds}"
+                        data-address="${row.address}" data-id="${row._id}" data-address="${row.phone}"><i class="bx bx-edit me-1"></i> Edit /View </button>
+                <button class="dropdown-item delete-btn" data-id="${row._id}"><i class="bx bx-trash me-1"></i> Delete</button>
+              </div>
+            </div>`;
+          },
+        }, // Assuming coffee is an array property
+        ],
+      });
+      $('#sellers').on('click', '.edit-action', function () {
+        var name = $(this).data('name');
+
+        var tds = $(this).data('tds');
+    var address = $(this).data('address');   
+    var phone = $(this).data('phone');   
+    var id = $(this).data('id');   
+
+    $('#editname').val(name);
+    $('#editaddress').val(address);
+    $('#editphone').val(phone);
+    $('#edittds').val(tds);
+    $('#id').val(id);
+
+    // Show the edit party modal
+    $('#editpartmodal').modal('show');
+    // const rowData = JSON.parse($(this).closest('.edit-btn').attr('data-row'));
+  });
+  $('#sellers').off('click', '.delete-btn');
+
+  $('#sellers').on('click', '.delete-btn', function () {
+
+    var id = $(this).data('id');
+    const password = window.prompt("Please enter your password to confirm deletion:");
+    if (password !== null) { // User clicked "OK"
+        // Send a request to deleteuser API endpoint with the entered password
+        fetch('/deleteuser', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify( {password:password,id:id} )
+        })
+        .then(response => {
+          console.log(response)
+            if (response.ok) {
+                alert('User deleted successfully');
+                window.location.reload();
+            } else {
+                alert('Failed to delete user. Please check your password.');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting user:', error);
+            alert('Failed to delete user. Please try again later.');
+        });
+    }
+
+
+  });
+    });
+  </script>
+  <script>
+    const closeModalButton = document.getElementById('closeModalBtn');
+
+    function openAddModal() {
+      // Clear the modal fields
+      document.getElementById('name').value = '';
+      document.getElementById('address').value = '';
+      document.getElementById('tds').value = 'YES';
+
+      // Set the onclick function and text for the modal button
+      //   document.getElementById('submitbutton').onclick = addseller;
+      document.getElementById('submitbutton').innerText = 'Add Party';
+      document.getElementById('modalCenterTitle').innerText = 'Add New Place';
+    }
+    function addParty() {
+    // Get form data
+    const name = document.getElementById('name').value;
+    const address = document.getElementById('address').value;
+    const phone = document.getElementById('phone').value;
+    const tds = document.getElementById('tds').value;
+    var closeButton = document.getElementById('closeaddpartybtn');
+
+    // Prepare data to be sent
+    const data = {
+        name: name,
+        address: address,
+        phone: phone,
+        tds: tds
+    };
+
+ 
+      axios.post('/addseller', data)
+  .then(response => {
+    // Handle the server response here
+    dataTable.ajax.reload();
+    closeButton.click();
+    
+    // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+}
+function editparty() {
+    // Get form data
+    const name = document.getElementById('editname').value;
+    const address = document.getElementById('editaddress').value;
+    const phone = document.getElementById('editphone').value;
+    const tds = document.getElementById('edittds').value;
+    const id = document.getElementById('id').value;
+
+    var closeButton = document.getElementById('closeeditpartybtn');
+
+    // Prepare data to be sent
+    const data = {
+        name: name,
+        address: address,
+        phone: phone,
+        tds: tds,
+        id:id
+    };
+
+ 
+      axios.post('/editseller', data)
+  .then(response => {
+    // Handle the server response here
+    dataTable.ajax.reload();
+    closeButton.click();
+    
+    // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+}
+
+  </script>
+</div>

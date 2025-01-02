@@ -1,0 +1,393 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+                <button type="button" class="btn btn-primary d-md-none" data-bs-toggle="modal" data-bs-target="#transactionModal">
+                  Open Transaction Form
+              </button>
+                <div class="table-responsive text-nowrap p-4"> 
+                  <div class="d-none d-md-block">
+                  <form id="transactionFormTable">
+                  <table class="table" style="width: 100%;">
+                  <tr>
+                    <th>Date</th>
+                    <th>Party / Organisation Name</th>
+                    <th>Refferance</th>
+                    <th>Medium</th>
+                    <th style="min-width: 120px;">Paid</th>
+                    <th style="min-width: 120px;">Recieved</th>
+                    <th>Action</th>
+              
+                  </tr>
+                  <tr>
+              
+                    <td>
+                      <input type="date"  id="transactiondate" class="form-control"  >
+                    </td>
+                    <td>
+                      <select class="js-data-example-ajaxs" style="width: 250px;"  name="party" id="party" autofocus></select>
+
+                    </td>
+                    <td>
+                      <input type="text" id="transactionrefference" class="form-control" >
+                    </td>
+                    <td>
+                      <select name="transactionmedium" id="transactionmedium" style="width: 150px;"  class="form-control">
+                        <option value="bank">BANK</option>
+                        <option value="cash">CASH</option>
+                        <option value="tds">TDS</option>
+              
+                      </select>
+              
+                    </td>
+                    <td>
+                      <input type="number" style="min-width: 120px;" value="0" id="transactionpaid" class="form-control">
+                    </td>
+                    <td>
+                      <input type="number" style="min-width: 120px;" value="0" id="transactionrecieved" class="form-control">
+                    </td>
+                    <td>
+                      <a class="btn btn-success text-white submit-transaction" href="#" id="submitTransaction">Submit</a>
+              
+                    </td>
+                  </tr>
+              
+                </table>
+                </form>
+              </div>
+                    <table class="table" id="transactionTable">
+                        <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Name</th>
+                              <th>Refference</th>
+                              <th>Medium</th>
+                              <th>Paid</th>
+                              <th >Recieved</th>
+                              <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0" id="table-body">
+                          <!-- Data will be populated here -->
+                      </tbody>
+  </table>
+
+</div>
+</div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+<div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Transaction Form</h5>
+              
+          </div>
+          <div class="modal-body">
+              <form id="transactionFormModal">
+                  <div class="mb-3">
+                      <label for="transactiondate">Date</label>
+                      <input type="date" id="transactiondate" name="transactiondate" class="form-control">
+                  </div>
+                  <div class="mb-3">
+                      <label for="party">Party / Organisation Name</label>
+                      <select id="party" name="party" class="js-data-example-ajax2 form-control"></select>
+                  </div>
+                  <div class="mb-3">
+                      <label for="transactionreference">Reference</label>
+                      <input type="text" id="transactionrefference" name="transactionrefference" class="form-control">
+                  </div>
+                  <div class="mb-3">
+                      <label for="transactionmedium">Medium</label>
+                      <select id="transactionmedium" name="transactionmedium" class="form-control">
+                          <option value="bank">BANK</option>
+                          <option value="cash">CASH</option>
+                          <option value="tds">TDS</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                      <label for="transactionpaid">Paid</label>
+                      <input type="number" id="transactionpaid" name="transactionpaid" class="form-control">
+                  </div>
+                  <div class="mb-3">
+                      <label for="transactionreceived">Received</label>
+                      <input type="number" id="transactionrecieved" name="transactionrecieved" class="form-control">
+                  </div>
+                  <button type="button" id="submitTransaction" class="btn btn-primary text-white submit-transaction">Submit</button>
+                  <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" >close</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+<div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+<script>
+  $(document).ready(function () {
+    var today = new Date();
+
+// Format the date to YYYY-MM-DD (required format for input type="date")
+var formattedDate = today.toISOString().split('T')[0];
+
+// Set the value of the input field to today's date
+document.querySelectorAll('#transactiondate').forEach(element => {
+    element.value = formattedDate;
+});
+ // Assuming you're passing this variable from EJS
+ const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+    transactionTable = $('#transactionTable').DataTable({
+      responsive: responsive,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/alltransactions', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+       
+          // Add any additional parameters you want to send to the server here
+        },
+      },
+      columns: [
+      {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      }, 
+      { data: 'name' },
+        { data: 'refference' },
+        { data: 'medium' },
+        {
+    data: 'paid',
+    render: function (data, type, row) {
+      // Return the data with red color for paid values
+      return `<span style="color: red;">${data}</span>`;
+    }
+  },
+  {
+    data: 'recieved',
+    render: function (data, type, row) {
+      // Return the data with green color for received values
+      return `<span style="color: green;">${data}</span>`;
+    }
+  },
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item delete-btn" href="javascript:void(0);" data-id="${row._id}" data-party="${row.name}"><i class="bx bx-trash me-1"></i> Delete</a>                </div>
+                </div>
+              </div>`;
+          },
+        },
+      ],
+    });
+    $('#transactionTable').off('click', '.delete-btn');
+
+    $('#transactionTable').on('click', '.delete-btn', function () {
+      var id = $(this).data('id');
+    var party = $(this).data('party');
+    fetch(`/transaction/${id}/${party}`, {
+        method: 'DELETE'
+    }).then(response => {
+        // Check if the request was successful
+        if (response.ok) {
+            // Reload or update the DataTable
+            transactionTable.ajax.reload(null, false);
+        } else {
+            // Handle errors
+            console.error('Failed to delete item.');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+    });
+
+    // Delete Button Click Event
+//     function deleteData(id) {
+//     $.ajax({
+//       url: `https://www.safehomes.ae/backend/deleteproperty/${id}`,
+//       type: 'DELETE',
+//       success: function (response) {
+//         dataTable.ajax.reload();
+//       },
+//       error: function (error) {
+//         console.error('Error deleting data:', error);
+//       },
+//     });
+//   }
+
+//   function toggleFeatured(id, isFeatured) {
+//     var formDataObj = { id: id, status: isFeatured ? 'notfeatured' : 'featured' };
+
+//     $.ajax({
+//       url: `https://www.safehomes.ae/backend/addfeatured`,
+//       type: 'POST',
+//       data: JSON.stringify(formDataObj),
+//       contentType: 'application/json',
+//       success: function (response) {
+//         dataTable.ajax.reload();
+//       },
+//       error: function (error) {
+//         console.error('Error updating data:', error);
+//       },
+//     });
+//   }
+
+//   $('#example').on('click', '.delete-btn', function () {
+//     var data = dataTable.row($(this).closest('tr')).data();
+//     var id = data._id;
+//     deleteData(id);
+//   });
+
+//   $('#example').on('click', '.featured-button', function () {
+//     var data = dataTable.row($(this).closest('tr')).data();
+//     var id = data._id;
+    
+//     if (routeName === 'featured') {
+//       toggleFeatured(id, true); // Remove from Featured
+//     } else if (routeName === 'properties') {
+//       toggleFeatured(id, false); // Add to Featured
+//     }
+//   });
+// 
+$('.js-data-example-ajaxs').select2({
+        ajax: {
+            url: '/getnames',
+            dataType: 'json',
+            delay: 250, // Delay in milliseconds before making the request
+            processResults: function(data) {
+                // Check the structure of the response
+                return {
+                    results: data.results.map(name => ({ id: name, text: name }))
+                };
+            },
+            cache: true // Enable caching to reduce server requests
+        },
+        placeholder: "Select a Name", // Optional
+        
+    });
+
+    // Initialize the second Select2 instance for the modal
+    $('#transactionModal').on('shown.bs.modal', function () {
+        $('.js-data-example-ajax2').select2({
+            dropdownParent: $("#transactionModal"),
+            ajax: {
+                url: '/getnames',
+                dataType: 'json',
+                delay: 250,
+                processResults: function(data) {
+                    return {
+                        results: data.results.map(name => ({ id: name, text: name }))
+                    };
+                },
+                cache: true
+            },
+            placeholder: "Select a Name",
+           
+        });
+    });
+
+$('.submit-transaction').click(function() {
+  var form = $(this).closest('form');
+
+// Extract data from the specific form
+var data = {
+  name: form.find('#party').val(),
+  date: form.find('#transactiondate').val(),
+  medium: form.find('#transactionmedium').val(),
+  paid: parseFloat(form.find('#transactionpaid').val()),
+  recieved: parseFloat(form.find('#transactionrecieved').val()),
+  refference: form.find('#transactionrefference').val()
+};
+  if(data.name && data.date){
+
+  // Send data to the server
+  $.ajax({
+    url: '/saveTransaction',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(data),
+    success: function(response) {
+      // Update DataTable on success
+
+      transactionTable.ajax.reload();
+      $('#transactionModal').modal('hide');
+
+// Reset the form
+let modalDateValue = $('#transactionFormModal #transactiondate').val();
+let tableDateValue = $('#transactionFormTable #transactiondate').val();
+
+// Reset both forms
+$('#transactionFormModal')[0].reset();
+$('#transactionFormTable')[0].reset();
+
+// Restore the date value after reset
+$('#transactionFormModal #transactiondate').val(modalDateValue);
+$('#transactionFormTable #transactiondate').val(tableDateValue);
+$('#transactionFormModal #party').val('');
+$('#transactionFormTable #party').val('');
+
+      // Optionally, clear the form fields
+      // $('#transactionpaid').val(0);
+      // $('#transactionrecieved').val(0);
+      // $('#transactionrefference').val('');
+      // $('#party').val('');
+    },
+    error: function(xhr, status, error) {
+      transactionTable.ajax.reload();
+      $('#transactionModal').modal('hide');
+      console.log('Error:', error);
+      // Handle error
+    }
+  });
+}else{
+  return alert('enter a name')
+}
+})
+
+
+ });
+</script>
+
+
+                                    
+                                        <%- include('./include/end.ejs') -%>

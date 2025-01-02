@@ -1,0 +1,452 @@
+<div class="table-responsive text-nowrap p-4">
+  <h3>Store-Out</h3>
+  <table class="table" id="storeoutTable">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Storage Wgt.</th> 
+        <th>Net EP %</th>
+        <th>Storage EP</th>
+        <th>Action</th>
+
+      </tr>
+    </thead>
+    <tbody class="table-border-bottom-0" id="table-body">
+      <!-- Data will be populated here -->
+    </tbody>
+  </table>
+
+</div>
+
+
+<div id="salestorebill" class="modal"
+  style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+  <div class="modal-content"
+    style="background-color: white; padding: 20px; border-radius: 5px; width: 50%;  max-width: 800px; position: relative;">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalCenterTitle">New Sales Storage Settlement</h5>
+    
+
+    </div>
+    <div class="modal-body"> 
+       <h4 class="modal-title" id="modalCenterTitle">Item : <span id="storeoutitemnames"></span> </h4>
+      <h4 class="modal-title" id="modalCenterTitle">Storage Weight : <span id="storeoutitemweights"></span> </h4>
+      <h4 class="modal-title" id="modalCenterTitle">Ep Percentage :  <span id="storeoutitemepps"></span></h4>
+      <h4 class="modal-title" id="modalCenterTitle">Net Ep :  <span id="storeoutitemeps"></span></h4>
+      <div class="row" style="margin-top: 10px;">
+        <div class="col mb-3">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" id="ssdates" name="ssdates" class="form-control" >
+
+        </div>
+        <div class="col mb-3">
+          <label for="image" class="form-label">Crop</label>
+          <select type="text" id="sscrops" name="sscrops" class="form-control items-js-reffernece-pccom">
+            <option value="<%=reference%>"><%=reference%></option>
+          </select>
+        </div>
+        <div class="col mb-3">
+          <label for="image" class="form-label">Tax</label>
+          <select  id="ssreferences" name="ssreferences" class="form-control">
+            <option value="0">sgst-0% + cgst-0% + igst-0%</option>
+            <option value="5">sgst-2.5% + cgst-2.5% + igst-0%</option>
+            <option value="10">sgst-2.5% + cgst-2.5% + igst-5%</option>
+
+
+          </select>
+        
+        </div>
+      </div>
+
+      <div class="row">
+        
+        <div class="col mb-3">
+          <label for="description" class="form-label">Weight</label>
+          <input type="number" id="ssweights" name="sweights" class="form-control" placeholder="Weight">
+        </div>
+<div class="col mb-3">
+          <label for="highlighted" class="form-label">Average EP %</label>
+          <input type="number" id="ssepps" name="ssepps" class="form-control" placeholder="EP %" max="100" value="100">
+
+        </div>
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">EP Weight</label>
+          <input type="number" id="sseps" disabled name="sseps" class="form-control" placeholder="EP %" max="100" value="100">
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Commitment</label>
+          <div class="my-1 flex-nowrap input-group">
+            <input type="text" id="sscommitments" name="sscommitments" disabled class="form-control">
+            <a class="bg-light fw-bold text-secondary small input-group-text" href="#" onclick="opensaleaCommitments()" data-bs-toggle="modal" data-bs-target="#allsalecommitmentmodal"><i class="menu-icon tf-icons bx bx-notepad"></i></a>
+          </div>
+        </div>
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Rate</label>
+          <input type="number" id="ssrates" name="ssrates" class="form-control" value="0">
+
+        </div>
+        <div class="col mb-3">
+          <label for="highlighted" class="form-label">Total</label>
+          <input type="number" id="sstotals" name="sstotals" class="form-control" value="0">
+<input type="hidden" name="ssitems" id="ssitems">
+        </div>
+      </div>
+    </div>
+
+ <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" onclick="closesalesetllement()"
+        data-bs-dismiss="modal">
+        Close
+      </button>
+      <button onclick="postsalesettlement()" id="submitbutton" class="btn btn-primary">Add Settlements</button>
+    </div>
+    </div>
+   
+  </div>
+</div>
+<div class="modal fade hidden" id="allsalecommitmentmodal">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 700px;"> 
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="commitments-titile"><span id="commitmentpartys"> </span> <br><span id="commitmentitems"></span><br><span id="commitment-types"></span>
+        </h5>
+       
+
+      </div>
+      <div class="modal-body">
+          <form >
+        <div class="row">
+          <div class="col  mb-3">
+            <!-- <label for="name" class="form-label">Actual Weight</label> -->
+            <div class="my-1 flex-nowrap input-group">
+              <div class="bg-light text-secondary small input-group-text no-pointer-events" href="#" >Billable Weights</div>
+              <input  type="text" name="actualweightcoms" id="actualweightcoms" oninput="changeeps()" class="form-control" placeholder="Actual Weight">
+            </div>
+           <!-- <label for="image" class="form-label">Ep Weight</label> -->
+          
+          </div>
+          <div class="col mb-3"> 
+             <div class="lex-nowrap input-group">
+              <div class="bg-light text-secondary small input-group-text no-pointer-events"  href="#" >Billable Ep wgt.</div>
+              <input  type="text" name="actualepcoms" id="actualepcoms" class="form-control" oninput="changeweights()" placeholder="Ep Weight">
+            </div>
+         
+                    </div>
+          </div>
+ 
+          <div class="row">
+          <table lass="table" class="table" id="sale-commitments-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Commitment</th>
+              <th>Balance Wgt.</th>
+              <th>Ep Balance</th>
+              <th>Rate</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0" id="commitment-table-body">
+            <!-- Data will be populated here -->
+          </tbody>
+          </table>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-outline-secondary" id="closeModalBtn" data-bs-dismiss="modal">
+          Close
+        </button> -->
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+<!-- Include Axios library (if not already included) -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- Your existing HTML code -->
+<script>
+   var billableweights =0;
+  var billableeps =0;
+  var billableeppercentages =0;
+
+  function opensaleaCommitments() {
+
+
+const ditem = document.getElementById('ssitems').value
+var billtype = 'Sales'
+console.log(ditem)
+
+document.getElementById('commitmentpartys').innerText = name
+document.getElementById('commitmentitems').innerText = ditem
+document.getElementById('commitment-types').innerText =   'Sale Commitments' 
+document.getElementById('actualepcoms').value = billableeps
+document.getElementById('actualweightcoms').value = ((billableeps*100)/billableeppercentages).toFixed(1)
+
+var api;
+if (billtype === 'Purchase') {
+api = 'purchasecommitments';
+} else if (billtype === 'Sales') {
+api = 'salescommitments';
+}
+
+const modal = document.getElementById('allsalecommitmentmodal');
+modal.style.display = 'flex';
+if (dataTable) {
+    dataTable.destroy();
+}
+const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+dataTable = $('#sale-commitments-table').DataTable({
+  responsive: responsive,
+    processing: true,
+    serverSide: true,
+    searching: false, // Disable search option
+    lengthChange: false,
+    ajax: {
+        url: '/' + api, 
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+          d.name = name;
+          d.item = ditem;
+            // Add any additional parameters you want to send to the server here
+        },
+    },
+    columns: [
+    {
+    data: 'date',
+    render: function (data, type, row) {
+      // Format the date using moment.js
+      return moment(data).format('DD/MM/YYYY');
+    }
+  },
+        { data: 'id' },
+        { data: 'balanceweight' },
+        { data: 'balance' },
+        { data: 'rate' },
+        {
+      data: null,
+      render: function (data, type, row) {
+        return `<div class="dropdown">
+            <button type="button" class="btn p-0 dropdown-toggle hide-arrow assign-commitment-btn" 
+                     data-id="${row.id}"
+                    data-weight="${row.balanceweight}"
+                    data-rate="${row.rate}"
+                    >
+              <i class="bx bx-plus-circle text-primary"></i>
+            </button>
+          </div>`;
+      },
+    }, // Assuming coffee is an array property
+    ],
+"autoWidth": false
+});
+}
+$('#sale-commitments-table').on('click', '.assign-commitment-btn', function() {
+    // var actualep = document.getElementById('actualepcoms').value
+    // var actualweightcoms = document.getElementById('actualweightcoms').value
+    var eppercentage = document.getElementById('sseps').value
+    // var weight = 0
+    var actualweight =$(this).data('weight'); 
+    var actualep = ((actualweight/100)*eppercentage).toFixed(1)
+    // var weight = 0
+    // var actualweight =0 ;
+    // if(actualep > 0){
+    //   weight = actualep
+    //   actualweight = actualweightcoms
+    // }else{
+    //   weight = $(this).data('weight');   
+    // }
+    var id = $(this).data('id');
+    var rate = $(this).data('rate');   
+    $('#sscommitments').val(id)
+    $('#ssrates').val(rate)
+    $('#allsalecommitmentmodal').modal('hide');
+    $('#ssweights').val(actualweight)
+    $('#sseps').val(actualep)
+
+    $('#sstotals').val(parseInt(rate*actualep))
+
+    // Call the assignCommitment function with the retrieved arguments
+});
+function changeeps(){
+  console.log('here')
+    var actualweightcoms = document.getElementById('actualweightcoms').value
+    ep =  ((actualweightcoms/100)*billableeppercentages).toFixed(1)
+    document.getElementById('actualepcoms').value = ep
+
+
+}
+function changeweights(){
+  var ep = document.getElementById('actualepcoms').value
+    weight =  ((ep*100)/billableeppercentages).toFixed(1)
+    document.getElementById('actualweightcoms').value = weight
+
+} 
+</script>
+<script>
+  window.individualstoreout = function () {
+     
+    // var geturl = routeName == 'featured' ? 'featuredpropertieslist' : 'propertieslist'  // Assuming you're passing this variable from EJS
+    // var buttonname = routeName == 'featured' ? 'Remove From Featured' : 'Add To Featured'  // Assuming you're passing this variable from EJS
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+    storeoutTable = $('#storeoutTable').DataTable({
+      responsive: responsive,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/productwisestoreout', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+             d.name = name; // Add the 'name' parameter to the data object
+            return d;
+          // Add any additional parameters you want to send to the server here
+        },
+        // error: function (xhr, error, thrown) {
+        //     console.log('AJAX error: ', error); // Log the error to the console
+        //     // You can also display an error message to the user or perform other error handling tasks here
+        // }
+      },
+      columns: [
+      {
+          data: null,
+          render: function (data, type, row) {
+            return `<a href="#" onclick="showstoreoutdetail('${row.item}')"> ${row.item}</a>`
+        // { data: 'item'
+          }
+      
+      },
+        // { data: 'lotnumber' },
+        { data: 'totalStorageWeight' },
+        { data: 'eppercentage' },
+        { data: 'totalStorageep' },
+
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item featured-button" onclick="showstoreoutdetail('${row.item}')" href="javascript:void(0);"><i class="bx bx-eye me-1"></i>View</a>
+                  <a class="dropdown-item add-storeout-bill" data-id="${row.item}" data-weight="${row.totalStorageWeight}"  data-percentage="${row.eppercentage}" data-epweight="${row.totalStorageep}" href="#"><i class="bx bx-edit me-1"></i> Add Bill</a>
+                </div>
+              </div>`;
+          },
+        },
+      ],
+   });
+
+   
+   $('#storeoutTable').on('click', '.add-storeout-bill', function() {
+    var id = $(this).data('id');
+    var weight = $(this).data('weight');
+    var percentage = $(this).data('percentage');
+    var epweight = $(this).data('epweight');
+    $('#storeoutitemnames').text(id)
+    $('#storeoutitemeps').text(epweight)
+    $('#storeoutitemweights').text(weight)
+    $('#storeoutitemepps').text(percentage)
+
+    billableeps  = epweight;
+    billableweights = weight;
+    billableeppercentages = percentage; 
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    var yyyy = today.getFullYear();
+    var formattedDate = yyyy + '-' + mm + '-' + dd;
+    $('#ssdates').val(formattedDate);
+    $('#ssepps').val(percentage);
+    $('#ssitems').val(id);
+
+    const modal = document.getElementById('salestorebill');
+    modal.style.display = 'flex';
+
+    $('#ssreferences').focus();
+    updatesaleValues();
+
+
+    })
+
+  }
+
+  function closesalesetllement() {
+    const modal = document.getElementById('salestorebill');
+    modal.style.display = 'none';
+  }
+  function updatesaleValues() {
+    var ssweight = parseFloat($('#ssweights').val()) || 0;
+    var ssepp = parseFloat($('#ssepps').val()) || 100;
+    var ssrate = parseFloat($('#ssrates').val()) || 0;
+
+    // Calculate ssep and round to one decimal place
+    var ssep = (ssweight / 100) * ssepp;
+    $('#sseps').val(ssep.toFixed(1));
+
+    // Calculate sstotal and round to integer
+    var sstotal = Math.round(ssep * ssrate);
+    $('#sstotals').val(sstotal);
+}
+$('#ssweights, #ssrates,#ssepps').on('input', function() {
+    updatesaleValues();
+});
+async function postsalesettlement() {
+    const ssdate = document.getElementById('ssdates').value;
+    const sscrop = document.getElementById('sscrops').value;
+    const ssreference = document.getElementById('ssreferences').value;
+    const ssweight = document.getElementById('ssweights').value;
+    const ssep = document.getElementById('sseps').value;
+    const ssepp = document.getElementById('ssepps').value;
+    const ssrate = document.getElementById('ssrates').value;
+    const ssitem = document.getElementById('ssitems').value;
+    const sscommitment = document.getElementById('sscommitments').value;
+    const sstotal = document.getElementById('sstotals').value;
+
+    const payload = {
+      name:name,
+      ssdate: ssdate,
+      sscrop: sscrop,
+      ssreference: ssreference,
+      ssweight: ssweight,
+      ssep: ssep,
+      ssepp: ssepp,
+      ssrate: ssrate,
+      ssitem: ssitem,
+      sscommitment:sscommitment,
+      sstotal:sstotal
+    };
+    if(!ssdate||!ssweight||!ssepp||!ssrate||!ssitem){
+      return alert('Please fill Date,Item,Weight,Ep,Rate fields')
+    }
+
+  
+    try {
+      // Use Axios to make the POST request
+      const response = await axios.post('/addstoreoutsettlement', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Handle the response (you can add your own logic here)
+      storeoutTable.ajax.reload();
+      document.getElementById('sscommitment').value = ''
+
+      // Close the modal after server response
+      closesalesetllement();
+      getdetailedreport()
+    } catch (error) {
+      // Handle errors, such as network issues or server errors
+      console.log('Error:', error);
+    }
+  }
+ 
+</script>

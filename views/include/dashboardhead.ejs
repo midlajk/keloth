@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="/assets/"
+    data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Hi-Tech Coffee</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/logo.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="/assets/vendor/fonts/flag-icons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/typeahead-js/typeahead.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/bs-stepper/bs-stepper.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/select2/select2.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/tagify/tagify.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/flatpickr/flatpickr.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/%40form-validation/umd/styles/index.min.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/typeahead-js/typeahead.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/quill/typography.css">
+    <link rel="stylesheet" href="/assets/vendor/libs/quill/katex.css">
+    <link rel="stylesheet" href="/assets/vendor/libs/quill/editor.css">
+    <link rel="stylesheet" href="/assets/vendor/libs/dropzone/dropzone.css">
+
+    <!-- Page CSS -->
+    <style>
+        .dropzone {
+            /* Add your dropzone styles here */
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .preview-container {
+            /* Add your preview container styles here */
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .preview-item {
+            /* Add your preview item styles here */
+            position: relative;
+            max-width: 200px;
+            max-height: 150px;
+            border: 1px solid #ccc;
+            overflow: scroll;
+        }
+
+        .preview-item img,
+        .preview-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-close {
+            /* Add your close button styles here */
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1;
+            padding: 5px;
+        }
+
+        .btn-close:hover {
+            color: #f00;
+        }
+    </style>
+
+    <!-- Helpers -->
+    <script src="/assets/vendor/js/helpers.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="/assets/js/config.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Menu -->
+
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="/dashboard" class="app-brand-link">
+                        <span class="app-brand-logo demo">
+                            <image src="/images/brandnamelogo.png" style="float: left;width: 200px;height: 50px;">
+                            </image>
+                        </span>
+                    </a>
+
+                    <a href="javascript:void(0);"
+                        class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                        <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                    </a>
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+
+                <ul class="menu-inner py-1">
+                    <!-- Dashboard -->
+
+                    <br>
+                    
+                    <li class="menu-item <%= route=='dashboard'?'active':'' %>">
+                        <a href="/dashboard" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Enquiries">Dashoard</div>
+                        </a>
+                    </li>
+                    <% if(usertype == 'Admin'){%>
+                    <li class="menu-item <%= route=='generatereport'?'active':'' %>">
+                        <a href="/generatereport" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-note"></i>
+                            <div data-i18n="Add Property">Generate Report</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item <%= route=='accounts'?'active':'' %>">
+                        <a href="/accounts" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-user"></i>
+                            <div data-i18n="Properties">Accounts</div>
+                        </a>
+                    </li>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Daily Report</span>
+                    </li>
+                    <li class="menu-item <%= route=='transactions'?'active':'' %>">
+                        <a href="/transactions" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-money"></i>
+                            <div data-i18n="Add Property">Transactions</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='expencesandincome'?'active':'' %>">
+                        <a href="/expencesandincome" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-money-withdraw"></i>
+                            <div data-i18n="Add Property">Expences & Income</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='purchasedelivered'?'active':'' %>">
+                        <a href="/purchasedelivered" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-inbox"></i>
+                            <div data-i18n="Add Property">Arrivals</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item <%= route=='salesdelivered'?'active':'' %>">
+                        <a href="/salesdelivered" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-send"></i>
+                            <div data-i18n="Add Property">Despatch</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Bills</span>
+                    </li>
+                    <li class="menu-item <%= route=='purchases'?'active':'' %>">
+                        <a href="/purchases" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-cart"></i>
+                            <div data-i18n="Properties">Purchase</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='sales'?'active':'' %>">
+                        <a href="/sales" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-truck"></i>
+                            <div data-i18n="Properties">Sales</div>
+                        </a>
+                    </li>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Storage & Commitment</span>
+                    </li>
+               
+                    <li class="menu-item <%= route=='purchasestorage'?'active':'' %>">
+                        <a href="/purchasestorage" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-archive"></i>
+                            <div data-i18n="Properties">Purchase Storage</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='salesstorage'?'active':'' %>">
+                        <a href="/salesstorage" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-box"></i>
+                            <div data-i18n="Properties">Sales Storage</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='commitments'?'active':'' %>">
+                        <a href="/commitments" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-hand-up"></i>
+                            <div data-i18n="Properties">Commitments</div>
+                        </a>
+                    </li>
+                    <% }%>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Work Flow Managment</span>
+                    </li>
+                    <li class="menu-item <%= route=='loaders'?'active':'' %>">
+                        <a href="/loaders" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-group"></i>
+                            <div data-i18n="Add Property">Loders</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='deliveryagents'?'active':'' %>">
+                        <a href="/deliveryagents" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-bus"></i>
+                            <div data-i18n="Properties">DeliveryAgents</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='employees'?'active':'' %>">
+                        <a href="/employees" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-group"></i>
+                            <div data-i18n="Add Property">Employees</div>
+                        </a>
+                    </li>
+              
+
+                    <!-- Components -->
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Report & Utility</span>
+                    </li>
+                    
+                    <li class="menu-item <%= route=='loadinworks'?'active':'' %>">
+                        <a href="/loadinworks" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-rewind-circle"></i>
+                            <div data-i18n="Add Property">Loading Works</div>
+                        </a>
+                    </li>
+                    <% if(usertype == 'Admin'){%>
+                    <li class="menu-item <%= route=='expenceincome'?'active':'' %>">
+                        <a href="/expenceincome" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-user-account"></i>
+                            <div data-i18n="Admin Management">Expenses & Incomes</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='report'?'active':'' %>">
+                        <a href="/report" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-report"></i>
+                            <div data-i18n="Admin Management">Report</div>
+                        </a>
+                    </li>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Settings</span>
+                    </li>
+                    <li class="menu-item <%= route=='settings'?'active':'' %>">
+                        <a href="/settings" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-cog"></i>
+                            <div data-i18n="Admin Management">Management</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='trashoutside'?'active':'' %>">
+                        <a href="/trashoutside" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-trash"></i>
+                            <div data-i18n="Admin Management">Outside Trash</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <%= route=='trashinside'?'active':'' %>">
+                        <a href="/trashinside" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-trash"></i>
+                            <div data-i18n="Admin Management">Inside Trash</div>
+                        </a>
+                    </li>
+                <%}%>
+                    <li class="menu-item">
+                        <a href="/logout" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-log-out"></i>
+                            <div data-i18n="Logout">Logout</div>
+                        </a>
+                    </li>
+
+
+                    <!-- Misc -->
+
+                </ul>
+            </aside>
+            <!-- / Menu -->
+
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Navbar -->
+
+                <nav class="" id="layout-navbar">
+                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                        <a class="nav-item nav-link px-0 me-xl-4" id="menubutton" href="javascript:void(0)">
+                            <i class="bx bx-menu bx-sm"></i>
+                        </a>
+                    </div>
+
+
+                </nav>

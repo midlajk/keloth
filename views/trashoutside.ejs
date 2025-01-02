@@ -1,0 +1,115 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <h1>Outside Trash</h1>
+
+
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+               
+                <div class="table-responsive text-nowrap p-4">
+                    <table class="table" id="arrivalstable">
+                        <thead>
+                            <tr>
+                <th>Date</th> 
+                              <th>Party</th>
+        <th>Deleted</th>
+        <th>Entry date</th>
+
+        <th>Reference</th>     
+        <th>Variables</th>
+        <th>User</th>
+        <th>Reason</th>
+       
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0" id="table-body">
+                          <!-- Data will be populated here -->
+                      </tbody>
+  </table>
+
+</div>
+</div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+
+<script>
+  $(document).ready(function () {
+    // var routeName = '<%= route %>';
+    // var geturl =  routeName=='featured' ?'featuredpropertieslist':'propertieslist'  // Assuming you're passing this variable from EJS
+    // var buttonname =  routeName=='featured' ?'Remove From Featured':'Add To Featured'  // Assuming you're passing this variable from EJS
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+    var dataTable = $('#arrivalstable').DataTable({
+      responsive:responsive,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/gettrashoutside', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+          // Add any additional parameters you want to send to the server here
+        },
+        
+      },
+      columns: [
+      {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      },
+      { data: 'party' },
+
+      { data: 'deleteditem' },
+      { data: 'entrydate' },
+
+        { data: 'refference' },
+        { data: 'variables' },
+        { data: 'user' },
+        { data: 'reason' },
+      ],
+    });
+
+  
+
+  })
+
+
+
+</script>
+
+
+                                    
+                                        <%- include('./include/end.ejs') -%>

@@ -1,0 +1,864 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="flex-grow-1 m-4">
+
+
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                <div class="table-responsive text-nowrap p-4 col-5">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                              <th>Variable Name</th>
+                                <th>Value</th>
+                                
+
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0" id="table-body">
+                          <tr>
+                            <td>
+                              Default Reff.
+                            </td>
+                            <td>
+                              <div class="my-1 flex-nowrap input-group">
+                                <select class="form-control" name="referenceselect" id="referenceselect" >
+                                  <option value="<%=refferance%>" ><%=refferance%></option>
+
+                                </select>
+      
+                                <a class="bg-light fw-bold text-secondary small input-group-text" href="#" data-bs-toggle="modal" data-bs-target="#referanceAdd"><i class="menu-icon tf-icons bx bx-user-plus"></i></a>
+                              </div>                            </td>
+                            
+
+                            <td>
+                              <a href="#" onclick="setrefferencedefault()" class="btn btn-primary">Update</a>
+                            </td>
+
+                          </tr>
+                          <tr>
+                            <td>
+                              Financial Year
+                            </td>
+                            <td>
+                              <div class="my-1 flex-nowrap input-group">
+                                <select class="form-control" name="financialyear" id="financialyear" >
+                                  <option value="<%=year%>" ><%=year%></option>
+
+                                </select>
+      
+                                <a class="bg-light fw-bold text-secondary small input-group-text" href="#" data-bs-toggle="modal" data-bs-target="#financialyearadd"><i class="menu-icon tf-icons bx bx-user-plus"></i></a>
+                              </div>    
+                            </td>
+                            
+
+                            <td>
+                              <a href="#" onclick="setfinancialdefault()" class="btn btn-primary">Update</a>
+                            </td>
+
+                          </tr>
+                          <tr>
+                            <td>
+                              Purchase Bill NO.
+                            </td>
+                            <td>
+                              <input type="number" id="pbillno" value="<%=user.pbillid%>"  class="form-control">
+                            </td>
+                            
+
+                            <td>
+                              <a href="" onclick="updateNumbers()" class="btn btn-primary">Update</a>
+                            </td>
+
+                          </tr>
+                          <tr>
+                            <td>
+                              Sales Bill NO.
+                            </td>
+                            <td>
+                              <input type="number" id="sbillno" value="<%=user.sbill%>"  class="form-control">
+                            </td>
+                            
+
+                            <td>
+                              <a href="" onclick="updateNumbers()" class="btn btn-primary">Update</a>
+                            </td>
+
+                          </tr>
+                          <tr>
+                            <td>
+                              Credit Note NO.
+                            </td>
+                            <td>
+                              <input type="number" id="cnoteno" value="<%=user.creditnoteid%>"  class="form-control">
+                            </td>
+                            
+
+                            <td>
+                              <a href="" onclick="updateNumbers()" class="btn btn-primary">Update</a>
+                            </td>
+
+                          </tr>
+                          <tr>
+                          <td>
+                            Debit Note NO.
+                          </td>
+                          <td>
+                            <input type="number" id="dnoteno"  value="<%=user.debitnoteid%>" class="form-control">
+                          </td>
+                          
+
+                          <td>
+                            <a href="" onclick="updateNumbers()" class="btn btn-primary">Update</a>
+                          </td>
+
+                        </tr>
+                        <tr>
+                          <td>
+                            Urd P-Bill NO.
+                          </td>
+                          <td>
+                            <input type="number" id="urdpbillno"  value="<%=user.purdbillid%>" class="form-control">
+                          </td>
+                          
+
+                          <td>
+                            <a href="" onclick="updateNumbers()" class="btn btn-primary">Update</a>
+                          </td>
+
+                        </tr>
+                        <tr>
+                          <td>
+                            Urd S-Bill NO.
+                          </td>
+                          <td>
+                            <input type="number" id="urdsbillno" value="<%=user.surdbillid%>" class="form-control">
+                          </td>
+                          
+
+                          <td>
+                            <a href="" onclick="updateNumbers()" class="btn btn-primary">Update</a>
+                          </td>
+
+                        </tr>
+                        <tr>
+                          <td>
+                            P-Commitment NO.
+                          </td>
+                          <td>
+                            <input type="number" id="pcommno" value="<%=user.pcomm%>" class="form-control">
+                          </td>
+                          
+
+                          <td>
+                            <a href="" onclick="updateNumbers()" class="btn btn-primary">Update</a>
+                          </td>
+
+                        </tr>
+                        <tr>
+                          <td>
+                            S-Commitment NO.
+                          </td>
+                          <td>
+                            <input type="number" id="scommno" value="<%=user.scomm%>" class="form-control">
+                          </td>
+                          
+
+                          <td>
+                            <a href="#" onclick="updateNumbers()" class="btn btn-primary">Update</a>
+                          </td>
+
+                        </tr>
+                          <!-- Data will be populated here -->
+                      </tbody>
+  </table>
+  
+
+</div>
+
+  <div class="table-responsive text-nowrap p-4 col-7">
+    <h3>Products <a href="" class="btn btn-success float-right " data-bs-toggle="modal" data-bs-target="#newitems">Add Product</a></h3>
+  <table class="table table-bordered" id="example">
+    <thead>
+        <tr>
+          <th>Item</th>
+            <th>Aprx Stock</th>
+            <th>Aprx EP</th>
+            <th>By Products</th>
+            <th>Curing</th>
+            <th>Update</th>
+
+        </tr>
+    </thead>
+    <tbody class="table-border-bottom-0" id="product-table-body">
+      </tbody>
+      </table>
+</div>
+<% if(user.username == 'midlaj'){%>
+<div class="table-responsive text-nowrap p-4 col-12">
+  <h3>Users<a class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#adduser">Add user</a>          
+  </h3>
+<table class="table table-bordered" id="users">
+  <thead>
+      <tr>
+        <th>User name</th>
+        <th>Res</th>
+        <th>Previlage</th>
+        <th>Telegram</th>
+        <th>ChatID</th>
+        <th>Lastlogin</th>
+        <th>Password</th>
+        <th>Action</th>
+
+      </tr>
+  </thead>
+  <tbody class="table-border-bottom-0" id="user-table-body">
+    </tbody>
+    </table>
+</div>
+<%}%>
+</div>
+               
+</div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+<div class="modal fade" id="newitem" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Item <span id="currentitemname"></span></h5>
+      <a href="#" id="closeaddproductmodal" data-bs-dismiss="modal" class="float-right">X</a>
+      </div>
+
+      <div class="modal-body">
+          <form id="newproductform">
+        <div class="row">
+          <div class="col mb-3">
+            <div class="my-1 flex-nowrap input-group">
+              <select name="itemtype" id="itemtype" class="form-control">
+                <option value="Primary">Primary Item</option>
+                <option value="Secondary">Secondary Item</option>
+
+              </select>
+                <button type="button" class="btn btn-primary" onclick=" addByProductRow();" id="addByProduct">Update Ctegory</button> 
+
+            </div>   
+            <div id="byproducts-main">
+
+            <div class="row"> 
+           
+              <div class="col mb-3">
+                <label for="name" class="form-label">By-Product name</label>
+              </div>
+              <div class="col mb-3">
+                <label for="name" class="form-label">Percentage</label>
+              </div>
+              <div class="col mb-3">
+                <label for="name" class="form-label">Action</label>
+              </div>
+             
+            </div>
+            <div class="row byproduct-row"> 
+              <div class="col mb-3"> 
+                <select class="js-data-example-ajax-byproduct" name="byproductitem" id="byproductitem" required></select> 
+              </div> 
+              <div class="col mb-3"> 
+                  <input type="text" class="form-control" name="byproductpercentage" id="byproductpercentage" placeholder="Enter Percentage"> 
+              </div> 
+              <div class="col mb-3"> 
+                  <button type="button" class="btn btn-primary" onclick=" addByProductRow();" id="addByProduct">Add By-Product</button> 
+              </div> 
+          </div>
+          <div id="byproducts">
+
+          </div>
+          </div>
+        </div>
+          </div>
+ 
+       
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="deleteproduct()"  class="btn btn-outline-danger" id="deleteproduct">
+          Delete
+        </button>
+        <a onclick="addproduct()" class="btn btn-primary text-white">Update Product</a>
+      </div>
+  
+    </div>
+  </div>
+ </div>
+ <div class="modal fade hidden" id="newitems" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">New Item</h5>
+      
+      </div>
+
+      <div class="modal-body">
+          <form id="newproductform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">New Item</label>
+            <div class="my-1 flex-nowrap input-group">
+              <input required type="text" name="productname" id="productname" class="form-control" placeholder="Enter Name">
+              <select name="itemtypea" id="itemtypea" class="form-control">
+                <option value="Primary">Primary Item</option>
+                <option value="Secondary">Secondary Item</option>
+
+              </select>
+
+            </div>   
+            <div id="byproducts-main">
+
+            <div class="row"> 
+           
+              <div class="col mb-3">
+                <label for="name" class="form-label">By-Product name</label>
+              </div>
+              <div class="col mb-3">
+                <label for="name" class="form-label">Percentage</label>
+              </div>
+              <div class="col mb-3">
+                <label for="name" class="form-label">Action</label>
+              </div>
+             
+            </div>
+            <div class="row byproduct-row"> 
+              <div class="col mb-3"> 
+                <select class="js-data-example-ajax-byproduct" name="byproductitemA" id="byproductitemA" required></select> 
+              </div> 
+              <div class="col mb-3"> 
+                  <input type="text" class="form-control" name="byproductpercentageA" id="byproductpercentageA" placeholder="Enter Percentage"> 
+              </div> 
+              <div class="col mb-3"> 
+                  <button type="button" class="btn btn-primary" onclick="addByProducta();" id="addByProduct">Add By-Product</button> 
+              </div> 
+          </div>
+          <div id="byproductA">
+
+          </div>
+          </div>
+        </div>
+          </div>
+ 
+       
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeaddproductmodal" data-bs-dismiss="modal" >
+          Close
+        </button>
+        <a onclick="addprod()" class="btn btn-primary text-white">Add Product</a>
+      </div>
+  
+    </div>
+  </div>
+ </div>
+ <div class="modal fade hidden" id="referanceAdd">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">New Refference</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form id="referanceform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">New Refference</label>
+            <input required type="text" name="newreferance" id="newreferance" class="form-control" placeholder="Enter Name">
+          </div>
+        
+          </div>
+ 
+       
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeReferenceModalBtn" data-bs-dismiss="modal" >
+          Close
+        </button>
+        <a onclick="addrefferance()" class="btn btn-primary text-white">Add Referance</a>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ <div class="modal fade hidden" id="financialyearadd">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">New Financial Year</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form id="referanceform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">Financial Year</label>
+            <input required type="text" name="newfinancial" id="newfinancial" class="form-control" placeholder="Enter Year">
+          </div>
+        
+          </div>
+ 
+       
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closefinancialModalBtn" data-bs-dismiss="modal" >
+          Close
+        </button>
+        <a onclick="addfinancial()" class="btn btn-primary text-white">Add Financial Year</a>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ <div class="modal fade hidden" id="adduser">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">New user</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form id="adduserform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">Username</label>
+            <input required type="text" name="username" id="username" class="form-control" placeholder="Enter Name">
+          </div>
+          <div class="col mb-3">
+            <label for="name" class="form-label">Password</label>
+            <input required type="text" name="password" id="password" class="form-control" placeholder="Enter Name">
+          </div>
+          </div>
+ 
+       
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeaddusermodal" data-bs-dismiss="modal" >
+          Close
+        </button>        
+        <a onclick="adduser()" class="btn btn-primary text-white">Add User</a>
+
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  async function fetchData() {
+      try {
+          const response = await fetch('/getdetailedproductproducts');
+          const data = await response.json();
+          updateTable(data);
+      } catch (error) {
+          console.log('Error:', error);
+      }
+  }
+  async function fetusers() {
+      try {
+          const response = await fetch('/getuserslist');
+          const data = await response.json();
+          console.log(data)
+          updateusertable(data);
+      } catch (error) {
+          console.log('Error:', error);
+      }
+  }
+  function updateusertable(data) {
+      const tableBody = document.getElementById('user-table-body');
+      tableBody.innerHTML = '';
+
+      data.forEach(user => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+              <td><input class="form-control usera disabled" disabled style="width:150px" value="${user.username}" id="usera"/></td>
+               <td>
+                
+    <select class="form-control resp" style="width:150px" id="resp">
+        <option value="true">true</option>
+        <option value="false">false</option>
+    </select>
+            </td>
+              <td>
+                
+    <select class="form-control prev" style="width:150px" id="prev">
+        <option value="Admin" ${user.accounttype === "Admin" ? "selected" : ""}>Admin</option>
+        <option value="Employee" ${user.accounttype === "Employee" ? "selected" : ""}>Employee</option>
+        <option value="Banned" ${user.accounttype === "Banned" ? "selected" : ""}>Banned</option>
+    </select>
+            </td>
+            <td><input class="form-control telegram" style="width:150px" value="${user.telegram}" id="telegram"/></td>
+              <td><input class="form-control chatid" style="width:150px" value="${user.chatid}" id="chatid"/></td>
+              
+              <td>${user.lastlogin}</td>
+              <td><input class="form-control pass" style="width:150px" value="" id="pass"/> </td>
+              <td><a href="#" class="btn btn-primary text-white updateuser">Update </a></td>
+          `;
+          tableBody.appendChild(row);
+      });
+  }
+
+  function updateTable(data) {
+      const tableBody = document.getElementById('product-table-body');
+      tableBody.innerHTML = '';
+
+      data.forEach(product => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+              <td>${product.product}</td>
+              <td><input class="form-control stockvalue" style="width:150px" value="${product.stockweight}" id="stockvalue"/></td>
+              <td><input class="form-control epvalue" style="width:150px" value="${product.stockep}" id="epvalue"/></td>
+              <td><a href="#" class="openModalButton" id="openModalButton" data-product='${JSON.stringify(product)}' >By-Products</a> </td>
+              <td><input value="0" class="form-control curingvalue" style="width:150px" id="curingvalue"></td>
+              <td><a href="#" class="btn btn-primary text-white updateButton">Update </a></td>
+          `;
+          tableBody.appendChild(row);
+      });
+  }
+
+  // Call fetchData function when the DOM content is loaded
+  document.addEventListener('DOMContentLoaded', fetchData);
+  document.addEventListener('DOMContentLoaded', fetusers);
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="/js/settingsproduct.js"></script>
+<script>
+$('#referenceselect').select2({
+
+ajax: {
+url: '/getrefferance',
+dataType: 'json',
+delay: 250, // Delay in milliseconds before making the request
+processResults: function (data) {
+  return {
+    results: data.results.map(name => ({ id: name, text: name }))
+  };
+},
+cache: true // Enable caching to reduce server requests
+}
+
+});
+function addrefferance(){
+
+var referance = document.getElementById("newreferance").value;
+var data = {
+refference: referance
+};
+
+// Send a POST request to the server using Axios
+axios.post('/addreference', data)
+  .then(response => {
+    // Handle the server response here
+
+    // Close the modal on successful response
+    if (response.data.success) {
+    var closeButton = document.getElementById('closeReferenceModalBtn');
+
+// Trigger the click event on the button
+closeButton.click();
+
+    }
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+
+
+}
+
+
+function setrefferencedefault(){
+  var referance = document.getElementById("referenceselect").value;
+  
+  var data = {
+refference: referance
+};
+
+// Send a POST request to the server using Axios
+axios.post('/updaterefferencedefault', data)
+  .then(response => {
+    // Handle the server response here
+
+    // Close the modal on successful response
+    if (response.data.success) {
+      window.location.reload();
+
+    }
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+
+
+}
+
+function addfinancial(){
+
+var financial = document.getElementById("newfinancial").value;
+var data = {
+year: financial
+};
+
+// Send a POST request to the server using Axios
+axios.post('/newfinancial', data)
+  .then(response => {
+    // Handle the server response here
+
+    // Close the modal on successful response
+    if (response.data.success) {
+    var closeButton = document.getElementById('closefinancialModalBtn');
+
+// Trigger the click event on the button
+closeButton.click();
+
+    }
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+
+
+}
+function adduser(){
+
+var username = document.getElementById("username").value;
+var password = document.getElementById("password").value;
+
+var data = {
+  username: username,
+  password:password
+};
+if(!username || !password){
+  return
+}
+// Send a POST request to the server using Axios
+axios.post('/addnewuser', data)
+  .then(response => {
+    // Handle the server response here
+
+    // Close the modal on successful response
+    if (response.data.success) {
+    var closeButton = document.getElementById('closeaddusermodal');
+    fetusers()
+// Trigger the click event on the button
+closeButton.click();
+
+    }
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+
+
+}
+
+function setfinancialdefault(){
+  var referance = document.getElementById("financialyear").value;
+  
+  var data = {
+refference: referance
+};
+
+// Send a POST request to the server using Axios
+axios.post('/updatefinancialdefault', data)
+  .then(response => {
+    // Handle the server response here
+
+    // Close the modal on successful response
+    if (response.data.success) {
+      window.location.reload();
+
+    }
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+
+
+}
+
+
+$('#financialyear').select2({
+
+ajax: {
+url: '/getfinancialyears',
+dataType: 'json',
+delay: 250, // Delay in milliseconds before making the request
+processResults: function (data) {
+  return {
+    results: data.results.map(name => ({ id: name, text: name }))
+  };
+},
+cache: true // Enable caching to reduce server requests
+}
+
+});
+</script>          
+<script>
+  function updateNumbers() {
+    if(!confirm('do you want to update the numbering index ?')){
+      return
+    }
+    // Retrieve values from input fields
+    var pbillno = document.getElementById('pbillno').value;
+    var sbillno = document.getElementById('sbillno').value;
+    var cnoteno = document.getElementById('cnoteno').value;
+    var dnoteno = document.getElementById('dnoteno').value;
+    var urdpbillno = document.getElementById('urdpbillno').value;
+    var urdsbillno = document.getElementById('urdsbillno').value;
+    var pcommno = document.getElementById('pcommno').value;
+    var scommno = document.getElementById('scommno').value;
+
+    // Construct an object with input values
+    var data = {
+      pbillno: pbillno,
+      sbillno: sbillno,
+      cnoteno: cnoteno,
+      dnoteno: dnoteno,
+      urdpbillno: urdpbillno,
+      urdsbillno: urdsbillno,
+      pcommno: pcommno,
+      scommno: scommno
+    };
+
+    // Send API request to server
+    fetch('/editvariables', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      if (response.ok) {
+        window.location.reload();
+      }
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('There was a problem with your fetch operation:', error);
+    });
+  }
+  $(document).ready(function() {
+    $(document).on('click', '.updateButton', function() {
+      var row = $(this).closest('tr');
+        var stockValue = row.find('.stockvalue').val();
+        var curingValue = row.find('.curingvalue').val();
+        var epvalue = row.find('.epvalue').val();
+        var productData = row.find('.openModalButton').data('product');
+        var productId = productData._id;
+
+        var requestData = {
+        stockValue: stockValue,
+        curingValue: curingValue,
+        productId: productId,
+        epvalue:epvalue
+    };
+
+    // Send an API POST request
+    $.ajax({
+        url: 'updatestock', // Endpoint URL
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(requestData),
+        success: function(response) {
+            // Handle successful response
+            window.location.reload();
+            // You can perform any further actions here after a successful response
+        },
+        error: function(xhr, status, error) {
+            // Handle error response
+            console.error('API Error:', error);
+        }
+    });
+    });
+
+    $(document).on('click', '.updateuser', function() {
+      var row = $(this).closest('tr');
+      var user = row.find('.usera').val();
+        var previlage = row.find('.prev').val();
+        var telegram = row.find('.telegram').val();
+        var password = row.find('.pass').val();
+        var chatid = row.find('.chatid').val();
+        var resp = row.find('.resp').val();
+
+        
+
+        var requestData = {
+          user: user,
+        previlage: previlage,
+        telegram: telegram,
+        password:password,
+        chatid:chatid,
+        resp:resp
+    };
+
+    // Send an API POST request
+    $.ajax({
+        url: 'updateuser', // Endpoint URL
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(requestData),
+        success: function(response) {
+            // Handle successful response
+            window.location.reload();
+            // You can perform any further actions here after a successful response
+        },
+        error: function(xhr, status, error) {
+            // Handle error response
+            console.log('API Error:', error);
+        }
+    });
+    });
+});
+
+</script>
+
+                                        <%- include('./include/end.ejs') -%>

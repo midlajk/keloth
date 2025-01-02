@@ -1,0 +1,478 @@
+<%- include('../include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+<h3>Account of <%=employee%> <a ><i class="bx bxs-edit me-1"></i></a></h3>
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+               
+                <a class="btn btn-primary text-white" href="#"  data-bs-toggle="modal"
+                  data-bs-target="#newagentmodal">Mark Load</a>
+                  <a class="btn btn-primary text-white" href="#" data-bs-toggle="modal"
+                  data-bs-target="#viewloadmodal">View Loads</a>
+           <div class="row mt-3 text-center"> 
+                    <div class="col-4"> <h4>Total Payable</h4>
+                        <h4 id="payabletotal">0</h4></div>
+                    <div class="col-4"><h4>Total Paid</h4> <h4 id="paidtotal">0</h4></div>
+                    <div class="col-4"><h4>Balance</h4> <h4 id="balancetotal">0</h4></div>
+
+                </div>
+                <div class="table-responsive text-nowrap p-4">
+                  <table class="table" id="sellers">
+                    <thead>
+                      <tr>
+                        <th>Date</th> 
+                        <th>To/From</th>
+ <th>Hint</th>
+                          <th>Medium</th>
+                         
+
+                          <th>Payable</th>
+                          <th>Recieved</th>
+                          <th>Paid</th>  
+
+  <th>Action</th>     
+          
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="table-body">
+                      <!-- Data will be populated here -->
+                    </tbody>
+                  </table>
+          
+                </div>
+              </div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade "></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+<div class="modal fade hidden" id="viewloadmodal" >
+  <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 50%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">View <span id="loadtype">Despatch</span> Loads</h5>
+        <h5 class="modal-title" id="modalCenterTitle"><a href="" class="btn btn-primary" id="loadswitchbtn">Switch Load</a></h5>
+
+      </div>
+      <div class="modal-body">
+        <form  >
+      <div class="row">
+        <table lass="table"  class="table" id="loads-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>From-To</th>
+              <th>Vehicle</th>
+              <th>Item</th>
+              <th>Weight</th>
+              <th>Trip Rent</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0" id="loads-table-body">
+            <!-- Data will be populated here -->
+          </tbody>
+          </table>
+        </div>
+
+        
+      
+    </div>
+      
+  </form>
+    </div>
+  </div>
+ </div>
+ 
+<div class="modal fade hidden" id="newagentmodal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Mark new Load</h5>
+      
+      </div>
+      <div class="modal-body">
+        <form  id="transportagentform">
+          <div class=row>
+      
+        <div class="col mb-3">
+          <label for="name" class="form-label">Date</label>
+          <input required type="date" autofocus name="tripdate" id="tripdate" class="form-control" >
+        </div>
+        <div class="col mb-3">
+          <label for="name" class="form-label">Source-Destination</label>
+          <input required type="text" name="distance" id="distance" class="form-control" placeholder="Source/Destination">
+        </div>
+      
+
+          </div>
+          <div class=row>
+      
+            <div class="col mb-3">
+              <label for="name" class="form-label">Vehicle</label>
+              <input required type="text" name="vehi" id="vehi" class="form-control" placeholder="Vehicle Number">
+            </div>
+            <div class="col mb-3">
+              <label for="name" class="form-label">item</label>
+              <input required type="text" name="item" id="item" class="form-control" placeholder="Item">
+            </div>
+          
+    
+              </div>
+          <div class="row">
+          <div class="col mb-3">
+            <label for="description" class="form-label">Weight</label>
+            <input  type="number" id="weight" name="weight" class="form-control" placeholder="Weight">
+          </div>
+          <div class="col mb-3">
+            <label for="address" class="form-label">Rent</label>
+            <input type="number" id="rent " name="rent" class="form-control" placeholder="Rent">
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeTransportModalBtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" form="sellerform" id="submitbutton" onclick="markload()" class="btn btn-primary">Mark Load</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  var thetatable
+      $(document).ready(function () {
+        const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+         thetatable = $('#sellers').DataTable({
+          responsive: responsive,
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: '/ieaccount',
+            dataSrc: 'data', // Key that holds the array of data in the API response
+            data: function (d) {
+              d.name = '<%=employee%>'; // Add the 'name' parameter to the data object
+              return d;
+  
+              // Add any additional parameters you want to send to the server here
+            },
+          },
+          columns: [
+          {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      }, 
+      { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.name || '') 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.refference || '') 
+              }
+          },
+           
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.medium || '') 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return parseInt(row.payable || 0) 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return parseInt(row.recieved || 0) 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                return parseInt(row.paid || 0) 
+              }
+          },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item delete-btn" data-id="${row._id}"><i class="bx bx-trash me-1"></i> Delete</button>
+                </div>
+              </div>`;
+            },
+          }, // Assuming coffee is an array property
+          ],
+        });
+        $('#sellers').off('click', '.delete-btn');
+
+    $('#sellers').on('click', '.delete-btn', function () {
+  
+      var id = $(this).data('id');
+      if (confirm("do you want to delete ?")) { // User clicked "OK"
+          // Send a request to deleteuser API endpoint with the entered password
+          fetch('/deleteagentdata', {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify( {agent:employee,id:id} )
+          })
+          .then(response => {
+              if (response.ok) {
+                  alert('User deleted successfully');
+                  thetatable.ajax.reload();
+                  calculatesum()
+                } else {
+                  alert('Failed to delete user. Please check your password.');
+              }
+          })
+          .catch(error => {
+              console.log('Error deleting user:', error);
+              alert('Failed to delete user. Please try again later.');
+          });
+      }
+  
+  
+    });
+      });
+   </script>     
+    
+    
+     <script>
+var employee = '<%=employee%>'
+$(document).ready(function() {
+  calculatesum()
+  var loadtype = 'Despatch'
+  
+  var dataTable
+$('#loadswitchbtn').click(function(e) {
+        e.preventDefault(); // Prevent the default action of the anchor tag
+        dataTable.destroy();
+        // Get the current text of the span
+        var currentText = $('#loadtype').text();
+        
+        // Toggle the text between 'Despatch' and 'Arrival'
+        if (currentText === 'Despatch') {
+            $('#loadtype').text('Arrival');
+            loadtype = 'Arrival'
+        } else {
+            $('#loadtype').text('Despatch');
+            loadtype = 'Despatch'
+        }
+        viewtable()
+    });
+    $('#viewloadmodal').on('shown.bs.modal', function() {
+      viewtable()
+  });
+  function viewtable(){
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+    dataTable = $('#loads-table').DataTable({
+      responsive: responsive,
+        "pageLength": 10,
+        "dom": 'rtip',
+
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/agentxloads', // Replace with your API endpoint
+        dataSrc: 'data', // Key that holds the array of data in the API response
+        data: function (d) {
+          d.name = employee;
+          d.loadtype = loadtype; // Add the 'name' parameter to the data object
+          return d;
+          // Add any additional parameters you want to send to the server here
+        },
+        
+      },
+        columns: [
+  
+        {
+          data: 'date',
+          render: function (data, type, row) {
+            // Format the date using moment.js
+            return moment(data).format('DD/MM/YYYY');
+          }
+        },
+        {
+      data: 'delivery',
+      render: function (data, type, row) {
+        // If delivery is null, show billTo instead
+        return data ? data : row.billTo;
+      }
+    },        { data: 'lorry' },
+        { data: 'item' },
+        { data: 'quantity' },
+        {
+      data: null,
+      render: function (data, type, row) {
+        // Render an input field with the value of 'trip'
+        return `<input type="text" class="form-control trip-input" data-row-id="${row._id}" name="trip">`;
+      }
+    },
+     
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="dropdown">
+                  <button type="button" class="btn btn-primary btn-sm add-btnvd" data-src='${JSON.stringify(row)}'>
+        <i class="bx bx-plus"></i> Add
+      </button>
+                  
+                </div>`;
+            },
+          },
+        ],
+      });
+      $('#loads-table').off('click', '.add-btnvd');
+      $('#loads-table').on('click', '.add-btnvd', function() {
+        var rowData = $(this).data('src'); // Get the row data
+    var tripValue = $(this).closest('tr').find('input.trip-input').val();
+    dat = {
+      loadtype:loadtype,
+      id:rowData._id
+    }
+    axios.post('/deliverymarked', dat)
+  .then(response => {
+    // Handle the server response here
+    
+    addtrip(rowData,tripValue)
+    $('#viewloadmodal').modal('hide');
+    // closeButton.click();
+ // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+    // Call the assignCommitment function with the retrieved arguments (row data and trip value)
+    
+
+    // Call the assignCommitment function with the retrieved arguments
+});
+   
+  }
+   $('#viewloadmodal').on('hidden.bs.modal', function() {
+        // Function to run when the modal is hidden (closed)
+        dataTable.destroy();
+          });
+  })
+  function markload() {
+    // Retrieve the form element
+    const form = document.getElementById('transportagentform');
+    
+    // Get form data using FormData API
+    const formData = new FormData(form);
+    
+    // Convert FormData to an object
+    const data = Object.fromEntries(formData.entries());
+
+    // Construct the `src` object
+    const src = {
+        name: employee, // Assuming employee is a global variable or defined elsewhere
+        delivery: data.distance, // Or another relevant field if distance isn't correct
+        lorry: data.vehi,
+        item: data.item,
+        quantity: data.weight, // Assuming weight is the quantity
+        date: data.tripdate,
+        rate: data.rent // Assuming rent is the rate
+    };
+ if(src.delivery && src.date && src.rate){
+  addtrip(src,src.rate)
+ }else{
+  alert('Please fill the fields')
+ }
+   
+}
+  function addtrip(data,value){
+    const src = {
+        name: employee,
+        trip: data.delivery || data.billTo,
+        vehicle: data.lorry,
+        item: data.item,
+        quantity: data.quantity,
+        date:data.date,
+        rate:value
+
+    };
+
+    axios.post('/addtrip', src)
+  .then(response => {
+    // Handle the server response here
+    thetatable.ajax.reload();
+    $('#newagentmodal').modal('hide');
+    calculatesum()
+    // closeButton.click();
+    
+    // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+
+   
+  }
+  function calculatesum(){
+    axios.get('/agentsum/'+employee)
+            .then(function(response) {
+              console.log(response)
+                var data = response.data.data;
+                document.getElementById('payabletotal').innerText = (data.totalPayable+data.totalrecieved)
+                document.getElementById('paidtotal').innerText = data.totalPaid
+                document.getElementById('balancetotal').innerText = (data.totalPayable+data.totalrecieved-data.totalPaid)
+            })
+   }
+    </script>
+
+
+      
+                                        <%- include('../include/end.ejs') -%>

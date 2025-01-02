@@ -1,0 +1,1536 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+<div class="content-wrapper">
+  <!-- Content -->
+  <div class="container-xxl flex-grow-1 container-p-y">
+
+
+    <!-- Basic Bootstrap Table -->
+    <div class="card">
+      <div class="card-body">
+        <!-- action="/submit-bill" method="post" -->
+        <form id="dataform">
+          <div class="row">
+              <div class="col-md-8 col-lg-9">
+                  <div class="card p-4 p-xl-5 my-3 my-xl-4">
+                      <!-- <div class="d-flex flex-row align-items-start justify-content-between mb-3">
+                          <div class="d-flex flex-column">
+                              
+                              <div class="d-flex flex-row align-items-center">
+                                  <span class="fw-bold d-block me-2">Bill Date:</span>
+                                  <input type="date" class="form-control" name="dateOfIssue" id="dateOfIssue" style="max-width: 150px;" required>
+                              </div>
+                          </div>
+                         
+                      </div> -->
+                      <div class="row">
+                        <div class="d-flex flex-column col-6">
+                              
+                          <div class="d-flex flex-row align-items-center">
+                              <span class="fw-bold d-block me-2">Bill Date:</span>
+                              <input type="date" class="form-control" name="dateOfIssue" id="dateOfIssue" style="max-width: 150px;" required autofocus>
+                          </div>
+                      </div>
+                        <div class="d-flex flex-row align-items-center col-6">
+                        <span class="fw-bold me-2">Refference:&nbsp;</span>
+                        <div class="my-1 flex-nowrap input-group">
+                          <select class="form-control" name="referenceselect" id="referenceselect" >
+                            <option value="<%=coffee.referenceselect%>"><%=coffee.referenceselect%></option>
+                          </select>
+
+                          <!-- <a class="bg-light fw-bold text-secondary small input-group-text" href="#" data-bs-toggle="modal" data-bs-target="#referanceAdd"><i class="menu-icon tf-icons bx bx-user-plus"></i></a> -->
+                        </div>
+
+                    </div></div>
+                      
+                      <hr class="my-4">
+                      <div class="row mb-5">
+                          <div class="col">
+
+                              <label class="fw-bold">Party:</label>
+                              
+                        <div class="my-1 flex-nowrap input-group">
+                          <input type="text" value="<%=coffee.billTo%>"  name="billTo" id="billTo"  class="form-control" disabled>
+                          <a class="bg-light fw-bold text-secondary small input-group-text" href="/purchaseaccount/<%=coffee.billTo%>"><i class="menu-icon tf-icons bx bx-arrow-back"></i></a>
+
+                        </div>
+                        <label class="fw-bold">Transportation Agent:</label>
+
+                        <div class="my-1 flex-nowrap input-group">
+                          <input type="text" value="<%=coffee.transportagent%>" disabled name="transportagent" id="transportagent"  class="form-control">
+
+
+                        </div>
+                              <!-- <input placeholder="Who is this invoice to?" type="text" name="billTo" id="billto" class="form-control my-2" required> -->
+                           
+                               <input placeholder="Lorry Number" type="text" name="lorry" id="lorry" value="<%=coffee.lorry%>" class="form-control my-2">
+                            
+                              </div>
+                          <div class="col">
+                            
+                            <label class="fw-bold">Status:</label>
+                            <input type="text" value="<%=status%>" disabled name="billtype" id="billtype"  class="form-control">
+
+                              <label class="fw-bold">Delivery: <%=coffee.delivery%></label>
+                              <div class="my-1 flex-nowrap input-group">
+                                <select class="js-data-example-ajax" name="delivery" id="delivery" required >
+                                  <option value="<%=coffee.delivery%>"><%=coffee.delivery%></option>
+                                </select>
+      
+                                <a class="bg-light fw-bold text-secondary small input-group-text" href="#" data-bs-toggle="modal" data-bs-target="#modalCenter"><i class="menu-icon tf-icons bx bx-user-plus"></i></a>
+                              </div>                       
+                                     <input placeholder="Remarks" value="<%=coffee.remarks%>" type="text" name="remarks" id="remarks" class="form-control my-2">
+
+                        
+                          </div>
+                      </div>
+                      <div class="row">
+                        <table style="border-spacing: 10px; ">
+                          <thead>
+                              <tr>
+                                  <th>ITEM</th>
+                                  <th>NO.OF BAGS</th>
+                                  <th>QTY</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td style="width: 45%;padding: 5px">
+                                  <div class="input-group">
+                                    <div class="my-1 flex-nowrap input-group">
+                                      <input
+                                      type="text"
+                                      name="item"
+                                      min="1"
+                                      step="1"
+                                      id="item"
+                                      class="form-control"
+                                      value="<%=coffee.item%>"
+                                      required
+                                   disabled/>                       </div>    
+                                      
+                                  </div>
+                              </td>
+                              <td style="min-width: 70px;padding: 5px">
+                                <div class="input-group my-1 flex-nowrap">
+                                    <input
+                                        type="number"
+                                        name="bags"
+                                        min="1"
+                                        step="1"
+                                        value="<%=coffee.bags%>"
+                                        id="bags"
+                                        class="form-control"
+                                        oninput="updateNetWeight()"
+                                        required
+                                    />
+                                </div>
+                            </td>
+                              <td style="min-width: 70px;padding: 5px">
+                                  <div class="input-group my-1 flex-nowrap">
+                                      <input
+                                          type="number"
+                                          name="quantity"
+                                          min="1"
+                                          value="<%=coffee.quantity%>"
+                                          step="1"
+                                          id="quantity"
+                                          class="form-control"
+                                          oninput="updateNetWeight()"
+                                          required
+                                      />
+                                  </div>
+                              </td>
+                  
+                             
+                          </tr>
+                              <!-- ItemRows will be added here -->
+                          </tbody>
+                      </table>
+                    
+                      </div>
+                      
+                     
+                      <div class="row mt-4 justify-content-end">
+                        <div class="col-lg-6">
+                            <!-- <div class="d-flex flex-row align-items-start justify-content-between">
+                                <span class="fw-bold">Subtotal:</span>
+                                <span>₹0.00</span>
+                            </div> -->
+                            <%
+                            var weight =0
+                            var huskcutting=0
+                            var bag =0
+                            weight = coffee.quantity - (coffee.bags*coffee.bagweight)
+                            bags = (coffee.bags*coffee.bagweight)
+                            forign = parseInt(weight*(coffee.forignobject)/100)
+                            %>
+                            <div class="d-flex flex-row align-items-start justify-content-between mt-2">
+                                <span class="fw-bold mt-2">Bag Weight (One):</span>
+                                <span>
+                                  <div class="my-1 flex-nowrap input-group" >
+                                  <input type="number" name="bagweight" value="<%=coffee.bagweight%>"  oninput="updateNetWeight()" id="bagweight" class="bg-white border form-control" style="width: 80px;" placeholder="0.2" min="0.00" step="0.01" max="100.0">
+                                  <span class="bg-light fw-bold text-secondary small input-group-text"><span id="bagweightDisplay"><%=bags%></span> Kg</span>  
+                                 
+                                </div>
+                              </span>
+                            </div>
+                            
+                            <div class="d-flex flex-row align-items-start justify-content-between mt-2">
+                              <span class="fw-bold mt-2">Forign Object (%):</span>
+                              <span>
+                                <div class="my-1 flex-nowrap input-group" >
+                                <input type="number" name="forignobject" id="forignobject" value="<%=coffee.forignobject%>" class="bg-white border form-control"  oninput="updateNetWeight()" style="width: 80px;" placeholder="0.2" min="0.0" step="0.1" max="100.0">
+                                <span class="bg-light fw-bold text-secondary small input-group-text"> <span id="forignobjectDisplay"><%=forign%></span> Kg</span>  
+                               
+                              </div>
+                            </span>
+                          </div>
+                          <div class="d-flex flex-row align-items-start justify-content-between mt-2">
+                            <span class="fw-bold mt-2">Weight Adjustment (Kg):</span>
+                            <span>
+                              <div class="my-1 flex-nowrap input-group" >
+                              <input type="number" name="weightallowance" id="weightallowance" value="<%=coffee.weightallowance%>"  class="bg-white border form-control"  oninput="updateNetWeight()" style="width: 80px;">
+                              <span class="bg-light fw-bold text-secondary small input-group-text">  Kg</span>  
+                             
+                            </div>
+                          </span>
+                        </div>
+                     
+                    <hr>
+                    <div style="font-size: 1.125rem;" class="d-flex flex-row align-items-start justify-content-between">
+                      <span class="fw-bold">Net Weight:</span>
+                      <span class="fw-bold" id="netWeightDisplay"><%=coffee.netWeight%></span>Kg
+                  </div>
+                   
+                           
+                        </div>
+                    </div>    
+         
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3" id="reportcol">
+                  <div class="sticky-top pt-md-3 pt-xl-4">
+                      <!-- <a href="#" id="openModalBtn" onclick="modalclicked()"  class="btn btn-primary d-block w-100">Review Report</a> -->
+                      <!-- <div class="my-3" id="clientslist" style="max-height: 700px;overflow-y: scroll;padding:10px">
+                      </div> -->
+                      <div class="my-3">
+                        <label class="fw-bold">Report:</label>
+                        <br>
+                        <label for="">Outern</label>
+                        <div class="my-1 flex-nowrap input-group">
+
+                          <input type="number" name="outern50" oninput="multiply()" id="outern50" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="50">
+                          <span class="bg-light fw-bold text-secondary small input-group-text">50</span>
+                          <input type="number" oninput="updateNetWeight()" name="outern" id="outern" value="<%=coffee.outern%>" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+
+                          <span class="bg-light fw-bold text-secondary small input-group-text">100</span>
+                          </div>
+
+                        <!-- <div class="my-1 flex-nowrap input-group">
+                            <input type="number" name="outern" value="<%=coffee.outern%>" oninput="updateNetWeight()"  id="outern" class="bg-white border form-control" placeholder="100" min="0.00" step="0.01" max="100.00">
+                            <a class="bg-light fw-bold text-secondary small input-group-text" onclick="multiply()">%</a>
+                          </div> -->
+                            <label for="">Husk Cutting</label>
+                  
+                          <div class="my-1 flex-nowrap input-group">
+
+                            <input type="number" name="huskpercentage" value="<%=coffee.huskpercentage%>" oninput="updateNetWeight()" id="huskpercentage" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+                            <span class="bg-light fw-bold text-secondary small input-group-text">%</span>
+                            <input type="number" oninput="updatcutting()" value="<%=coffee.huskcutting%>" name="huskcutting" id="huskcutting" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+
+                            <span class="bg-light fw-bold text-secondary small input-group-text">Kg</span>
+                            </div>   
+                          <label for="">Moisture Cutting</label>
+
+                        <div class="my-1 flex-nowrap input-group">
+                
+                          <input type="number" name="moisturepercentage" value="<%=coffee.moisturepercentage%>" oninput="updateNetWeight()" id="moisturepercentage" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+                          <span class="bg-light fw-bold text-secondary small input-group-text">%</span>
+                          <input type="number" name="moisturecutting" value="<%=coffee.moisturecutting%>" oninput="updatcutting()" id="moisturecutting" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+
+                          <span class="bg-light fw-bold text-secondary small input-group-text">Kg</span>
+                          </div>
+                        <label for="">BB Cutting</label>
+
+                        <div class="my-1 flex-nowrap input-group">
+                          <input type="number" name="bbpercentage" value="<%=coffee.bbpercentage%>" oninput="updateNetWeight()" id="bbpercentage" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+                          <span class="bg-light fw-bold text-secondary small input-group-text">%</span>
+                          <input type="number" name="bbcutting" value="<%=coffee.bbcutting%>" oninput="updatcutting()" id="bbcutting" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+
+                          <span class="bg-light fw-bold text-secondary small input-group-text">Kg</span>
+                          </div>
+                          <label for="">IDB Cutting</label>
+
+                          <div class="my-1 flex-nowrap input-group">
+                            <input type="number" value="<%=coffee.berryborepercentage%>" name="berryborepercentage" oninput="updateNetWeight()" id="berryborepercentage" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+                            <span class="bg-light fw-bold text-secondary small input-group-text">%</span>
+                            <input type="number" value="<%=coffee.berryborecutting%>" name="berryborecutting" oninput="updatcutting()" id="berryborecutting" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+  
+                            <span class="bg-light fw-bold text-secondary small input-group-text">Kg</span>
+                            </div>
+                            <label for="">Other Cutting</label>
+
+                            <div class="my-1 flex-nowrap input-group">
+                                <input type="number" name="other" value="<%=coffee.other%>" id="other" oninput="updateNetWeight()" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+                                <span class="bg-light fw-bold text-secondary small input-group-text">Kg</span>
+                              </div>
+                              <label for="">Ep Allowance</label>
+
+                              <div class="my-1 flex-nowrap input-group">
+                                  <input type="number" name="allowance"  value="<%=coffee.allowance%>" oninput="updateNetWeight()" id="allowance" class="bg-white border form-control" placeholder="0.0" min="0.00" step="0.01" max="100.00">
+                                  <span class="bg-light fw-bold text-secondary small input-group-text">Kg</span>
+                                </div>
+                                <label for="">Report Finalized</label>
+                                <input type="radio" name="reportstatus" checked value="finalizedreport">
+                          <br>
+                          <hr>
+                          <div style="font-size: 1.125rem;" class="d-flex flex-row align-items-start justify-content-between">
+                            <span class="fw-bold">Net EP Weight:</span>
+                            <span class="fw-bold" id="epWeightDisplay"> <%=coffee.netepweight%> Kg</span>
+                        </div>
+                        <div style="font-size: 1.125rem;" class="d-flex flex-row align-items-start justify-content-between">
+                          <span class="fw-bold">Ep % : </span>
+                          <span class="fw-bold" id="eppercenagedisplay"><%=coffee.eppercentage%></span>
+                          <span class="fw-bold" id="eppercenagedisplay50"><%=(coffee.eppercentage/2)%></span>
+
+                      </div>
+                      
+                        </div>
+                        <a href="#" id="openModalBtn" onclick="modalclicked()"  class="btn btn-primary d-block w-100">Review Report</a>
+                        <a href="/viewcurrentreport?billTo=<%=coffee.billTo%>&status=<%=status%>&lotnumber=<%=coffee.lotnumber%>" target="_blank"  class="btn btn-secondary d-block w-100 mt-1">View Current Report</a>
+
+                      </div>
+                  </div>
+          
+              </div> 
+            </form>
+          </div>
+     
+       </div>
+       </div>
+  <!-- Footer -->
+
+ </div>
+
+  <!-- / Footer -->
+
+  <div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+<div id="invoiceModal" class="modal" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+  <div class="modal-content" style="background-color: white; padding: 20px; border-radius: 5px; width: 60%; height: 80%; max-width: 850px; max-height: 90%; overflow: auto; position: relative;">
+    <span class="close" id="closeModalBtn" style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">&times;</span>
+    <div id="invoiceCapture" class="modal-content-wrapper" style="padding: 10px;">
+      <!-- Invoice content goes here -->
+      <div>
+        <!-- Modal -->
+        <div id="invoiceCapture">
+          <div class="d-flex flex-row justify-content-between align-items-start bg-light w-100 p-4">
+            <div class="w-100">
+              <h4 class="fw-bold my-2" id="partyname"><%=coffee.billTo%></h4>
+              <h5 class="fw-bold my-2" id="itemnamedisplay"></h5>
+              <h5 class="fw-bold my-2" id="businesstype"></h5>
+              <h5 class="fw-bold my-2" id="Transportvehicle"></h5>
+              <h6 class="fw-bold text-secondary mb-1">Lot No #: <span id="lotnumber"></span> </h6>
+            </div>
+            <div class="text-end ms-4">
+              <h6 class="fw-bold mt-1 mb-2">Actual&nbsp;Weight:</h6>
+              <h5 class="fw-bold text-secondary" id="actualweightdisplay"> </h5>
+              <h6 class="fw-bold mt-1 mb-2">EP&nbsp;Weight:</h6>
+              <h5 class="fw-bold text-secondary" id="epweightdisplay"> </h5>
+              
+            </div>
+          </div>
+          <div class="p-4">
+            <div class="row mb-4">
+              <div class="col-md-4">
+                <div class="fw-bold">Bill Date:</div>
+                <div><input type="date" class="form-control" id="billingdate"></div>
+                <div> </div>
+                <div> </div>
+              </div>
+              <div class="col-md-4">
+                <div class="fw-bold">Billing Number:</div>
+                <div><input type="text" class="form-control" id="billingnumber"></div>
+                <div> </div>
+                <div> </div>
+              </div>
+              <div class="col-md-4">
+                <div class="fw-bold">Product Tax:</div>
+                <div><select name="tax" class="form-control" id="tax">
+                  <option value="0">sgst-0% + cgst-0% + igst-0%</option>
+                  <option value="5">sgst-2.5% + cgst-2.5% + igst-0%</option>
+                  <option value="10">sgst-2.5% + cgst-2.5% + igst-5%</option>
+                </select> </div>
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  
+                  <th>COMMITMENT</th>
+                  <th>QTY</th>
+                  <th class="text-end">PRICE</th>
+                  <th class="text-end">AMOUNT</th>
+                  <th class="text-end">ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>        <div class="my-1 flex-nowrap input-group">
+                    <input id="newcommitid" class="form-control" disabled/>
+
+                    <a class="bg-light fw-bold text-secondary small input-group-text" href="#" onclick="openCommitments()" data-bs-toggle="modal" data-bs-target="#commitmentmodal"><i class="menu-icon tf-icons bx bx-notepad"></i></a>
+                  </div></td>
+                  <td><input class="form-control" id="newcommitqty"/></td>
+                  
+                  <td>
+                      <input id="newcommitrate" class="form-control"/>
+
+                      
+                 </td>
+                  <td id="newcommittotal"></td>
+                  <td><button class="btn btn-success" onclick="onButtonClick()">Add</td>
+                </tr>
+                <!-- Item rows go here -->
+              </tbody>
+            </table>
+            <table class="table" style="width: 100%;" id="billtable">
+              <tbody id="billtablebody">
+                
+               
+                <!-- Additional rows for TAX, DISCOUNT, and TOTAL go here -->
+              </tbody>
+              
+               <tr class="text-end">
+                <td></td>
+                <td></td>
+                  <td></td>
+                  <td class="fw-bold">SUB TOTAL<br>CONSIGNMENT</td>
+                  <td class="text-end"><span id="totalbillamount"></span><br><span id="consignmentdisplay"></span></td>
+                  
+                </tr>
+            </table>
+            <div class="bg-light py-3 px-4 rounded">
+              <!-- Notes go here -->
+            </div>
+          </div>
+        </div>
+        <div class="pb-4 px-4">
+          <div class="row">
+            <div class="col-md-6">
+              <button class="btn btn-secondary d-block w-100">
+                <i class="me-2" style="width: 15px; height: 15px; margin-top: -3px;"></i>Print Detailed Report
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-outline-primary d-block w-100 mt-3 mt-md-0" >
+                <i class="me-2" style="width: 16px; height: 16px; margin-top: -3px;"></i>Print Bill
+              </button>
+            </div>
+           
+          </div> 
+          <br>
+        <div class="col-12">
+              <button class="btn btn-primary d-block w-100 mt-md-0" id="generateInvoiceBtn" type="submit" form="dataform">
+                <i class="me-2" style="width: 16px; height: 16px; margin-top: -3px;"></i>Save Details
+              </button>
+            </div>
+      </div>
+        </div>  
+        
+      <hr class="mt-4 mb-3" />
+      
+    </div>
+    
+  </div>
+</div>
+<div class="modal fade hidden" id="referanceAdd">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">New Refference</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form id="referanceform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">New Refference</label>
+            <input required type="text" name="newreferance" id="newreferance" class="form-control" placeholder="Enter Name">
+          </div>
+        
+          </div>
+ 
+       
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeReferenceModalBtn" data-bs-dismiss="modal" >
+          Close
+        </button>
+        <a onclick="addrefferance()" class="btn btn-primary text-white">Add Referance</a>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+<script>
+ var party = '<%=coffee.billTo%>';
+  var bill = [] ;
+  var consignment = '<%=coffee.storage%>'  ;
+  var epweight =  parseInt((parseFloat('<%=coffee.netWeight%>') / 100) * parseFloat('<%=coffee.outern%>')); 
+  var lotnumber = '<%=coffee.lotnumber%>' ;
+  var netepweight = '<%=coffee.netepweight%>';
+  var netWeight = '<%=coffee.netWeight%>';
+  var eppercentage = '<%=coffee.eppercentage%>';
+  var billedquantity = 0;
+  netepweightold = '<%=coffee.netepweight%>';
+  function setBillDateToCurrentDate() {
+    // Get the current date
+    // var currentDate = new Date().toISOString().slice(0, 10);
+    const today = new Date('<%=coffee.date%>')
+
+// Format today's date as yyyy-mm-dd
+    const formattedDate = today.toISOString().split('T')[0];
+    // Set the value of the bill date input field to the current date
+    document.getElementById('billingdate').value = formattedDate;
+  }
+
+ async function onButtonClick() {
+    var referenceselect = document.getElementById('referenceselect').value
+    var billid=document.getElementById('billingnumber').value;
+    const uniqueid = new Date().getTime().toString();
+    var referenceselect = document.getElementById('referenceselect').value
+    var tax = document.getElementById('tax').value
+    var item = '<%=coffee.item%>'
+
+    var billingdate = document.getElementById('billingdate').value || new Date().toISOString().slice(0, 10);
+ var billtype = '<%=status%>'
+      // Extract data from HTML elements
+      var commitId = document.getElementById('newcommitid').value || referenceselect;
+      var commitQty = document.getElementById('newcommitqty').value;
+      var commitRate = document.getElementById('newcommitrate').value;
+      var commitTotal = document.getElementById('newcommittotal').innerText;
+      var billData = {
+        date:billingdate,
+        lotnumber:lotnumber,
+        uniqueid:uniqueid,
+        billid:billid,
+        id: commitId,
+        quantity: commitQty,
+        rate: commitRate,
+        total: commitTotal
+    };
+    var reportstatus =  $("input[type='radio'][name='reportstatus']:checked").val();
+
+    if ((consignment-commitQty) < 0 || reportstatus == 'pendingreport'|| commitTotal<=0 || netepweight!=netepweightold ) {
+          if(reportstatus=='pendingreport'){
+            alert('You cant make bill before finalizing the report')
+
+           }else if(commitTotal<=0){
+            alert('Cant add empty data')
+
+           }
+           else if(netepweight!=netepweightold){
+            alert('Please save the details')
+           } else{
+                      alert('You cant add more bill than original End Product  quantity')
+
+           }
+            return; // Skip the iteration
+        }else{
+          function isIdAlreadyExists(newId, billArray) {
+           for (var i = 0; i < billArray.length; i++) {
+        if (billArray[i].id === newId&& billArray[i].id != referenceselect) {
+
+            return true; // If the id already exists, return true
+        }
+    }
+    return false; // If the id doesn't exist, return false
+}
+
+// Example usage:
+
+    if (isIdAlreadyExists(billData.id, bill)) {
+        alert("Bill for "+billData.id+" already exists!");
+    } else {
+
+      try {
+        const report = await updatereport()
+        const response = await fetch('/generatebill', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({...billData,billtype:billtype,name:party,eppercentage:eppercentage,tax:tax,item:item})
+        });
+
+        if (response.ok) {
+          bill.push(billData);
+           displayBill();
+            // Handle the response data as needed
+        } else {
+            throw new Error('Failed to submit purchase bill');
+        }
+    } catch (error) {
+        console.log('Error:', error.message);
+        // Handle errors
+    }
+    
+
+    }
+              
+
+        }
+    // Push the object into the bill array
+   
+      // Call addbill function with the extracted data
+  }
+ 
+  function displayBill() {
+    var billtype = document.getElementById('billtype').value
+
+  
+var apib 
+if (billtype === 'Purchase') {
+  apib = 'bills';
+} else if (billtype === 'Sales') {
+  apib = 'sbills';
+}
+    var tableBody = document.getElementById("billtablebody");
+    // Clear previous content
+    tableBody.innerHTML = "";
+    var totalbill = 0;
+    var totalQty = 0;
+
+    // Iterate over the bill array and create rows for each object
+    bill.forEach(function(billData, index) { 
+      
+     
+        var row = tableBody.insertRow();
+        var cellId = row.insertCell(0);
+        var cellQty = row.insertCell(1);
+        var cellRate = row.insertCell(2);
+        var cellTotal = row.insertCell(3);
+        var cellDelete = row.insertCell(4);
+        var totalQuantity = 0; // Initialize total quantity
+
+        // Set cell content with data from the billData object
+        cellId.textContent = billData.id;
+        cellQty.textContent = billData.quantity;
+        cellRate.textContent = billData.rate;
+        cellTotal.textContent = billData.total;
+        totalbill += parseFloat(billData.total);
+        totalQty += parseFloat(billData.quantity);
+        consignment = netepweight-totalQty
+        billedquantity =totalQty;
+
+        // Create a delete button/icon
+        var deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "&times;"; // The 'times' symbol (×) for delete
+        deleteButton.className = "btn btn-danger btn-sm";
+        // Add event listener to delete the row and remove data from the bill array
+        deleteButton.addEventListener("click", function() {
+            // Remove the row from the table
+            // Remove the corresponding data from the bill array 
+            if(netepweight!=netepweightold){
+              alert('plese save the details ')
+              return
+    
+            }
+            fetch(`/${apib}/${billData.uniqueid}/${party}`, {
+        method: 'DELETE'
+    })
+    .then(response => {
+      console.log(response)
+        if (response.ok) {
+            // Remove the bill from the client-side array or any other data structure
+            const index = bill.findIndex(item => item.uniqueid === billData.uniqueid);
+            if (index !== -1) {
+                bill.splice(index, 1);
+            }
+            // Update total bill amount
+            row.remove();
+            if(bill.length==1){
+              bill=[]
+            }else{
+            bill.splice(index,1);
+            }
+            updatetotalbillamount()
+        } else {
+            // Handle errors
+            console.error('Failed to delete bill:', response.statusText);
+            alert('Failed to delete bill. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.log('Error deleting bill:', error);
+        alert('An error occurred while deleting bill. Please try again.');
+    });
+            
+        });
+        document.getElementById('totalbillamount').innerText = "₹"+ totalbill  
+        document.getElementById('consignmentdisplay').innerText = consignment+" Kg"  
+
+        // Append the delete button to the delete cell
+        cellDelete.appendChild(deleteButton);
+    });
+}
+function updatetotalbillamount() {
+    var total = 0;
+    var totalQty= 0
+    bill.forEach(function(billData) {
+      total += parseFloat(billData.total);
+      totalQty += parseFloat(billData.quantity);
+
+    });
+    consignment = netepweight-totalQty
+    // Update the total quantity cell in the table
+    document.getElementById('totalbillamount').innerText = "₹"+total  
+    document.getElementById('consignmentdisplay').innerText = consignment+" Kg"  
+
+}
+</script>
+<style>
+#commitments-table {
+  width: 100%;
+}
+
+/* #commitments-table tbody tr td {
+  text-align: center;
+} */
+/* #commitments-table thead tr th {
+  text-align: center;
+} */
+</style>
+<div class="modal fade hidden" id="modalCenter">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Add New Party</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form>
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">Party Name</label>
+            <input  type="text" name="name" id="name" class="form-control" placeholder="Enter Name">
+          </div>
+          <div class="col mb-3">
+            <label for="image" class="form-label">Address</label>
+            <input type="text" id="address" name="address" class="form-control" placeholder="Enter Address">
+          </div>
+          </div>
+ 
+          <div class="row">
+          <div class="col mb-3">
+            <label for="description" class="form-label">Phone</label>
+            <input  type="text" id="phone" name="phone" class="form-control" placeholder="Enter Phone">
+          </div>
+          <div class="col mb-3">
+            <label for="highlighted" class="form-label">TDS</label>
+            <select type="text" id="tds" name="tds" class="form-control" placeholder="Enter GSTIN">
+
+              <option value="YES">YES</option>
+              <option value="NO">NO</option>
+
+            </select>
+ 
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeaddpartybtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" form="sellerform" id="submitbutton" onclick="addParty()" class="btn btn-primary">Add Party</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ 
+ <div class="modal fade hidden" id="transportagentModal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Add New Transport Agent</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form  id="transportagentform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">Agent Name</label>
+            <input required type="text" name="Tagentname" id="Tagentname" class="form-control" placeholder="Enter Name">
+          </div>
+          <div class="col mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" id="Tagentaddress" name="Tagentaddress" class="form-control" placeholder="Enter Address">
+          </div>
+          </div>
+ 
+          <div class="row">
+          <div class="col mb-3">
+            <label for="description" class="form-label">Phone</label>
+            <input  type="text" id="Tagentphone" name="Tagentphone" class="form-control" placeholder="Enter Phone">
+          </div>
+          <div class="col mb-3">
+            <label for="highlighted" class="form-label">Strength</label>
+            <input type="number" id="Tagentstrength" name="Tagentstrength" class="form-control" placeholder="Enter GSTIN">
+ 
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeTransportModalBtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" form="sellerform" id="submitbutton" onclick="addtransportagent()" class="btn btn-primary">Add Party</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ <div class="modal fade hidden" id="commitmentmodal">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 700px;"> 
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="commitments-titile"><span id="commitmentparty"> </span> <br><span id="commitmentitem"></span><br><span id="commitment-type"></span>
+        </h5>
+       
+
+      </div>
+      <div class="modal-body">
+          <form >
+        <div class="row">
+          <div class="col  mb-3">
+            <!-- <label for="name" class="form-label">Actual Weight</label> -->
+            <div class="my-1 flex-nowrap input-group">
+              <div class="bg-light text-secondary small input-group-text no-pointer-events" href="#" >Billable Weight</div>
+              <input  type="text" name="actualweightcom" id="actualweightcom" class="form-control" placeholder="Actual Weight">
+            </div>
+           <!-- <label for="image" class="form-label">Ep Weight</label> -->
+          
+          </div>
+          <div class="col mb-3"> 
+             <div class="lex-nowrap input-group">
+              <div class="bg-light text-secondary small input-group-text no-pointer-events" href="#" >Billable Ep wgt.</div>
+              <input  type="text" name="actualepcom" id="actualepcom" class="form-control" placeholder="Ep Weight">
+            </div>
+         
+                    </div>
+          </div>
+ 
+          <div class="row">
+          <table lass="table" class="table" id="commitments-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Commitment</th>
+              <th>Balance Wgt.</th>
+              <th>Ep Balance</th>
+              <th>Rate</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0" id="commitment-table-body">
+            <!-- Data will be populated here -->
+          </tbody>
+          </table>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-outline-secondary" id="closeModalBtn" data-bs-dismiss="modal">
+          Close
+        </button> -->
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ <div class="modal fade hidden" id="referanceAdd">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">New Refference</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form id="referanceform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">New Refference</label>
+            <input required type="text" name="newreferance" id="newreferance" class="form-control" placeholder="Enter Name">
+          </div>
+        
+          </div>
+ 
+       
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeReferenceModalBtn" data-bs-dismiss="modal" >
+          Close
+        </button>
+        <a onclick="addrefferance()" class="btn btn-primary text-white">Add Referance</a>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ <style>
+  /* .select2-close-mask {
+    z-index: 2099;
+}
+
+.select2-dropdown {
+    z-index: 3051;
+} */
+.select2-container--default .select2-dropdown {
+    position: absolute;
+}
+.select2-container {
+    z-index: 1000; /* Adjust as needed */
+}
+
+.select2-dropdown {
+    z-index: 1000; /* Adjust as needed */
+}
+ </style>
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+ <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+<script>
+
+// Get the current date and time
+
+
+</script>
+<script>
+  $(document).ready(function () {
+    const today = new Date('<%=coffee.date%>')
+
+// Format today's date as yyyy-mm-dd
+const formattedDate = today.toISOString().split('T')[0];
+document.getElementById('billingdate').value = formattedDate;
+// Set the value of the input field to today's date
+document.getElementById('dateOfIssue').value = formattedDate;
+  
+      // Function to add a new by-product row
+   
+      // Event listener for adding by-product
+      // $("#addByProduct").click(function (e) {
+      //     e.preventDefault();
+      //     addByProductRow();
+      // });
+
+      // Event listener for deleting row
+      $(document).on('click', '.delete-row', function () {
+        var index = $(this).data('index');
+        if(index < byproducts.length-1){
+          alert('delete the last item first')
+        }else{ byproducts.splice(index, 1);
+        $(this).closest('.byproduct-row').remove();
+        console.log(byproducts)}
+       
+      });
+  }); 
+
+
+    function addByProductRow() {
+     
+
+         var byproductname = document.getElementById('byproductitem').value
+         var byproductpercentage = document.getElementById('byproductpercentage').value
+
+         var byProduct = {
+        name: byproductname,
+        percentage: byproductpercentage
+    };
+
+    byproducts.push(byProduct);
+    var rowIndex = byproducts.length - 1
+
+
+
+          var newRowHtml = '<div class="row byproduct-row"> \
+                                <div class="col mb-3">'+byproductname+'\
+                                 \
+                                </div> \
+                                <div class="col mb-3"> \
+                                    '+byproductpercentage+' \
+                                </div> \
+                                <div class="col mb-3"> \
+                                    <button type="button" class="btn btn-danger delete-row" data-index="' + rowIndex + '">Delete</button> \
+                                </div> \
+                            </div>';
+
+          $("#byproducts").append(newRowHtml);
+
+          
+      }
+      // $.fn.modal.Constructor.prototype._enforceFocus = function() {};
+      function addproduct(){
+
+var productname = document.getElementById("productname").value;
+var data = {
+product: productname,
+byproduct : byproducts
+};
+if(productname){
+
+// Send a POST request to the server using Axios
+axios.post('/addproducts', data)
+  .then(response => {
+    // Handle the server response here
+
+    // Close the modal on successful response
+    if (response.data.success) {
+    var closeButton = document.getElementById('closeaddproductmodal');
+
+// Trigger the click event on the button
+closeButton.click();
+    }
+  })
+  .catch(error => {
+    // Handle errors here
+    console.error('Error:', error);
+  });
+}else{
+  alert('Please enter a product name')
+}
+
+
+}
+
+</script>
+
+<script>
+  // Function to handle Enter key press and focus on the next input
+  function handleEnterKeyPress(event) {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent form submission on Enter key press
+
+      // Find the current active element (the input element)
+      const currentInput = document.activeElement;
+
+      // Find all input elements within the form
+      const inputElements = Array.from(currentInput.form.elements).filter(
+        (element) => element.tagName === "INPUT"
+      );
+
+      // Find the index of the current input element
+      const currentIndex = inputElements.indexOf(currentInput);
+
+      // Calculate the index of the next input element (loop to the first if at the end)
+      const nextIndex = (currentIndex + 1) % inputElements.length;
+
+      // Focus on the next input element
+      inputElements[nextIndex].focus();
+    }
+  }
+
+  // Add event listeners to all input elements to handle Enter key press
+  const inputFields = document.querySelectorAll("input");
+  inputFields.forEach((input) => {
+    input.addEventListener("keydown", handleEnterKeyPress);
+  });
+</script>
+
+            
+<script>
+  var dataTable;
+  // Function to open the modal
+ async  function openModal() {
+    setBillDateToCurrentDate()
+    var item = document.getElementById('item').value
+    var referenceselect = document.getElementById('referenceselect').value
+
+    var billtype = document.getElementById('billtype').value
+    var Transportvehicle = document.getElementById('lorry').value
+
+  
+var apia 
+if (billtype === 'Purchase') {
+  apia = 'invoicebasepurchasebills';
+} else if (billtype === 'Sales') {
+  apia = 'invoicesalesbill';
+}
+// Concatenate the components to form the unique ID
+lotnumber = '<%=coffee.lotnumber%>';
+
+document.getElementById('lotnumber').innerText = lotnumber
+
+   document.getElementById('businesstype').innerText = billtype
+   document.getElementById('Transportvehicle').innerText = Transportvehicle.toUpperCase()
+   document.getElementById('billingnumber').value = lotnumber
+   document.getElementById('itemnamedisplay').innerText = item
+
+    if(party && item && eppercentage >=0 && referenceselect){
+      const modal = document.getElementById('invoiceModal');
+    modal.style.display = 'flex';
+    }else{
+      alert('Please choose a party name , Item,Refferennce and ep percentage')
+    }
+
+    try {
+        const response = await fetch(`/${apia}?lotnumber=${lotnumber}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          data.forEach(function(billData, index) { 
+            var billData = {
+        date:billData.date,
+        lotnumber:billData.lotnumber,
+        uniqueid:billData.uniqueid,
+        billid:billData.invoice,
+        id: billData.commitment,
+        quantity: billData.qty,
+        rate: billData.amount,
+        total: billData.subtotal
+          };
+              bill.push(billData)
+          })
+          displayBill(bill);
+        } else {
+          alert(data.error || 'Failed to get purchase bills.');
+        }
+      }
+       catch (error) {
+        console.log('Error:', error);
+        alert('Failed to get purchase bills.');
+      } 
+
+  }
+  function openCommitments() {
+
+
+    const ditem = document.getElementById('item').value
+    var billtype = document.getElementById('billtype').value
+
+    document.getElementById('commitmentparty').innerText = party
+    document.getElementById('commitmentitem').innerText = ditem
+    document.getElementById('commitment-type').innerText =  billtype+'d Commitments' 
+document.getElementById('actualepcom').value = consignment
+document.getElementById('actualweightcom').value = ((consignment*100)/eppercentage)
+
+var api;
+if (billtype === 'Purchase') {
+    api = 'purchasecommitments';
+} else if (billtype === 'Sales') {
+    api = 'salescommitments';
+}
+
+    const modal = document.getElementById('commitmentmodal');
+    modal.style.display = 'flex';
+    if (dataTable) {
+        dataTable.destroy();
+    }
+    // Reinitialize the DataTable with new data fetched via AJAX
+    const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+    dataTable = $('#commitments-table').DataTable({
+      responsive: responsive,
+        processing: true,
+        serverSide: true,
+        searching: false, // Disable search option
+        lengthChange: false,
+        ajax: {
+            url: '/' + api, 
+            dataSrc: 'data', // Key that holds the array of data in the API response
+            data: function (d) {
+              d.name = party;
+              d.item = ditem;
+                // Add any additional parameters you want to send to the server here
+            },
+        },
+        columns: [
+        {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      },
+            { data: 'id' },
+            { data: 'balanceweight' },
+            { data: 'balance' },
+            { data: 'rate' },
+            {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow assign-commitment-btn" 
+                         data-id="${row.id}"
+                        data-weight="${parseInt(data.balance*(data.eppercentage/100))}"
+                        data-rate="${row.rate}"
+                        >
+                  <i class="bx bx-plus-circle text-primary"></i>
+                </button>
+              </div>`;
+          },
+        }, // Assuming coffee is an array property
+        ],
+    "autoWidth": false
+    });
+  }
+  $('#commitments-table').on('click', '.assign-commitment-btn', function() {
+    var actualep = document.getElementById('actualepcom').value
+    var weight = 0
+    if(actualep > 0){
+      weight = actualep
+    }else{
+      weight = $(this).data('weight');   
+    }
+    var id = $(this).data('id');
+    var rate = $(this).data('rate');   
+    $('#newcommitid').val(id)
+    $('#newcommitqty').val(weight)
+    $('#newcommitrate ').val(rate)
+    $('#commitmentmodal').modal('hide');
+    $('#newcommittotal').text(rate*weight)
+
+    // Call the assignCommitment function with the retrieved arguments
+});
+
+  // Function to close the modal
+  function closeModal() {
+    const modal = document.getElementById('invoiceModal');
+    modal.style.display = 'none';
+  }
+
+  // When the "Open Modal" button is clicked
+  document.getElementById('openModalBtn').addEventListener('click', openModal);
+
+  // When the "Close" button (X) is clicked
+  document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+
+  // When the "Generate Invoice" button is clicked
+  document.getElementById('generateInvoiceBtn').addEventListener('click', function() {
+    // Add your logic here to generate the invoice (e.g., using jsPDF)
+    // You can populate the invoice data from the #modalData element
+
+    // Close the modal when the invoice is generated
+    closeModal();
+  });
+
+  // Populate the modal with data from the #modalData element
+  const modalData = document.getElementById('modalData');
+  const invoiceCapture = document.getElementById('invoiceCapture');
+  // invoiceCapture.innerHTML = modalData.innerHTML;
+
+
+
+</script>        
+<!-- Your HTML code -->
+
+<script>
+
+
+async function submitForm() {
+  const form = document.querySelector('form');
+  const formData = await new FormData(form);
+  const formDataObj = {};
+      formData.forEach((value, key) => {
+        formDataObj[key] = value;
+      });
+      formDataObj['bill'] = bill;
+      formDataObj['lotnumber'] = lotnumber;
+      formDataObj['netepweight'] = netepweight;
+      formDataObj['netWeight'] = netWeight;
+      formDataObj['eppercentage'] = eppercentage;
+      formDataObj['billedquantity'] = billedquantity;
+      formDataObj['prevnetepweight']='<%=coffee.netepweight%>'
+      formDataObj['billTo']=party;
+      formDataObj['transportagent']='<%=coffee.transportagent%>'
+      formDataObj['billtype']='<%=status%>'
+      formDataObj['item']='<%=coffee.item%>'
+
+
+  try {
+    const response = await fetch('/edit-bill', {
+        method: "POST", // Replace with the appropriate HTTP method (e.g., POST, PUT, etc.)
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formDataObj),
+      });
+
+    if (response.ok) {
+      alert('Form submitted successfully');
+      // You can redirect or perform any other action here
+      window.location.reload()
+    } else {
+      alert('Error submitting the form');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error submitting the form');
+  }
+}
+async function updatereport() {
+  const form = document.querySelector('form');
+  const formData = await new FormData(form);
+  const formDataObj = {};
+      formData.forEach((value, key) => {
+        formDataObj[key] = value;
+      });
+      formDataObj['bill'] = bill;
+      formDataObj['lotnumber'] = lotnumber;
+      formDataObj['netepweight'] = netepweight;
+      formDataObj['netWeight'] = netWeight;
+      formDataObj['eppercentage'] = eppercentage;
+      formDataObj['billedquantity'] = billedquantity;
+      formDataObj['prevnetepweight']='<%=coffee.netepweight%>'
+      formDataObj['billTo']=party;
+      formDataObj['transportagent']='<%=coffee.transportagent%>'
+      formDataObj['billtype']='<%=status%>'
+      formDataObj['item']='<%=coffee.item%>'
+
+
+  try {
+    const response = await fetch('/edit-bill', {
+        method: "POST", // Replace with the appropriate HTTP method (e.g., POST, PUT, etc.)
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formDataObj),
+      });
+
+    
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error submitting the form');
+  }
+}
+
+// Add an event listener to the "Generate Invoice" button to trigger the form submission
+document.getElementById('generateInvoiceBtn').addEventListener('click', () => {
+  submitForm();
+});
+
+// // Add an event listener to the "Generate Invoice" button to trigger the form submission
+// document.getElementById('generateInvoiceBtn').addEventListener('click', () => {
+//   submitForm();
+// });
+
+</script>
+
+<script>
+  function handleChange(selectedValue) {
+    // Do something with the selected value
+    console.log('Selected value:', selectedValue);
+  }
+
+
+</script>
+
+<script>
+  function updateNetWeight() {
+    // Get values from input fields
+    const bags = parseFloat(document.getElementById('bags').value) || 0;
+    const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+    const bagweight = parseFloat(document.getElementById('bagweight').value) || 0;
+    const forignobject = parseFloat(document.getElementById('forignobject').value) || 0;
+    const weightallowance = parseFloat(document.getElementById('weightallowance').value) || 0;
+
+    var bgweight = Math.round(bags * bagweight);
+    var forgnweight=Math.round(quantity*(forignobject/100))
+   
+    // Calculate Net Weight
+    netWeight = quantity-bgweight - forgnweight+weightallowance;
+    
+    // Update display
+    document.getElementById('bagweightDisplay').textContent = bgweight.toFixed(2);
+    document.getElementById('forignobjectDisplay').textContent = forgnweight.toFixed(2);
+    document.getElementById('netWeightDisplay').textContent = netWeight.toFixed(2) + " Kg";
+        const outturn = parseFloat(document.getElementById('outern').value) || 0;
+    epweight =  (netWeight/100)*outturn
+    const huskpercentage = parseFloat(document.getElementById('huskpercentage').value) || 0;
+    hcutting =  huskpercentage > 0? parseFloat((huskpercentage/100)*netWeight).toFixed(1):0
+    const moisturepercentage = parseFloat(document.getElementById('moisturepercentage').value) || 0;
+    mcutting =  moisturepercentage > 0 ? parseFloat((moisturepercentage/100)*netWeight).toFixed(1):0
+    const bbpercentage = parseFloat(document.getElementById('bbpercentage').value) || 0;
+    bbcutting =  bbpercentage > 0? parseFloat((bbpercentage/100)*netWeight).toFixed(1):0
+    const berryborepercentage = parseFloat(document.getElementById('berryborepercentage').value) || 0;
+    berrycutting =  berryborepercentage > 0 ? parseFloat((berryborepercentage/100)*netWeight).toFixed(1):0
+    const other = parseFloat(document.getElementById('other').value) || 0;
+    const allowance = parseFloat(document.getElementById('allowance').value) || 0;
+
+    netepweight = +parseFloat(epweight-hcutting-mcutting-bbcutting-berrycutting-other+allowance).toFixed(1)
+
+
+
+
+    document.getElementById('huskcutting').value = hcutting;
+    document.getElementById('moisturecutting').value = mcutting;
+    document.getElementById('bbcutting').value = bbcutting;
+    document.getElementById('berryborecutting').value = berrycutting;
+    eppercentage =+parseFloat((netepweight / netWeight) * 100).toFixed(2)
+    document.getElementById('epWeightDisplay').textContent = netepweight.toFixed(2) + " Kg";
+    document.getElementById('eppercenagedisplay').textContent = eppercentage.toFixed(2) + " %";
+    document.getElementById('eppercenagedisplay50').textContent = (eppercentage/2).toFixed(2) + " %";
+
+
+  }
+
+  function updatcutting() {
+    const hcutting = parseFloat(document.getElementById('huskcutting').value) || 0;
+    document.getElementById('huskpercentage').value = ((hcutting/netWeight)*100).toFixed(2)
+
+    const mcutting = parseFloat(document.getElementById('moisturecutting').value) || 0;
+    document.getElementById('moisturepercentage').value = ((mcutting/netWeight)*100).toFixed(2)
+
+    const bbcutting = parseFloat(document.getElementById('bbcutting').value) || 0;
+    document.getElementById('bbpercentage').value = ((bbcutting/netWeight)*100).toFixed(2)
+
+    const berrycutting = parseFloat(document.getElementById('berryborecutting').value) || 0;
+    document.getElementById('berryborepercentage').value = ((berrycutting/netWeight)*100).toFixed(2)
+    const other = parseFloat(document.getElementById('other').value) || 0;
+    const allowance = parseFloat(document.getElementById('allowance').value) || 0;
+
+    netepweight = +parseFloat(epweight-hcutting-mcutting-bbcutting-berrycutting-other+allowance).toFixed(1)
+    eppercentage = +parseFloat((netepweight / netWeight) * 100).toFixed(2)
+    document.getElementById('epWeightDisplay').textContent = netepweight.toFixed(2) + " Kg";
+    document.getElementById('eppercenagedisplay').textContent = eppercentage.toFixed(2) + " %";
+    document.getElementById('eppercenagedisplay50').textContent = (eppercentage/2).toFixed(2) + " %";
+
+  }
+  function multiply(){
+    const outturn = parseFloat(document.getElementById('outern50').value) || 0;
+    document.getElementById('outern').value = outturn*2
+    updateNetWeight()
+
+  }
+  function modalclicked(){
+    
+    consignment = '<%=coffee.storage%>'
+    document.getElementById('epweightdisplay').innerText = netepweight
+    document.getElementById('consignmentdisplay').innerText = consignment + " Kg"
+    document.getElementById('actualweightdisplay').innerText = netWeight
+    bill=[]
+    document.getElementById('totalbillamount').innerText = "₹"+ 0  
+    var tableBody = document.getElementById("billtablebody");
+  // Clear previous content
+      tableBody.innerHTML = "";
+  }
+  $('.js-data-example-ajax').select2({
+
+    ajax: {
+    url: '/getnames',
+    dataType: 'json',
+    delay: 250, // Delay in milliseconds before making the request
+    processResults: function (data) {
+      return {
+        results: data.results.map(name => ({ id: name, text: name }))
+      };
+    },
+    cache: true // Enable caching to reduce server requests
+  }
+  
+});
+
+ 
+
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+
+</script>
+<script>
+  $(document).ready(function() {
+    // Get references to the input elements
+    const $qtyInput = $('#newcommitqty');
+    const $rateInput = $('#newcommitrate');
+    const $totalCell = $('#newcommittotal');
+
+    // Add event listeners to detect changes in quantity and rate inputs
+    $qtyInput.on('input', updateTotal);
+    $rateInput.on('input', updateTotal);
+
+    // Function to update the total based on quantity and rate inputs
+    function updateTotal() {
+        // Get the values of quantity and rate inputs
+        const qty = parseFloat($qtyInput.val()) || 0; // Use 0 if the value is not a valid number
+        const rate = parseFloat($rateInput.val()) || 0; // Use 0 if the value is not a valid number
+
+        // Calculate the total
+        const total = qty * rate;
+
+        // Update the content of the total cell
+        $totalCell.text(total.toFixed(2)); // Adjust the precision as needed
+    }
+});
+
+
+///// weight commitment calculation ////
+const actualWeightInput = document.getElementById('actualweightcom');
+    const actualEpInput = document.getElementById('actualepcom');
+
+    // Add event listeners to both input elements
+    actualWeightInput.addEventListener('input', updateEpWeight);
+    actualEpInput.addEventListener('input', updateActualWeight);
+
+    function updateEpWeight() {
+      // Get the value of the actual weight input
+      const actualWeightValue = parseFloat(actualWeightInput.value);
+
+      // Perform the calculation
+      const epWeightValue = (actualWeightValue / 100) * eppercentage; // You should define eppercentage
+
+      // Update the ep weight input with the calculated value
+      actualEpInput.value = isNaN(epWeightValue) ? '' : epWeightValue.toFixed(2); // You may adjust the decimal places as needed
+    }
+
+    function updateActualWeight() {
+      // Get the value of the ep weight input
+      const actualEpValue = parseFloat(actualEpInput.value);
+
+      // Perform the calculation in reverse to get the actual weight
+      const actualWeightValue = (actualEpValue / eppercentage) * 100; // You should define eppercentage
+
+      // Update the actual weight input with the calculated value
+      actualWeightInput.value = isNaN(actualWeightValue) ? '' : actualWeightValue.toFixed(2); // You may adjust the decimal places as needed
+    }
+    // /////
+    $('#referenceselect').select2({
+
+ajax: {
+url: '/getrefferance',
+dataType: 'json',
+delay: 250, // Delay in milliseconds before making the request
+processResults: function (data) {
+  return {
+    results: data.results.map(name => ({ id: name, text: name }))
+  };
+},
+cache: true // Enable caching to reduce server requests
+}
+
+});
+
+ </script>
+
+                       <%- include('./include/end.ejs') -%>

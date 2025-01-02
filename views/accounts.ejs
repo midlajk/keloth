@@ -1,0 +1,159 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+    
+        <!-- Content -->
+<div> </div>
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="row">
+
+            <div class="col-4 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between flex-sm-row flex-column gap-1">
+                      <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
+                        <div class="card-title">
+                            <span class="">Arrived EP <span id="arrivald"></span> </span> <br>
+                            <span class="badge bg-label-info rounded-pill">Billed Ep: <span id="billedarrival"></span></span><br>
+                            <span class="badge bg-label-danger rounded-pill">Ep Avg. Rate : <span id="averageaep"></span></span><br>
+                            <span class="badge bg-label-primary rounded-pill">Pending Payments : <span id="pendingapayment"></span> </span>
+                          
+                        </div>
+                     
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between flex-sm-row flex-column gap-2">
+                      <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
+                        <div class="card-title">
+                          <span class="rounded-pill">Despatched <span id="salessum"></span></span> <br>
+                          <span class="badge bg-label-info rounded-pill">Billed : <span id="billedsales"></span> </span><br>
+                          <span class="badge bg-label-danger rounded-pill">Avg Rate : <span id="averagesales"></span> </span><br>
+                          <span class="badge bg-label-primary rounded-pill">Pending Payment : <span id="pendingrecievable"></span> </span>
+                        </div>
+                     
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>  
+              <div class="col-4 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
+                      <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
+                        <div class="card-title">
+                       
+                          <span class="badge bg-label-primary rounded-pill">Pending Purchase : <span id="pendingpurchase"></span></span> <br>
+                          <span class="badge bg-label-danger rounded-pill">Avg Rate : <span id="purcommrate"></span> </span><br>
+                          <span class="badge bg-label-info rounded-pill">Pending Sales : <span id="pendingsales"></span> </span><br>   
+                          <span class="badge bg-label-danger rounded-pill">Avg. Rate : <span id="salecommrate"></span> </span>
+                        </div>
+                       
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-between"> 
+              <div class="col-6" id="heading"><h3>Accounts</h3> </div>
+          
+            </div>
+            
+
+            <!-- Basic Bootstrap Table -->
+            <div id="sellerscontainer">
+              <%- include("./components/sellers") -%>
+              <!-- Content will be loaded here based on userType -->
+            </div>
+        
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+        // Show loading indicator
+      
+        // Send GET request to fetch data using Axios
+        axios.get('/getpurchasesum')
+            .then(function(response) {
+              console.log(response)
+                var data = response.data.data;
+                // Populate fields with fetched data
+                console.log(data)
+                $('#arrivald').text(data.totalNetepweight);
+                $('#billedarrival').text(data.totalQty);
+                $('#averageaep').text(parseFloat(data.totalAmount/data.totalQty).toFixed(2));
+                $('#pendingapayment').text((data.totalPayable - data.totalPaid));
+
+                // Hide loading indicator
+            })
+            .catch(function(error) {
+                console.error('Error fetching data:', error);
+                // Hide loading indicator in case of error
+            });
+
+            axios.get('/getsalessum')
+            .then(function(response) {
+              console.log(response)
+                var data = response.data.data;
+                // Populate fields with fetched data
+                $('#salessum').text(data.totalNetepweight);
+                $('#billedsales').text(data.totalQty);
+                $('#averagesales').text(parseFloat(data.totalAmount/data.totalQty).toFixed(2));
+                $('#pendingrecievable').text((data.totalrevievable - data.totalrecieved));
+
+                // Hide loading indicator
+            })
+            .catch(function(error) {
+                console.error('Error fetching data:', error);
+                // Hide loading indicator in case of error
+            });
+            axios.get('/getcommitmentsum')
+            .then(function(response) {
+              console.log(response)
+                var data = response.data.data;
+                // Populate fields with fetched data
+                console.log(data)
+                $('#pendingpurchase').text(data.purchasecombalance);
+                $('#purcommrate').text(parseFloat(data.purchasecomtot/data.purchasecombalance).toFixed(2));
+                $('#pendingsales').text(data.salescombalance);
+                $('#salecommrate').text(parseFloat(data.salescomtot/data.salescombalance).toFixed(2));
+
+                // Hide loading indicator
+            })
+            .catch(function(error) {
+                console.error('Error fetching data:', error);
+                // Hide loading indicator in case of error
+            });
+    });
+</script>
+    <%- include('./include/end.ejs') -%>

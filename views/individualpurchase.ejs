@@ -1,0 +1,442 @@
+<%- include('./include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+          <div class="row">
+
+            <div class="col-4 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between flex-sm-row flex-column gap-1">
+                      <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
+                        <div class="card-title">
+                            <span class="badge bg-label-warning rounded-pill">Arrived <span id="arrivalspan"></span></span> <br>
+                            <span class="badge bg-label-info rounded-pill">Storage IN: <span id="storeinspan"></span> </span><br>
+                            <span class="badge bg-label-danger rounded-pill">Billed: <span id="buyingspan"></span></span><br>
+                            <span class="badge bg-label-success rounded-pill"> Commitment: <span id="commitmentpurchasespan"></span> kg </span>
+
+                          
+                        </div>
+                     
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
+                      <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
+                        <div class="card-title">
+                       
+                          <span class="badge bg-label-warning rounded-pill">Dispatched <span id="salesspan"></span></span> <br>
+                          <span class="badge bg-label-info rounded-pill">Storage OUT : <span id="storeoutspan"></span> </span><br>
+                          <span class="badge bg-label-danger rounded-pill">Billed : <span id="sellingspan"></span> </span><br>
+                          <span class="badge bg-label-success rounded-pill">Commitment : <span id="commitmentsalepan"></span> </span>
+                        </div>
+                       
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between flex-sm-row flex-column gap-2">
+                      <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
+                        <div class="card-title">
+                          <span class="badge bg-label-warning rounded-pill">Recievable : <span id="recievablespan"></span> </span> <br>
+                          <span class="badge bg-label-info rounded-pill">Payable : <span id="payablespan"></span> </span><br>
+                          <span class="badge bg-label-success rounded-pill">Paid : <span id="paidspan"></span> </span> <br>
+                          <span class="badge bg-label-danger rounded-pill">Recieved : <span id="recievedspan"></span> </span><br>
+
+                        </div>
+                     
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>  
+          
+            </div>
+            <div class="row justify-content-between"> 
+              <div class="col-6" id="heading"><h3><%=name%> <a data-bs-toggle="modal" data-bs-target="#referanceAdd"><i class="bx bx-edit me-1"></i></a></h3>
+              </div>
+            <div class="col-3">
+  <h3 style="color: black; font-weight: bold;">
+    Balance RS: <span id="balanceweightspan"></span>
+  </h3>
+</div>
+<div class="col-2 mb-1">
+  <label for="Filter">Filter Data</label>
+  <select class="float-right form-control" style="max-width: 150px;" name="filterdata" id="filterdata" onchange="filterDataChanged()">
+<option value="_id">Id Wise</option>
+<option value="date">Date Wise</option>
+
+  </select>
+</div>
+
+             
+            </div>
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+
+              <div class="card-body">
+                <a class="btn btn-primary text-white" onclick="showtransactions()" href="#" id="transaction">Transactions</a>
+                <a class="btn btn-primary text-white" href="#"  onclick="showpcommitments()" id="purchasecommitment">Purchase Commitments</a>
+                <a class="btn btn-primary text-white" href="#" onclick="showscommitments()" id="salescommitment">Sale Commitments</a>
+                <a class="btn btn-primary text-white" href="#" onclick="showarrival()" id="arrival">Arrival</a>
+                <a class="btn btn-primary text-white" href="#" onclick="showdespatch()" id="despatch">Despatch</a>
+                <a class="btn btn-primary text-white" href="#" onclick="showpurchasebill()" id="purchasebill">Purchase Bills</a>
+                <a class="btn btn-primary text-white" href="#" onclick="showsalesbill()" id="salesbill">Sales Bills</a>   
+                <a class="btn btn-primary text-white" href="#" onclick="showstorein()" id="storein">Store-In</a>
+                <a class="btn btn-primary text-white" href="#" onclick="showstoreout()" id="storeout">Store-Out</a>
+            
+            
+                <div id="purchasebilldiv" class="tab-content d-none">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/purchasebill.ejs") -%>
+
+                </div>  
+                  <div id="salesbilldiv" class="tab-content d-none">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/salesbill.ejs") -%>
+
+                </div>
+                <div id="purchasecommitmentdiv" class="tab-content d-none">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/purchasecommitment.ejs") -%>
+
+                </div>
+                <div id="salescommitmentsdiv" class="tab-content d-none">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/salescommitment.ejs") -%>
+
+                </div>   
+                <div id="arrivalssdiv" class="tab-content d-none">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/arrival.ejs") -%>
+
+                </div>   
+                <div id="despatcsdiv" class="tab-content d-none">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/despatch.ejs") -%>
+
+                </div>   
+                <div id="storeoutdiv" class="tab-content d-none">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/salesstore.ejs") -%>
+
+                </div>  
+                <div id="storeindiv" class="tab-content mt-2 card d-none">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/storein.ejs",{reference:reference}) -%>
+
+                </div>  
+                <div id="storeindivdetailed" class="tab-content card ">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/storeindetail.ejs") -%>
+
+                </div>  
+                <div id="transactiondiv" class="tab-content card mt-2">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/transactiondiv.ejs") -%>
+
+                </div>
+
+                <div id="storeoutdivdetailed" class="tab-content card mt-2 d-none">
+                  <!-- Content will be loaded here based on userType -->
+                  <%- include("./components/salesstoredetail.ejs") -%>
+
+                </div>  
+</div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+<div class="modal fade hidden" id="referanceAdd">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Change Account</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form id="referanceform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">Accounts</label>
+            <div class="my-1 flex-nowrap input-group">
+              <select class="js-data-example-ajax" name="accountname" id="accountname" required>
+                <option value="<%=name%>"><%=name%></option>
+              </select>
+
+              <a class="fw-bold btn-primary small input-group-text" href="#" onclick="changeaccount()" >Change Account</a>
+            </div>
+            
+          </div>
+        
+          </div>
+ 
+       
+        
+      </div>
+      <!-- <div class="modal-footer">
+       
+        <a onclick="changeaccount()" class="btn btn-primary text-white">Change Account</a>
+      </div> -->
+  </form>
+    </div>
+  </div>
+ </div>
+<div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+////tabs
+var name = '<%= name %>';
+    let dataTable;
+    let scTable;
+    let alTable;
+    let dpTable;
+    let sbillTable;
+    let psbillTable;
+    let storeoutTable;
+    let storeIntable;
+    let transactionTable;
+    let storeIndetailtable;
+    let storeoutdetailtable;
+      let filterdata = '_id'
+    const purchasecommitmentdiv = $('#purchasecommitmentdiv');
+    const salescommitmentsdiv = $('#salescommitmentsdiv');
+    const arrivalssdiv = $('#arrivalssdiv');
+    const despatcsdiv = $('#despatcsdiv');
+    const salesbilldiv = $('#salesbilldiv');
+    const purchasebilldiv = $('#purchasebilldiv');
+    const storeoutdiv = $('#storeoutdiv');
+    const storeindiv = $('#storeindiv');
+    const transactiondiv = $('#transactiondiv');
+    const storeindivdetailed = $('#storeindivdetailed');
+    const storeoutdivdetailed = $('#storeoutdivdetailed');
+//     function showpcommitments() {
+//       salescommitmentsdiv.addClass('d-none')
+//       purchasecommitmentdiv.removeClass('d-none')
+//       arrivalssdiv.addClass('d-none')
+
+//       if (dataTable instanceof $.fn.dataTable.Api) {
+//         console.log('here')
+//   // The variable is a DataTable instance
+//   dataTable.destroy()
+// } 
+//       purchasecommitments()
+
+//     }
+
+//     function showscommitments() {
+//       salescommitmentsdiv.removeClass('d-none')
+//       purchasecommitmentdiv.addClass('d-none')
+//       arrivalssdiv.addClass('d-none')
+
+//       if (scTable instanceof $.fn.dataTable.Api) {
+//   // The variable is a DataTable instance
+//   scTable.destroy()
+// } 
+//       salescommitments()
+
+//     }
+//     function showarrival() {
+//       salescommitmentsdiv.addClass('d-none')
+//       purchasecommitmentdiv.addClass('d-none')
+//       arrivalssdiv.removeClass('d-none')
+
+//       if (alTable instanceof $.fn.dataTable.Api) {
+//   // The variable is a DataTable instance
+//   alTable.destroy()
+// } 
+// individualarrivals()
+
+//     }
+
+    const tabContents = $('.tab-content');
+
+function showContent(contentDiv, tableInstance) {
+  tabContents.addClass('d-none');
+  contentDiv.removeClass('d-none');
+
+  // if (tableInstance instanceof $.fn.dataTable.Api) {
+  //   // The variable is a DataTable instance
+  //   tableInstance.destroy();
+  // }
+  
+}
+
+function initializeDataTable(tableInstance, dataFunction,data) {
+  if (tableInstance instanceof $.fn.dataTable.Api) {
+    tableInstance.destroy();
+  }
+  dataFunction(data);
+}
+
+function showpcommitments() {
+  showContent(purchasecommitmentdiv, dataTable);
+  initializeDataTable(dataTable, purchasecommitments);
+  activeTableInstance = showpcommitments
+}
+
+function showscommitments() {
+  showContent(salescommitmentsdiv, scTable);
+  initializeDataTable(scTable, salescommitments);
+  activeTableInstance = showscommitments
+}
+
+function showarrival() {
+  showContent(arrivalssdiv, alTable);
+  initializeDataTable(alTable, individualarrivals);
+  activeTableInstance = showarrival
+}
+function showdespatch() {
+  showContent(despatcsdiv, dpTable);
+  initializeDataTable(dpTable, individualdespatch);
+  activeTableInstance = showdespatch
+}
+function showsalesbill() {
+  showContent(salesbilldiv, sbillTable);
+  initializeDataTable(sbillTable, individualsalesbill);
+  activeTableInstance = showsalesbill
+}
+function showpurchasebill() {
+  showContent(purchasebilldiv,psbillTable);
+  initializeDataTable(psbillTable, purchasebilltable);
+  activeTableInstance = showpurchasebill
+}
+function showstoreout() {
+  showContent(storeoutdiv,storeoutTable);
+  initializeDataTable(storeoutTable, individualstoreout);
+  activeTableInstance = showstoreout
+}  
+function showstoreoutdetail(data) {
+  showContent(storeoutdivdetailed,storeoutdetailtable);
+  initializeDataTable(storeoutdetailtable, individualstoreoutdetail,data);
+  activeTableInstance = showstoreoutdetail
+}  
+
+function showstoreindetail(data) {
+  showContent(storeindivdetailed,storeIndetailtable);
+  initializeDataTable(storeIndetailtable, individualstoragedetail,data);
+  activeTableInstance = showstoreindetail
+}
+function showstorein() {
+  showContent(storeindiv,storeIntable);
+  initializeDataTable(storeIntable, individualstorein);
+  activeTableInstance = showstorein
+}
+function showtransactions() {
+  showContent(transactiondiv,transactionTable);
+  initializeDataTable(transactionTable, individualtransactions);
+  activeTableInstance = showtransactions
+}
+function filterDataChanged() {
+    const selectedValue = document.getElementById('filterdata').value;
+    filterdata = selectedValue
+    activeTableInstance()
+  }
+$(document).ready(function() {
+    // Your function to run on page load
+    showtransactions();
+}); 
+ $(document).ready(function() {
+  getdetailedreport()
+ })
+async function getdetailedreport(){
+
+  axios.get('/getdetailedreport',{
+    params: {
+        // Add your additional data here
+        name: '<%= name %>',
+        // Add more parameters as needed
+    }
+}).then(function(response) {
+                var data = response.data.data;
+                // Populate fields with fetched data
+                $('#balanceweightspan').text(parseInt(data.balance));
+                $('#recievablespan').text(parseInt(data.recievable));
+                $('#payablespan').text(parseInt(data.payable));
+                $('#recievedspan').text(parseInt(data.recieved));
+                $('#paidspan').text(parseInt(data.paid));
+                $('#storeinspan').text(parseInt(data.storein));
+                $('#storeoutspan').text(parseInt(data.storeout));
+                $('#arrivalspan').text(parseInt(data.arrival));
+                $('#commitmentpurchasespan').text(parseInt(data.commitmentpurchase));
+                $('#buyingspan').text((data.billedvalue/(data.arrival-data.storein)).toFixed(2));
+                $('#salesspan').text(parseInt(data.despatch));
+                $('#commitmentsalepan').text(parseInt(data.commitmentsale));
+                $('#sellingspan').text((data.salebilled/(data.despatch-data.storeout)).toFixed(2));
+
+                // $('#billedarrival').text(data.totalQty);
+                // $('#averageaep').text(parseFloat(data.totalAmount/data.totalQty));
+                // $('#pendingapayment').text((data.totalPayable - data.totalPaid));
+
+                // Hide loading indicator
+            })
+            .catch(function(error) {
+                console.error('Error fetching data:', error);
+                // Hide loading indicator in case of error
+            });
+
+
+
+}
+$('.js-data-example-ajax').select2({
+  dropdownParent: $("#referanceAdd"),
+ajax: {
+url: '/getnames',
+dataType: 'json',
+delay: 250, // Delay in milliseconds before making the request
+processResults: function (data) {
+  return {
+    results: data.results.map(name => ({ id: name, text: name }))
+  };
+},
+cache: true // Enable caching to reduce server requests
+}
+
+});
+function changeaccount(){
+  var selectedAccount = document.getElementById("accountname").value;
+    
+    // Redirect to the purchase account page with the selected account name
+    window.location.href = "/purchaseaccount/" + selectedAccount;
+}
+
+</script>
+
+                                    
+                                        <%- include('./include/end.ejs') -%>

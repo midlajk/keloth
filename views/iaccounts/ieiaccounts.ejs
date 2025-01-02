@@ -1,0 +1,361 @@
+<%- include('../include/dashboardhead.ejs') -%>
+
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+<h3>Account of <%=employee%> <a ><i class="bx bxs-edit me-1"></i></a></h3>
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+              <div class="card-body">
+       
+           <div class="row mt-3 text-center"> 
+            <div class="col-4"> <h4>Total Payable</h4>
+              <h4 id="payabletotal">0</h4></div>
+          <div class="col-4"><h4>Total Paid</h4> <h4 id="paidtotal">0</h4></div>
+          <div class="col-4"><h4>Balance</h4> <h4 id="balancetotal">0</h4></div>
+
+
+                </div>
+                <div class="table-responsive text-nowrap p-4">
+                  <table class="table" id="sellers">
+                    <thead>
+                      <tr>
+                        <th>Date</th> 
+                          <th>Hint</th>
+                          <th>Medium</th>
+                          <th>Recieved</th>
+                          <th>Paid</th>  
+
+  <th>Action</th>     
+          
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="table-body">
+                      <!-- Data will be populated here -->
+                    </tbody>
+                  </table>
+          
+                </div>
+              </div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+</div>
+<!-- / Content -->
+
+<!-- Footer -->
+
+<!-- / Footer -->
+
+<div class="content-backdrop fade "></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+<div class="modal fade hidden" id="transportagentModal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Add New account</h5>
+      
+      </div>
+      <div class="modal-body">
+        <form  id="transportagentform">
+      <div class="row">
+        <div class="col mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input required type="text" disabled name="editname" id="editname" class="form-control" placeholder="Enter Name">
+        </div>
+        <input type="hidden" name="id" id="id">
+        </div>
+
+        <div class="row">
+        <div class="col mb-3">
+          <label for="description" class="form-label">Phone</label>
+          <input  type="text" id="editphone" name="editphone" class="form-control" placeholder="Enter Phone">
+        </div>
+        <div class="col mb-3">
+          <label for="address" class="form-label">Address</label>
+          <input type="text" id="editaddress" name="editaddress" class="form-control" placeholder="Enter Address">
+        </div>
+      </div>
+      
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeeditpartybtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" form="sellerform" id="submitbutton" onclick="updateexpence()" class="btn btn-primary">Add Party</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ 
+<div class="modal fade hidden" id="newagentmodal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Add New account</h5>
+      
+      </div>
+      <div class="modal-body">
+          <form  id="transportagentform">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input required type="text" name="Tagentname" id="Tagentname" class="form-control" placeholder="Enter Name">
+          </div>
+          <!-- <div class="col mb-3">
+            <label for="address" class="form-label">Account Type</label>
+            <select name="accounttype" id="accounttype" class="form-control">
+
+              <option value="Labour">Labour</option>
+              <option value="Expence-income">Expence / Income</option>
+              <option value="Delivery-Agent">Delivery Agent</option>
+              <option value="Loader">Loader</option>
+
+            </select>     
+
+</div> -->
+<input type="hidden" name="accounttype" id="accounttype" value="Expence-income">
+          </div>
+ 
+          <div class="row">
+          <div class="col mb-3">
+            <label for="description" class="form-label">Phone</label>
+            <input  type="text" id="Tagentphone" name="Tagentphone" class="form-control" placeholder="Enter Phone">
+          </div>
+          <div class="col mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" id="Tagentaddress" name="Tagentaddress" class="form-control" placeholder="Enter Address">
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeTransportModalBtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" form="sellerform" id="submitbutton" onclick="addtransportagent()" class="btn btn-primary">Add Party</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  var thetatable
+  var employee = '<%=employee%>'
+      $(document).ready(function () {
+        calculatesum()
+        const responsive = '<%= resptype %>' === 'true'; // Convert the string to a boolean
+
+         thetatable = $('#sellers').DataTable({
+          responsive: responsive,
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: '/ieaccount',
+            dataSrc: 'data', // Key that holds the array of data in the API response
+            data: function (d) {
+              d.name = '<%=employee%>'; // Add the 'name' parameter to the data object
+              return d;
+  
+              // Add any additional parameters you want to send to the server here
+            },
+          },
+          columns: [
+          {
+        data: 'date',
+        render: function (data, type, row) {
+          // Format the date using moment.js
+          return moment(data).format('DD/MM/YYYY');
+        }
+      }, 
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.refference || '') 
+              }
+          },
+           
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return (row.medium || '') 
+              }
+          },
+        
+          { 
+              data: null,
+              render: function (data, type, row) {
+                  return parseInt(row.recieved || 0) 
+              }
+          },
+          { 
+              data: null,
+              render: function (data, type, row) {
+                return parseInt(row.paid || 0) 
+              }
+          },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item edit-action" data-id="${row._id}"  data-name="${row.agent}" data-address="${row.address}" data-address="${row.phone}"><i class="bx bx-edit me-1"></i> Edit /View </button>
+                  <button class="dropdown-item delete-btn" data-id="${row._id}"><i class="bx bx-trash me-1"></i> Delete</button>
+                </div>
+              </div>`;
+            },
+          }, // Assuming coffee is an array property
+          ],
+        });
+        $('#sellers').on('click', '.edit-action', function () {
+          var name = $(this).data('name');
+      var address = $(this).data('address');   
+      var phone = $(this).data('phone');   
+      var id = $(this).data('id');   
+
+      $('#editname').val(name);
+      $('#editaddress').val(address);
+      $('#editphone').val(phone);
+      $('#id').val(id);
+
+      // Show the edit party modal
+      $('#transportagentModal').modal('show');
+      // const rowData = JSON.parse($(this).closest('.edit-btn').attr('data-row'));
+    });
+    $('#sellers').off('click', '.delete-btn');
+
+    $('#sellers').on('click', '.delete-btn', function () {
+  
+      var id = $(this).data('id');
+      const password = window.prompt("Please enter your password to confirm deletion:");
+      if (password !== null) { // User clicked "OK"
+          // Send a request to deleteuser API endpoint with the entered password
+          fetch('/deleteagent', {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify( {password:password,id:id} )
+          })
+          .then(response => {
+              if (response.ok) {
+                  alert('User deleted successfully');
+                  window.location.reload();
+              } else {
+                  alert('Failed to delete user. Please check your password.');
+              }
+          })
+          .catch(error => {
+              console.error('Error deleting user:', error);
+              alert('Failed to delete user. Please try again later.');
+          });
+      }
+  
+  
+    });
+      });
+
+      function updateexpence() {
+    // Get form data
+    const name = document.getElementById('editname').value;
+    const address = document.getElementById('editaddress').value;
+    const phone = document.getElementById('editphone').value;
+    const id = document.getElementById('id').value;
+
+    var closeButton = document.getElementById('closeeditpartybtn');
+
+    // Prepare data to be sent
+    const data = {
+        name: name,
+        address: address,
+        phone: phone,
+        id:id
+    };
+
+ 
+      axios.post('/editagent', data)
+  .then(response => {
+    // Handle the server response here
+    thetatable.ajax.reload();
+    closeButton.click();
+    
+    // Close the modal on successful response
+    
+  })
+  .catch(error => {
+    // Handle errors here
+    console.log('Error:', error);
+  });
+}
+function addtransportagent(){
+  var agent = document.getElementById("Tagentname").value;
+  var address = document.getElementById("Tagentaddress").value;
+  var phone = document.getElementById("Tagentphone").value;
+  var strength = 0;
+  var accounttype = document.getElementById("accounttype").value;
+
+  var data = {
+    agent: agent,
+    address:address,
+    phone:phone,
+    strength:strength,
+    accounttype:'Labour'
+  
+  };
+  
+  
+  // Send a POST request to the server using Axios
+  axios.post('/addtransportagent', data)
+    .then(response => {
+      // Handle the server response here
+  
+      // Close the modal on successful response
+      if (response.data.success) {
+      var closeButton = document.getElementById('closeTransportModalBtn');
+      thetatable.ajax.reload()
+  // Trigger the click event on the button
+  closeButton.click();
+      }
+    })
+    .catch(error => {
+      // Handle errors here
+      console.log('Error:', error);
+    });
+  
+  
+  }
+  function calculatesum(){
+    axios.get('/agentsum/'+employee)
+            .then(function(response) {
+              console.log(response)
+                var data = response.data.data;
+                document.getElementById('payabletotal').innerText = (data.totalPayable+data.totalrecieved)
+                document.getElementById('paidtotal').innerText = data.totalPaid
+                document.getElementById('balancetotal').innerText = (data.totalPayable+data.totalrecieved-data.totalPaid)
+            })
+   }
+    </script>                
+                                        <%- include('../include/end.ejs') -%>
