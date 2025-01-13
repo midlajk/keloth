@@ -1084,6 +1084,7 @@ document.getElementById('lotnumber').innerText = lotnumber
    document.getElementById('Transportvehicle').innerText = Transportvehicle.toUpperCase()
    document.getElementById('billingnumber').value = lotnumber
    document.getElementById('itemnamedisplay').innerText = item
+   document.getElementById('newcommitqty').value = netepweight
 
     if(party && item && eppercentage >=0 && referenceselect){
       const modal = document.getElementById('invoiceModal');
@@ -1477,8 +1478,8 @@ document.getElementById('generateInvoiceBtn').addEventListener('click', () => {
         const rate = parseFloat($rateInput.val()) || 0; // Use 0 if the value is not a valid number
 
         // Calculate the total
-        const total = qty * rate;
-
+        // const total = qty * rate;
+        const total = qty * (rate/(eppercentage/2));
         // Update the content of the total cell
         $totalCell.text(total.toFixed(2)); // Adjust the precision as needed
     }
