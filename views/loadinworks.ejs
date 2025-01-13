@@ -58,7 +58,7 @@
 
             </style>
 
-<div id="popup" class="popup" style="display: flex; flex-direction: column; height: 100vh; max-width: 600px;">
+<div id="popup" class="popup" style="display: flex; flex-direction: column; height: 100vh; max-width: 600px;overflow-y: scroll;">
   <!-- Content of the popup -->
     <div class="card-body">
       <!-- action="/submit-bill" method="post" -->
@@ -169,10 +169,11 @@
                       </thead>
                       <tbody id="resultTableBody">
                         <!-- Rows will be dynamically added here -->
+                        
                       </tbody>
                   
                     </table>
-                    
+                   
                   </div>
 
                   </div>
@@ -183,7 +184,7 @@
         
 
   <!-- Submit button at the bottom -->
-  <div class="row p-2 mt-3 mb-2" style="position: relative; bottom: 0; width: 100%; background-color: white;">
+  <div class="row p-2 mt-3 mb-2" style="position: relative; bottom: 10; width: 100%; background-color: white;">
       <div class="col-12 text-right">
           <button class="btn btn-primary w-100" onclick="submitwork()" id="submitAttendance">Submit</button>
       </div>
