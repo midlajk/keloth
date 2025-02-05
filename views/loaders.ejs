@@ -13,7 +13,8 @@
                   data-bs-target="#newagentmodal">Add Loader</a>
                   <a class="btn btn-primary text-white" href="#" data-bs-toggle="modal"
                   data-bs-target="#openreport">Download Report</a>
-         
+                  <a class="btn btn-primary text-white" href="#" data-bs-toggle="modal"
+                  data-bs-target="#filterreport">Filter</a>
                 <div class="table-responsive text-nowrap p-4">
                   <h5>Current Month Report</h5>
                   <table class="table" id="sellers">
@@ -86,6 +87,39 @@
           Close
         </button>
         <button type="submit" id="buttonreport" form="downloadform"   class="btn btn-primary">Download loaders</button>
+      </div>
+  </form>
+    </div>
+  </div>
+ </div>
+ <div class="modal fade hidden" id="filterreport">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Report</h5>
+      
+      </div>
+      <div class="modal-body">
+        <form  id="filterdateform">
+      <div class="row">
+        <div class="col mb-3">
+          <label for="name" class="form-label">From</label>
+          <input required type="date"  id="datefrom" class="form-control">
+        </div>
+        <div class="col mb-3">
+          <label for="description" class="form-label">To</label>
+          <input  type="date" id="dateto" required  class="form-control" >
+        </div>
+        </div>
+
+       
+      
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="closeeditpartybtn" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" id="filterdate" form="downloadform"   class="btn btn-primary">Filter loaders</button>
       </div>
   </form>
     </div>
@@ -181,66 +215,7 @@
     </div>
   </div>
  </div>
- <div class="modal fade hidden" id="koolireport">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalCenterTitle">Kooli Report</h5>
-      
-      </div>
-      <div class="modal-body">
-        <form  id="transportagentform">
-      <div class="row">
-        <div class="col mb-3">
-          <label for="name" class="form-label">From</label>
-          <input required type="date" name="fromdate" id="fromdate" class="form-control" placeholder="Enter Name">
-        </div>
-        <div class="col mb-3">
-          <label for="description" class="form-label">To</label>
-          <input  type="date" id="todate" name="todate" class="form-control" placeholder="Enter Phone">
-        </div>
-        <div class="col-2 mb-3">
-          <label for="description" class="form-label"></label>
-          <button type="button" id="checkkooli" class="btn btn-primary btn-sm add-btnvd mt-2">
-            <i class="bx bx-check"></i> Check
-        </button>      
-        </div>
-        </div>
-        <div class="row">
-          <table>
-              <thead>
-                <tr>
-                  <th>Employee</th>
-                  <th>Kooli</th>
-                  <th>Paid</th>
-                  <th>Recieved</th>
-                  <th>Balance</th>
-                </tr>
-              </thead>
-              <tbody id="koolidetails">
 
-              </tbody>
-
-          </table>
-
-
-
-
-        </div>
-
-        
-      
-    </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" id="closeeditpartybtn" data-bs-dismiss="modal">
-          Close
-        </button>
-        <button type="button" id="downloadpdf" class="btn btn-primary">Download Report</button>
-      </div>
-  </form>
-    </div>
-  </div>
- </div>
 <script src="../assets/vendor/libs/jquery/jquery.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
@@ -262,6 +237,8 @@
             dataSrc: 'docs', // Key that holds the array of data in the API response
             data: function (d) {
               d.name = 'Loader'; // Add the 'name' parameter to the data object
+              d.from = $('#datefrom').val(); // Make sure the ID is correct
+              d.to = $('#dateto').val();
               return d;
   
               // Add any additional parameters you want to send to the server here
@@ -323,6 +300,11 @@
           }, // Assuming coffee is an array property
           ],
         });
+        $('#filterdate').on('click', function () {
+          console.log('here')
+        thetatable.ajax.reload(); // Reload the DataTable with the new date range
+        $('#filterreport').modal('hide'); // Close the modal after applying the filter
+    });
         $('#sellers').on('click', '.edit-action', function () {
           var name = $(this).data('name');
       var address = $(this).data('address');   

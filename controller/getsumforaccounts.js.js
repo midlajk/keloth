@@ -585,96 +585,97 @@ exports.commitmenttotal = async (req, res) => {
   
 exports.expenseincometotal = async (req, res) => {
     try {
-      const draw = parseInt(req.query.draw) || 1; // DataTables draw count
-      const start = parseInt(req.query.start) || 0; // Start index for pagination
-      const length = parseInt(req.query.length) || 10; // Number of records to fetch
-      const searchValue = req.query.search?.value || ''; // Search value
-      const regex = new RegExp(searchValue, 'i'); // Regex for search
-      const currentDate = new Date();
-      const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-  
-      const pipeline = [
-        // Match based on `accounttype` and optional search filter
-        {
-          $match: {
-            accounttype: req.query.name,
-            agent: regex
-          }
-        },
-        // Unwind the `transaction` array to process each transaction separately
-        {
-          $unwind: {
-            path: "$transaction",
-            preserveNullAndEmptyArrays: true // Allow agents with no transactions
-          }
-        },
-        // Filter transactions for the current month
-        {
-          $match: {
-            $or: [
-              { "transaction.date": { $gte: firstDayOfMonth, $lte: lastDayOfMonth } },
-              { transaction: null } // Handle agents with no transactions
-            ]
-          }
-        },
-        // Group transactions by agent and calculate totals for the current month
-        {
-          $group: {
-            _id: "$_id",
-            agent: { $first: "$agent" },
-            address: { $first: "$address" },
-            phone: { $first: "$phone" },
-            accounttype: { $first: "$accounttype" },
-            totalPayable: { $sum: "$transaction.payable" },
-            totalReceivable: { $sum: "$transaction.revievable" },
-            totalPaid: { $sum: "$transaction.paid" },
-            totalReceived: { $sum: "$transaction.recieved" }
-          }
-        },
-        // Add computed fields: totalPayable + totalReceived and totalPaid + totalReceivable
-        {
-          $addFields: {
-            totalIncome: { $add: ["$totalPayable", "$totalReceived"] },
-            totalExpense: { $add: ["$totalPaid", "$totalReceivable"] }
-          }
-        },
-        // Sort agents by `_id` in descending order
-        {
-          $sort: { _id: -1 }
-        },
-        // Paginate results
-        {
-          $facet: {
-            paginatedResults: [
-              { $skip: start },
-              { $limit: length }
-            ],
-            totalCount: [
-              { $count: "count" }
-            ]
-          }
-        }
-      ];
-  
-      // Execute the aggregation pipeline
-      const result = await Transportagent.aggregate(pipeline);
-  console.log(result[0].paginatedResults)
-      const docs = result[0].paginatedResults || [];
-      const totalCount = result[0].totalCount[0]?.count || 0;
-  
-      // Send response
-      res.json({
-        draw,
-        recordsTotal: totalCount,
-        recordsFiltered: totalCount,
-        docs // Documents with transaction summaries
-      });
+        const draw = parseInt(req.query.draw) || 1; // DataTables draw count
+        const start = parseInt(req.query.start) || 0; // Start index for pagination
+        const length = parseInt(req.query.length) || 10; // Number of records to fetch
+        const searchValue = req.query.search?.value || ''; // Search value
+        const regex = new RegExp(searchValue, 'i'); // Regex for search
+
+        // Check for date range in query
+        const fromDate = req.query.from ? new Date(req.query.from) : new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        const toDate = req.query.to ? new Date(req.query.to) : new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+
+        const pipeline = [
+            // Match based on `accounttype` and optional search filter
+            {
+                $match: {
+                    accounttype: req.query.name,
+                    agent: regex
+                }
+            },
+            // Unwind the `transaction` array to process each transaction separately
+            {
+                $unwind: {
+                    path: "$transaction",
+                    preserveNullAndEmptyArrays: true // Allow agents with no transactions
+                }
+            },
+            // Filter transactions based on the provided date range
+            {
+                $match: {
+                    $or: [
+                        { "transaction.date": { $gte: fromDate, $lte: toDate } },
+                        { transaction: null } // Handle agents with no transactions
+                    ]
+                }
+            },
+            // Group transactions by agent and calculate totals for the filtered date range
+            {
+                $group: {
+                    _id: "$_id",
+                    agent: { $first: "$agent" },
+                    address: { $first: "$address" },
+                    phone: { $first: "$phone" },
+                    accounttype: { $first: "$accounttype" },
+                    totalPayable: { $sum: "$transaction.payable" },
+                    totalReceivable: { $sum: "$transaction.revievable" },
+                    totalPaid: { $sum: "$transaction.paid" },
+                    totalReceived: { $sum: "$transaction.recieved" }
+                }
+            },
+            // Add computed fields: totalPayable + totalReceived and totalPaid + totalReceivable
+            {
+                $addFields: {
+                    totalIncome: { $add: ["$totalPayable", "$totalReceived"] },
+                    totalExpense: { $add: ["$totalPaid", "$totalReceivable"] }
+                }
+            },
+            // Sort agents by `_id` in descending order
+            {
+                $sort: { _id: -1 }
+            },
+            // Paginate results
+            {
+                $facet: {
+                    paginatedResults: [
+                        { $skip: start },
+                        { $limit: length }
+                    ],
+                    totalCount: [
+                        { $count: "count" }
+                    ]
+                }
+            }
+        ];
+
+        // Execute the aggregation pipeline
+        const result = await Transportagent.aggregate(pipeline);
+        const docs = result[0].paginatedResults || [];
+        const totalCount = result[0].totalCount[0]?.count || 0;
+
+        // Send response
+        res.json({
+            draw,
+            recordsTotal: totalCount,
+            recordsFiltered: totalCount,
+            docs // Documents with transaction summaries
+        });
     } catch (error) {
-      console.error(error);
-      res.status(500).send('An error occurred while fetching agents');
+        console.error(error);
+        res.status(500).send('An error occurred while fetching agents');
     }
-  };
+};
+
   
  exports.agentsum = async (req, res) => {
     const decodedName = req.params.name .replace(/&amp;/g, '&');
