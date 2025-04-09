@@ -154,7 +154,10 @@ exports.ieaccount = async (req, res) => {
 
       // If name is provided in the query, add a $match stage to filter by name
       if (name) {
-        pipeline.splice(1, 0, { $match: { agent: decodedName } });
+        pipeline.splice(1, 0, { $match: { agent: decodedName,$or: [
+            { "transaction.recieved": { $ne: 0 } },
+            { "transaction.paid": { $ne: 0 } }
+          ] } });
     } 
 
       const client = await Transportagent.aggregate(pipeline);
@@ -170,7 +173,10 @@ exports.ieaccount = async (req, res) => {
 
     // If name is provided in the query, add a $match stage to filter by name
     if (name) {
-      pipeline2.splice(1, 0, { $match: { agent: decodedName } });
+      pipeline2.splice(1, 0, { $match: { agent: decodedName,$or: [
+        { "transaction.recieved": { $ne: 0 } },
+        { "transaction.paid": { $ne: 0 } }
+      ] } });
   }
 
       const totalclients = await Transportagent.aggregate(pipeline2)
